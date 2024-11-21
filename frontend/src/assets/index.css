@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body
+{
+    @apply text-night;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+   @apply text-center self-center;
+}
+
+h1
+{
+    @apply text-3xl font-bold m-4;
+}
+
+.note
+{
+    @apply text-3xl w-10 h-10 self-center text-center;
+}
+
+a:hover
+{
+    @apply text-blue-light underline;
+}
+
+.btn-primary
+{
+    @apply bg-blue text-white text-center p-2 mx-auto my-3 transition-all border-2 border-blue w-fit rounded-sm cursor-pointer;
+}
+
+.btn-primary:hover
+{
+    @apply bg-beige-light text-blue no-underline;
+}
+
+table
+{
+    @apply relative top-0 left-0;
+}
+
+table th, table td
+{
+    @apply p-2 text-center;
+}
+
+table tr
+{
+    @apply divide-x divide-blue relative;
+}
+
+tbody tr
+{
+    @apply border-t border-blue;
+}
+
+th
+{
+    @apply text-blue;
+}
+
+::-webkit-scrollbar
+{
+    @apply bg-blue-dark;
+}
+
+::-webkit-scrollbar:horizontal
+{
+    @apply sm:rounded-b-md;
+}
+
+::-webkit-scrollbar:vertical
+{
+    @apply hidden;
+}
+
+::-webkit-scrollbar-thumb
+{
+    @apply bg-blue-light sm:rounded-b-md;
+}

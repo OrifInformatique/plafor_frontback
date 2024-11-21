@@ -1,2 +1,38 @@
 # plafor_frontback
-Refonte de l'application plafor pour séparer le frontend et le backend en deux applications distinctes.
+
+This project is the redesign of the CI4 Plafor web application, where frontend and backend are now seperated.
+
+## Frontend
+
+The frontend is made using React and Tailwind.
+
+### Run in local
+
+1. `cd frontend`.
+2. `npm start`.
+3. Go to [http://localhost:3000](http://localhost:3000).
+
+### Testing
+
+1. `npm test`
+
+### Building the app
+
+1. `npm build`
+
+## Backend
+
+The backend is made using [...].
+
+### Run in local
+
+1. `cd backend`.
+2. [...]
+
+### Testing
+
+1. [...]
+
+### Building the app
+
+1. [...]
