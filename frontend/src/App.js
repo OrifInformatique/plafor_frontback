@@ -4,21 +4,27 @@ import SchoolReportList from "./pages/SchoolReportList";
 import SchoolReportDetails from "./pages/SchoolReportDetails";
 import PageNotFound from "./pages/PageNotFound";
 
+/**
+ * Defines routes and is the app base.
+ *
+ * @returns {JSX.Element}
+ *
+ */
 const App = () =>
 {
     return (
         <BrowserRouter>
-                <Routes>
-                    <Route element={<Layout />}>
-                        <Route path="/" element={<SchoolReportList />}/>
-                        <Route path="/list" element={<SchoolReportList />}/>
+            <Routes>
+                <Route element={<Layout />}>
+                    <Route path="/" element={<SchoolReportList />}/>
+                    <Route path="/list" element={<SchoolReportList />}/>
 
-                        <Route path="/details/:apprentice_id" element={<SchoolReportDetails />}/>
-                    </Route>
+                    <Route path="/details/:apprentice_id" element={<SchoolReportDetails />}/>
+                </Route>
 
-                    <Route path="*" element={<PageNotFound />}/>
-                </Routes>
-            </BrowserRouter>
+                <Route path="*" element={<PageNotFound />}/>
+            </Routes>
+        </BrowserRouter>
     );
 }
 

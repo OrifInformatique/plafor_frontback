@@ -1,6 +1,17 @@
-const TeachingDomainTable = ({ subjects, modules }) =>
+/**
+ * Displays the details of a teaching domain.
+ *
+ * @param {?array} subjects Subjects linked to the teaching domain.
+ *
+ * @param {?array} modules Mouldes linked to the teaching domain.
+ *
+ * @returns {JSX.Element}
+ *
+ */
+const TeachingDomainTable = ({ subjects = null, modules = null }) =>
 {
     // TODO : Let the possibility to have multiple tables (e.g. for modules) : add table title.
+    // TODO : Create function for code below ???
     let tableHeaders = [];
 
     if(subjects && !modules)

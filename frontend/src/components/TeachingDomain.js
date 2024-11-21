@@ -44,9 +44,9 @@ const TeachingDomain = ({ teachingDomain }) =>
                 onClick={() => toggleDetails(teachingDomain.id)}>
                 <p className="text-lg select-none">
                     {teachingDomain.title}
+
                     {teachingDomain.is_eliminatory && (
-                        <div className="-mt-6 text-sm text-rose-500">
-                            <br />
+                        <div className="-mt-2 text-sm text-rose-500">
                             <em>Éliminatoire</em>
                         </div>
                     )}

@@ -1,5 +1,12 @@
 import { Link, Outlet } from "react-router-dom";
 
+/**
+ * Displays the header and the footer of the app.\
+ * It is displayed on all routes, except for the 404 error page.
+ *
+ * @returns {JSX.Element}
+ *
+ */
 const Layout = () =>
     {
         return (
