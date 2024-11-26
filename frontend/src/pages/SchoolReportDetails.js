@@ -7,6 +7,7 @@ import Apprentice from "../components/Apprentice";
 import TeachingDomain from "../components/TeachingDomain";
 import AnnualAverage from "../components/AnnualAverage";
 import Loading from "../components/Loading";
+import NoResults from "../components/NoResults";
 
 /**
  * Displays the school report details of an apprentice user course.
@@ -17,20 +18,31 @@ import Loading from "../components/Loading";
 const SchoolReportDetails = () =>
 {
     const [apprenticeSchoolReport, setApprenticeSchoolReport] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() =>
     {
         const fetchData = async () =>
         {
-            const data = await getApprenticeSchoolReport();
-            setApprenticeSchoolReport(data);
+            try
+            {
+                const data = await getApprenticeSchoolReport();
+                setApprenticeSchoolReport(data);
+            }
+
+            catch(error)
+            {
+                console.error("Erreur lors de l'affichage des données.", error)
+            }
+
+            finally
+            {
+                setIsLoading(false);
+            }
         }
 
         fetchData();
     }, [])
-
-    if(!apprenticeSchoolReport.user_courses)
-        return <Loading />;
 
     return (
         <>
@@ -46,17 +58,27 @@ const SchoolReportDetails = () =>
                 </Link>
             </div>
 
-            {apprenticeSchoolReport.user_courses.map(userCourse => (
-                <div key={userCourse.id}>
-                    <Apprentice apprentice={apprenticeSchoolReport} showLink={false} />
+            {isLoading ?
+                <Loading />
+            :
+                <>
+                    {apprenticeSchoolReport.user_courses.length > 0 ?
+                            apprenticeSchoolReport.user_courses.map(userCourse => (
+                                <div key={userCourse.id}>
+                                    <Apprentice apprentice={apprenticeSchoolReport} showLink={false} />
 
-                    {userCourse.teaching_domains.map(teachingDomain => (
-                        <TeachingDomain key={teachingDomain.id} teachingDomain={teachingDomain} />
-                    ))}
+                                    {userCourse.teaching_domains.map(teachingDomain => (
+                                        <TeachingDomain key={teachingDomain.id} teachingDomain={teachingDomain} />
+                                    ))}
 
-                    <AnnualAverage userCourse={userCourse} />
-                </div>
-            ))}
+                                    <AnnualAverage userCourse={userCourse} />
+                                </div>
+                            ))
+                    :
+                        <NoResults />
+                    }
+                </>
+            }
         </>
     )
 }
