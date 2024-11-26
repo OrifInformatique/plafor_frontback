@@ -1,5 +1,5 @@
 import { roundNumber } from "../utils/numberUtils";
-import { CalculateSubjectAverage } from "../utils/teachingUtils";
+import { CalculateModulesAverage, CalculateSubjectAverage } from "../utils/teachingUtils";
 
 /**
  * Displays the details of a teaching domain.
@@ -14,8 +14,8 @@ import { CalculateSubjectAverage } from "../utils/teachingUtils";
 const TeachingDomainTable = ({ subjects = null, modules = null }) =>
 {
     let tableHeaders = [];
-    let schoolModules = null;
-    let nonSchoolModules = null;
+    let schoolModules = [];
+    let nonSchoolModules = [];
 
     if(subjects && !modules)
     {
@@ -53,8 +53,11 @@ const TeachingDomainTable = ({ subjects = null, modules = null }) =>
     {
         tableHeaders.push("Numéro", "Titre", "Note");
 
-        schoolModules = modules.filter(module => module.is_school);
-        nonSchoolModules = modules.filter(module => !module.is_school);
+        schoolModules.modules = modules.filter(module => module.is_school);
+        nonSchoolModules.modules = modules.filter(module => !module.is_school);
+
+        schoolModules.average = CalculateModulesAverage(schoolModules.modules);
+        nonSchoolModules.average = CalculateModulesAverage(nonSchoolModules.modules);
     }
 
     else
@@ -96,24 +99,20 @@ const TeachingDomainTable = ({ subjects = null, modules = null }) =>
                         {schoolModules && (
                             <>
                                 <tr>
-                                    <th colSpan={3}>
+                                    <th colSpan={2}>
                                         Modules professionnels (80%)
                                     </th>
+
+                                    <th>{schoolModules.average}</th>
                                 </tr>
 
-                                {schoolModules.map(schoolModule => (
+                                {schoolModules.modules.map(schoolModule => (
                                     <tr key={schoolModule.id}>
-                                        <td>
-                                            {schoolModule.module_number}
-                                        </td>
+                                        <td>{schoolModule.module_number}</td>
 
-                                        <td>
-                                            {schoolModule.name}
-                                        </td>
+                                        <td>{schoolModule.name}</td>
 
-                                        <td>
-                                            {schoolModule.grade}
-                                        </td>
+                                        <td>{schoolModule.grade}</td>
                                     </tr>
                                 ))}
                             </>
@@ -122,24 +121,20 @@ const TeachingDomainTable = ({ subjects = null, modules = null }) =>
                         {nonSchoolModules && (
                             <>
                                 <tr>
-                                    <th colSpan={3}>
+                                    <th colSpan={2}>
                                         Modules interentreprises (20%)
                                     </th>
+
+                                    <th>{nonSchoolModules.average}</th>
                                 </tr>
 
-                                {nonSchoolModules.map(nonSchoolModule => (
+                                {nonSchoolModules.modules.map(nonSchoolModule => (
                                     <tr key={nonSchoolModule.id}>
-                                        <td>
-                                            {nonSchoolModule.module_number}
-                                        </td>
+                                        <td>{nonSchoolModule.module_number}</td>
 
-                                        <td>
-                                            {nonSchoolModule.name}
-                                        </td>
+                                        <td>{nonSchoolModule.name}</td>
 
-                                        <td>
-                                            {nonSchoolModule.grade}
-                                        </td>
+                                        <td>{nonSchoolModule.grade}</td>
                                     </tr>
                                 ))}
                             </>

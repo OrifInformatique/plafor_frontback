@@ -18,5 +18,5 @@ export const roundNumber = (number, decimals = 1) =>
         return roundedNumber;
 
     else
-        return null;
+        return 0;
 }

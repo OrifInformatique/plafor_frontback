@@ -22,7 +22,7 @@ export const CalculateSubjectAverage = (subject) =>
 }
 
 /**
- * Calculates the average of modules.
+ * Calculates the average of all modules for a domain.
  *
  * @param {array} schoolModules
  *
@@ -31,17 +31,30 @@ export const CalculateSubjectAverage = (subject) =>
  * @returns {float} The average of the modules.
  *
  */
-export const CalculateModulesAverage = (schoolModules, nonSchoolModules) =>
+export const CalculateDomainModulesAverage = (schoolModules, nonSchoolModules) =>
 {
-    let schoolModulesAverage = schoolModules.reduce(
-        (sum, module) => sum + module.grade, 0) / schoolModules.length;
+    const schoolModulesAverage = CalculateModulesAverage(schoolModules);
 
-    schoolModulesAverage = !isNaN(schoolModulesAverage) ? schoolModulesAverage : 0;
-
-    let nonSchoolModulesAverage = nonSchoolModules.reduce(
-        (sum, module) => sum + module.grade, 0) / nonSchoolModules.length;
-
-    nonSchoolModulesAverage = !isNaN(nonSchoolModulesAverage) ? nonSchoolModulesAverage : 0;
+    const nonSchoolModulesAverage = CalculateModulesAverage(nonSchoolModules);
 
     return schoolModulesAverage * 0.8 + nonSchoolModulesAverage * 0.2;
+}
+
+/**
+ * Calculates the average of provided modules.
+ * Does not distinguishes school modules from non-school modules.
+ *
+ * @param {array} modules
+ *
+ * @returns {float} The average.
+ *
+ */
+export const CalculateModulesAverage = (modules) =>
+{
+    let modulesAverage = modules.reduce(
+        (sum, module) => sum + module.grade, 0) / modules.length;
+
+    modulesAverage = !isNaN(modulesAverage) ? modulesAverage : 0;
+
+    return modulesAverage;
 }

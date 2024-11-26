@@ -2,7 +2,7 @@ import Grade from "./Grade"
 import TeachingDomainTable from "./TeachingDomainTable"
 import { useState, useEffect } from "react";
 import { roundNumber } from "../utils/numberUtils";
-import { CalculateSubjectAverage, CalculateModulesAverage } from "../utils/teachingUtils";
+import { CalculateSubjectAverage, CalculateDomainModulesAverage } from "../utils/teachingUtils";
 
 /**
  * Displays the details of a teaching domain, in the school report details.
@@ -33,7 +33,7 @@ const TeachingDomain = ({ teachingDomain }) =>
             const schoolModules = teachingDomain.modules.filter(module => module.is_school);
             const nonSchoolModules = teachingDomain.modules.filter(module => !module.is_school);
 
-            const modulesAverage = CalculateModulesAverage(schoolModules, nonSchoolModules);
+            const modulesAverage = CalculateDomainModulesAverage(schoolModules, nonSchoolModules);
 
             setDomainAverage(roundNumber(modulesAverage));
         }
@@ -95,13 +95,11 @@ const TeachingDomain = ({ teachingDomain }) =>
                 xl:w-1/3
                 max-h-0 overflow-hidden transition-all duration-[425ms]">
                 {teachingDomain.subjects &&
-                    <TeachingDomainTable subjects={teachingDomain.subjects}
-                        setDomainAverage={setDomainAverage} />
+                    <TeachingDomainTable subjects={teachingDomain.subjects} />
                 }
 
                 {teachingDomain.modules &&
-                    <TeachingDomainTable modules={teachingDomain.modules}
-                        setDomainAverage={setDomainAverage} />
+                    <TeachingDomainTable modules={teachingDomain.modules} />
                 }
             </div>
         </div>

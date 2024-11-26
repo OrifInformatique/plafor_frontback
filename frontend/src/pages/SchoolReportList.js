@@ -38,7 +38,7 @@ const SchoolReportList = () =>
     // Filters the list by apprentice name when typing in the searchbar
     useEffect(() =>
     {
-        if(searchBar != "")
+        if(searchBar !== "")
             setFilteredList(schoolReportsSummaries.filter(
                 summary => summary.username.toLowerCase()
                     .includes(searchBar.toLowerCase())
@@ -46,7 +46,7 @@ const SchoolReportList = () =>
 
         else
             setFilteredList(schoolReportsSummaries);
-    }, [searchBar])
+    }, [searchBar, schoolReportsSummaries])
 
     useEffect(() =>
     {
@@ -93,7 +93,8 @@ const SchoolReportList = () =>
                     {filteredList.length > 0 ?
                         filteredList?.map(schoolReportSummary =>
                         (
-                            <Apprentice key={schoolReportSummary.user_id} apprentice={schoolReportSummary} showLink={true} />
+                            <Apprentice key={schoolReportSummary.user_id}
+                                apprentice={schoolReportSummary} showLink={true} />
                         ))
                     :
                         <NoResults />
