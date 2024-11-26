@@ -52,6 +52,29 @@ table tr
     @apply divide-x divide-blue relative;
 }
 
+.subject-table th:first-child, .subject-table td:first-child
+{
+    @apply sticky left-0 z-10 bg-beige max-w-24 sm:max-w-36 truncate;
+}
+
+.subject-table th:first-child::after, .subject-table td:first-child::after
+{
+    @apply absolute top-0 right-0 block h-full w-px z-10 bg-black;
+    content: "";
+}
+
+/* TODO : Ask if keep subject and average visible */
+/*.subject-table th:last-child, .subject-table td:last-child
+{
+    @apply sticky right-0 z-10 bg-beige;
+}
+
+.subject-table th:last-child::before, .subject-table td:last-child::before
+{
+    @apply absolute top-0 left-0 block h-full w-px z-10 bg-black;
+    content: "";
+}*/
+
 tbody tr
 {
     @apply border-t border-blue;

@@ -25,14 +25,19 @@ const AnnualAverageDomain = ({ yearlyUserCourse }) =>
                     <div className="divide-y-2 divide-black">
                         {teachingDomain.subjects?.map(subject => (
                             <div key={subject.id} className="bg-white flex justify-between items-center space-x-2 p-2">
-                                <p className="text-lg">
-                                    {subject.name}
-                                </p>
+                                <div className="flex flex-col justify-center">
+                                    <p className="text-lg">
+                                        {subject.name}
+                                    </p>
 
-                                <div className="flex flex-col justfy-center items-center">
+                                    <em className="text-sm mt-2">
+                                        Notes semestrielles :
+                                    </em>
+                                </div>
+
+                                <div className="flex flex-col justfiy-center items-center">
                                     <Grade grade={subject.average} />
 
-                                    {/* TODO : Specfiy what the subgrades are. */}
                                     <div className="flex flex-row justify-center items-center">
                                         {subject.grades.map(grade => (
                                             <div key={grade.id} className="inline-block mx-1">

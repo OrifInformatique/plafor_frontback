@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import YearFilter from "./YearFilter";
 import AnnualAverageDomain from "./AnnualAverageDomain";
 import Grade from "./Grade";
+import { roundNumber } from "../utils/numberUtils";
 
 /**
  * Displays the annual averages of a user course.
@@ -88,7 +89,6 @@ const AnnualAverage = ({ userCourse }) =>
                     return moduleDate >= yearDateBegin && moduleDate <= yearDateEnd;
                 });
 
-
                 if(modules?.length > 0)
                 {
                     let schoolModules = modules.filter(module => module.is_school);
@@ -114,10 +114,7 @@ const AnnualAverage = ({ userCourse }) =>
                 return null;
             }
 
-            // Round average at 0.0 precision
-            domainAverage = Math.round(domainAverage * 10) / 10;
-
-            domainAverage = domainAverage > 0 ? domainAverage : null;
+            domainAverage = roundNumber(domainAverage);
 
             return { ...teachingDomain, subjects: subjects, modules: modules, average: domainAverage };
         }).filter(teachingDomain => teachingDomain);
@@ -128,9 +125,7 @@ const AnnualAverage = ({ userCourse }) =>
         const globalAverage = yearlyUserCourse.reduce(
             (sum, teachingDomain) => sum + teachingDomain.average * teachingDomain.weight, 0) / domainsWeightSum;
 
-        yearlyUserCourse.globalAverage = Math.round(globalAverage * 10) / 10;
-
-        yearlyUserCourse.globalAverage = yearlyUserCourse.globalAverage > 0 ? yearlyUserCourse.globalAverage : null;
+        yearlyUserCourse.globalAverage = roundNumber(globalAverage);
 
         setYearlyUserCourse(yearlyUserCourse);
     }
@@ -187,7 +182,7 @@ const AnnualAverage = ({ userCourse }) =>
                 <h2 className="text-blue text-xl tracking-wide">Moyenne annuelle</h2>
             </div>
 
-            <div className="flex justify-evenly content-center my-2">
+            <div className="flex justify-evenly content-center my-2 px-3 py-1 overflow-auto space-x-5">
                 {yearsList.map((year, index) => (
                     <YearFilter key={index} yearNum={index+1} year={year} setSelectedYear={setSelectedYear}
                     selected={(year[0] === selectedYear[0] && year[1] === selectedYear[1])} />

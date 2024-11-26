@@ -1,5 +1,8 @@
 import Grade from "./Grade"
 import TeachingDomainTable from "./TeachingDomainTable"
+import { useState, useEffect } from "react";
+import { roundNumber } from "../utils/numberUtils";
+import { CalculateSubjectAverage, CalculateModulesAverage } from "../utils/teachingUtils";
 
 /**
  * Displays the details of a teaching domain, in the school report details.
@@ -11,6 +14,31 @@ import TeachingDomainTable from "./TeachingDomainTable"
  */
 const TeachingDomain = ({ teachingDomain }) =>
 {
+    const [domainAverage, setDomainAverage] = useState(null);
+
+    useEffect(() =>
+    {
+        if(teachingDomain.subjects)
+        {
+            const domainAverage = teachingDomain.subjects.reduce((sum, subject) => {
+                const subjectAverage = CalculateSubjectAverage(subject);
+                return sum + subjectAverage * subject.weight;
+            }, 0);
+
+            setDomainAverage(roundNumber(domainAverage));
+        }
+
+        else if(teachingDomain.modules)
+        {
+            const schoolModules = teachingDomain.modules.filter(module => module.is_school);
+            const nonSchoolModules = teachingDomain.modules.filter(module => !module.is_school);
+
+            const modulesAverage = CalculateModulesAverage(schoolModules, nonSchoolModules);
+
+            setDomainAverage(roundNumber(modulesAverage));
+        }
+    }, [teachingDomain]);
+
     /**
      * Opens or closes the details of a teaching domain.
      *
@@ -46,14 +74,14 @@ const TeachingDomain = ({ teachingDomain }) =>
                     {teachingDomain.title}
 
                     {teachingDomain.is_eliminatory && (
-                        <div className="-mt-2 text-sm text-rose-500">
-                            <em>Éliminatoire</em>
-                        </div>
+                        <em className="block -mt-2 text-sm text-rose-500">
+                            Éliminatoire
+                        </em>
                     )}
                 </p>
 
                 <div className="flex flex-col justify-center content-center select-none">
-                    <Grade grade={teachingDomain.average} />
+                    <Grade grade={domainAverage} />
 
                     <p className="-mt-2">
                         ({teachingDomain.weight * 100}%)
@@ -67,11 +95,13 @@ const TeachingDomain = ({ teachingDomain }) =>
                 xl:w-1/3
                 max-h-0 overflow-hidden transition-all duration-[425ms]">
                 {teachingDomain.subjects &&
-                    <TeachingDomainTable subjects={teachingDomain.subjects} />
+                    <TeachingDomainTable subjects={teachingDomain.subjects}
+                        setDomainAverage={setDomainAverage} />
                 }
 
                 {teachingDomain.modules &&
-                    <TeachingDomainTable modules={teachingDomain.modules} />
+                    <TeachingDomainTable modules={teachingDomain.modules}
+                        setDomainAverage={setDomainAverage} />
                 }
             </div>
         </div>
