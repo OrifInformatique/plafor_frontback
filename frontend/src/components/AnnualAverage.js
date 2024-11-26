@@ -3,6 +3,7 @@ import YearFilter from "./YearFilter";
 import AnnualAverageDomain from "./AnnualAverageDomain";
 import Grade from "./Grade";
 import { roundNumber } from "../utils/numberUtils";
+import { CalculateDomainModulesAverage } from "../utils/teachingUtils";
 
 /**
  * Displays the annual averages of a user course.
@@ -94,17 +95,7 @@ const AnnualAverage = ({ userCourse }) =>
                     let schoolModules = modules.filter(module => module.is_school);
                     let nonSchoolModules = modules.filter(module => !module.is_school);
 
-                    let schoolModulesAverage = schoolModules.reduce(
-                        (sum, module) => sum + module.grade, 0) / schoolModules.length;
-
-                    schoolModulesAverage = !isNaN(schoolModulesAverage) ? schoolModulesAverage : 0;
-
-                    let nonSchoolModulesAverage = nonSchoolModules.reduce(
-                        (sum, module) => sum + module.grade, 0) / nonSchoolModules.length;
-
-                    nonSchoolModulesAverage = !isNaN(nonSchoolModulesAverage) ? nonSchoolModulesAverage : 0;
-
-                    domainAverage = schoolModulesAverage * 0.8 + nonSchoolModulesAverage * 0.2;
+                    domainAverage = CalculateDomainModulesAverage(schoolModules, nonSchoolModules);
                 }
             }
 
@@ -190,9 +181,9 @@ const AnnualAverage = ({ userCourse }) =>
             </div>
 
             <div className="w-full py-2 px-5 bg-blue-light flex justify-between items-center space-x-2 text-white rounded-lg">
-                        <p className="text-lg font-bold">
+                        <strong className="text-lg">
                             Moyenne de l'année
-                        </p>
+                        </strong>
 
                         <strong>
                             <Grade grade={yearlyUserCourse.globalAverage} />
