@@ -8,9 +8,10 @@ The frontend is made using React and Tailwind.
 
 ### Run in local
 
-1. `cd frontend`.
-2. `npm start`.
-3. Go to [http://localhost:3000](http://localhost:3000).
+1. `cd frontend`
+2. `npm install`
+3. `npm start`
+4. Go to [http://localhost:3000](http://localhost:3000).
 
 ### Testing
 
@@ -18,7 +19,7 @@ The frontend is made using React and Tailwind.
 
 ### Building the app
 
-1. `npm build`
+1. `npm run build`
 
 ## Backend
 
