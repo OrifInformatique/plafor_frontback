@@ -8,7 +8,7 @@ export const getSchoolReportsSummaries = async () =>
 {
     try
     {
-        const response = await fetch("http://localhost/plafor/public/api/school_reports");
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/school_reports`);
         const data = await response.json();
 
         return data;
@@ -35,7 +35,7 @@ export const getApprenticeSchoolReport = async (user_course_id = null) =>
 {
     try
     {
-        const response = await fetch(`http://localhost/plafor/public/api/school_report/${user_course_id}`);
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/school_report/${user_course_id}`);
         const data = await response.json();
 
         return data;
