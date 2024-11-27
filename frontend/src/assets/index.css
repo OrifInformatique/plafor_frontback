@@ -63,8 +63,7 @@ table tr
     content: "";
 }
 
-/* TODO : Ask if keep subject and average visible */
-/*.subject-table th:last-child, .subject-table td:last-child
+.subject-table th:last-child, .subject-table td:last-child
 {
     @apply sticky right-0 z-10 bg-beige;
 }
@@ -73,7 +72,7 @@ table tr
 {
     @apply absolute top-0 left-0 block h-full w-px z-10 bg-black;
     content: "";
-}*/
+}
 
 tbody tr
 {
