@@ -16,4 +16,4 @@ It is made using React and Tailwind.
 
 ## Building the app
 
-1. `npm build`
+1. `npm run build`

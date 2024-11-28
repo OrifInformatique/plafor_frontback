@@ -6,6 +6,7 @@ import './assets/index.css';
 import './assets/tailwind.css';
 
 import App from './App';
+import './i18n';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

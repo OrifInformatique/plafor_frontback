@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import Grade from "./Grade"
 import TeachingDomainTable from "./TeachingDomainTable"
 
@@ -11,6 +13,8 @@ import TeachingDomainTable from "./TeachingDomainTable"
  */
 const TeachingDomain = ({ teachingDomain }) =>
 {
+    const { t } = useTranslation("teachingDomain");
+
     if(teachingDomain.modules)
     {
         teachingDomain.modules.schoolModulesAverage = teachingDomain.school_modules_average;
@@ -53,7 +57,7 @@ const TeachingDomain = ({ teachingDomain }) =>
 
                     {teachingDomain.is_eliminatory && (
                         <em className="block -mt-2 text-sm text-rose-500">
-                            Éliminatoire
+                            {t("eliminatory")}
                         </em>
                     )}
                 </p>

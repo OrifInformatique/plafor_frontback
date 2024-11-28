@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+
 import { getSchoolReportsSummaries } from "../services/api/school_reports";
+
 import Apprentice from "../components/Apprentice";
 import Loading from "../components/Loading";
 import NoResults from "../components/NoResults";
@@ -12,6 +15,8 @@ import NoResults from "../components/NoResults";
  */
 const SchoolReportList = () =>
 {
+    const { t } = useTranslation(["titles", "apprenticesList"]);
+
     // List of all summaries
     const [schoolReportsSummaries, setSchoolReportsSummaries] = useState([]);
 
@@ -111,16 +116,20 @@ const SchoolReportList = () =>
 
     return (
         <div className="space-y-4">
-            <h1>Liste des bulletins de notes des apprentis</h1>
+            <h1>{t("school_report_list", { ns: "titles" })}</h1>
 
             <div className="w-full p-3 bg-beige-light space-x-2 flex justify-between items-center
                 sm:w-1/2 sm:m-auto sm:rounded-md
                 xl:w-1/3">
                 <select className="basis-1/3 max-w-24 sm:max-w-36 px-2 py-1 rounded-sm"
                     onChange={handleTrainersFilter}>
-                    <option value="all">Tous</option>
+                    <option value="all">
+                        {t("all", { ns: "apprenticesList" })}
+                    </option>
 
-                    <option value="unassigned">Non-assignés</option>
+                    <option value="unassigned">
+                        {t("unassigned", { ns: "apprenticesList" })}
+                    </option>
 
                     {trainers.map(trainer => (
                         <option key={trainer.user_id} value={trainer.user_id}>
@@ -134,7 +143,7 @@ const SchoolReportList = () =>
                 </select>
 
                 <input type="text" value={searchBar}
-                    onChange={handleSearchBar} placeholder="Rechercher un apprenti..."
+                    onChange={handleSearchBar} placeholder={t("search_for_apprentice", { ns: "apprenticesList" })}
                     className="basis-2/3 px-2 py-1 rounded-sm"
                 />
             </div>

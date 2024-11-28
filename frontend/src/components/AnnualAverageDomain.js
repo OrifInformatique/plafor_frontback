@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import Grade from "./Grade";
 
 /**
@@ -10,6 +12,8 @@ import Grade from "./Grade";
  */
 const AnnualAverageDomain = ({ teachingDomains }) =>
 {
+    const { t } = useTranslation("annualAverage");
+
    return (
        <>
            {teachingDomains?.map(teachingDomain => (
@@ -31,7 +35,7 @@ const AnnualAverageDomain = ({ teachingDomains }) =>
                                     </p>
 
                                     <em className="text-sm mt-2">
-                                        Notes semestrielles :
+                                        {t("semestrial_grades")}
                                     </em>
                                 </div>
 

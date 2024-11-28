@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import YearFilter from "./YearFilter";
+import { useTranslation } from "react-i18next";
+
 import AnnualAverageDomain from "./AnnualAverageDomain";
 import Grade from "./Grade";
 import NoResults from "./NoResults";
+import YearFilter from "./YearFilter";
 
 /**
  * Displays the annual averages of a user course.
@@ -14,6 +16,8 @@ import NoResults from "./NoResults";
  */
 const AnnualAverage = ({ userCourse }) =>
 {
+    const { t } = useTranslation("annualAverage");
+
     // List of start and end dates of each school year
     const [yearsList, setYearsList] = useState([]);
 
@@ -99,7 +103,7 @@ const AnnualAverage = ({ userCourse }) =>
         sm:w-1/2 sm:m-auto sm:rounded-md
         xl:w-1/3">
             <div>
-                <h2 className="text-blue text-xl tracking-wide">Moyenne annuelle</h2>
+                <h2 className="text-blue text-xl tracking-wide">{t("yearly_average")}</h2>
             </div>
 
             <div className="flex justify-evenly content-center my-2 px-3 py-1 overflow-auto space-x-5">
@@ -113,7 +117,7 @@ const AnnualAverage = ({ userCourse }) =>
                 <>
                     <div className="w-full py-2 px-5 bg-blue-light flex justify-between items-center space-x-2 text-white rounded-lg">
                         <strong className="text-lg">
-                            Moyenne de l'année
+                            {t("average_of_the_year")}
                         </strong>
 
                         <strong>

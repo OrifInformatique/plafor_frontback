@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import { getApprenticeSchoolReport } from "../services/api/school_reports";
 
-import Apprentice from "../components/Apprentice";
-import TeachingDomain from "../components/TeachingDomain";
 import AnnualAverage from "../components/AnnualAverage";
+import Apprentice from "../components/Apprentice";
 import Loading from "../components/Loading";
 import NoResults from "../components/NoResults";
+import TeachingDomain from "../components/TeachingDomain";
 
 /**
  * Displays the school report details of an apprentice user course.
@@ -17,6 +18,8 @@ import NoResults from "../components/NoResults";
  */
 const SchoolReportDetails = () =>
 {
+    const { t } = useTranslation(["titles", "buttons"]);
+
     const [apprenticeSchoolReport, setApprenticeSchoolReport] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -58,14 +61,14 @@ const SchoolReportDetails = () =>
             :
                 <>
                     <h1>
-                        Bulletin de notes de<br/>
+                        {t("school_report_details", { ns: "titles" })}<br/>
                         {apprenticeSchoolReport?.username}
                     </h1>
 
                     {/* TODO : Let only trainers and admins see this button */}
                     <div className="w-max h-max mx-auto my-6">
                         <Link to={"/list"} className="btn-primary">
-                            Retour à la liste
+                            {t("back_to_list", { ns: "buttons" })}
                         </Link>
                     </div>
 

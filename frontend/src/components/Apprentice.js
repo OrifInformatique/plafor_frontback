@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+
 import Grade from "./Grade";
 
 /**
@@ -27,7 +28,7 @@ const Apprentice = ({ apprentice, showLink }) =>
                     {apprentice.user_courses.map(user_course => (
                         <div className="flex justify-between items-center py-3" key={user_course.id}>
                             {showLink ?
-                                <Link to={`/details/${user_course.id}`} title="Voir le bulletin de notes" className="w-fit sm:w-5/6">
+                                <Link to={`/details/${user_course.id}`} className="w-fit sm:w-5/6">
                                     <p>{user_course.official_name}</p>
                                 </Link>
                             :

@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 /**
  * Displays the years filters for the annaul averages.
  *
@@ -15,11 +17,13 @@
  */
 const YearFilter = ({ yearNum, year, setSelectedYear, selected }) =>
 {
-    let prefix = "ème";
+    const { t } = useTranslation("annualAverage");
+
+    let suffix = t("number_suffix");
 
     if(yearNum === 1)
     {
-        prefix = "ère";
+        suffix = t("first_suffix");
     }
 
     return (
@@ -28,7 +32,7 @@ const YearFilter = ({ yearNum, year, setSelectedYear, selected }) =>
         sm:basis-1/6
         ${selected && "border-b-blue-light text-blue-light"}`}
         onClick={() => setSelectedYear(year)}>
-            {yearNum + prefix}
+            {yearNum + suffix}
         </div>
     )
 }

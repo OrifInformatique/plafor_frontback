@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 /**
  * Displays the details of a teaching domain.
  *
@@ -10,18 +12,20 @@
  */
 const TeachingDomainTable = ({ subjects = null, modules = null }) =>
 {
+    const { t } = useTranslation("teachingDomain");
+
     let tableHeaders = [];
     let schoolModules = [];
     let nonSchoolModules = [];
 
     if(subjects && !modules)
     {
-        tableHeaders.push("Matière");
+        tableHeaders.push(t("subject"));
 
         for(let i = 1; i <= 8; i++)
-            tableHeaders.push(`Sem. ${i}`);
+            tableHeaders.push(t("semester_prefix") + " " + i);
 
-        tableHeaders.push("Moyenne");
+        tableHeaders.push(t("average"));
 
         subjects.forEach(subject =>
         {
@@ -46,7 +50,7 @@ const TeachingDomainTable = ({ subjects = null, modules = null }) =>
 
     else if(!subjects && modules)
     {
-        tableHeaders.push("Numéro", "Titre", "Note");
+        tableHeaders.push(t("module_number"), t("title"), t("grade"));
 
         schoolModules.modules = modules.filter(module => module.is_school);
         nonSchoolModules.modules = modules.filter(module => !module.is_school);
@@ -93,7 +97,7 @@ const TeachingDomainTable = ({ subjects = null, modules = null }) =>
                             <>
                                 <tr>
                                     <th colSpan={2}>
-                                        Modules professionnels (80%)
+                                        {t("school_modules")} (80%)
                                     </th>
 
                                     <th>{modules.schoolModulesAverage}</th>
@@ -115,7 +119,7 @@ const TeachingDomainTable = ({ subjects = null, modules = null }) =>
                             <>
                                 <tr>
                                     <th colSpan={2}>
-                                        Modules interentreprises (20%)
+                                        {t("non_school_modules")} (20%)
                                     </th>
 
                                     <th>{modules.nonSchoolModulesAverage}</th>
