@@ -13,7 +13,7 @@ import Grade from "./Grade";
  */
 const Apprentice = ({ apprentice, showLink }) =>
 {
-    if(Array.isArray(apprentice.user_courses))
+    if(apprentice && Array.isArray(apprentice.user_courses))
     {
         return (
             <div className="w-full p-3 bg-beige-light
@@ -39,6 +39,35 @@ const Apprentice = ({ apprentice, showLink }) =>
                             </div>
                         </div>
                     ))}
+                </div>
+            </div>
+        );
+    }
+
+    else if(apprentice && apprentice.user_course)
+    {
+        return (
+            <div className="w-full p-3 bg-beige-light
+                sm:w-1/2 sm:m-auto sm:rounded-md
+                xl:w-1/3">
+                <div>
+                    <h2 className="text-blue text-xl tracking-wide">{apprentice.username}</h2>
+                </div>
+
+                <div className="divide-y divide-blue">
+                    <div className="flex justify-between items-center py-3">
+                        {showLink ?
+                            <Link to={`/details/${apprentice.user_course.id}`} title="Voir le bulletin de notes" className="w-fit sm:w-5/6">
+                                <p>{apprentice.user_course.official_name}</p>
+                            </Link>
+                        :
+                            <p>{apprentice.user_course.official_name}</p>
+                        }
+
+                        <div className="ml-3">
+                            <Grade grade={apprentice.user_course.global_average} />
+                        </div>
+                    </div>
                 </div>
             </div>
         );

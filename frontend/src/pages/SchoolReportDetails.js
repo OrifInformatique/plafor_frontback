@@ -22,10 +22,17 @@ const SchoolReportDetails = () =>
 
     useEffect(() =>
     {
+        /**
+         * Fetches school report details data.
+         *
+         * @returns {void}
+         *
+         */
         const fetchData = async () =>
         {
             try
             {
+                /* TODO : Add user course ID as param */
                 const data = await getApprenticeSchoolReport();
                 setApprenticeSchoolReport(data);
             }
@@ -46,34 +53,33 @@ const SchoolReportDetails = () =>
 
     return (
         <>
-            <h1>
-                Bulletin de notes de<br/>
-                {apprenticeSchoolReport.username}
-            </h1>
-
-            {/* TODO : Let only trainers and admins see this button */}
-            <div className="w-max h-max mx-auto my-6">
-                <Link to={"/list"} className="btn-primary">
-                    Retour à la liste
-                </Link>
-            </div>
-
             {isLoading ?
                 <Loading />
             :
                 <>
-                    {apprenticeSchoolReport.user_courses.length > 0 ?
-                            apprenticeSchoolReport.user_courses.map(userCourse => (
-                                <div key={userCourse.id}>
-                                    <Apprentice apprentice={apprenticeSchoolReport} showLink={false} />
+                    <h1>
+                        Bulletin de notes de<br/>
+                        {apprenticeSchoolReport?.username}
+                    </h1>
 
-                                    {userCourse.teaching_domains.map(teachingDomain => (
-                                        <TeachingDomain key={teachingDomain.id} teachingDomain={teachingDomain} />
-                                    ))}
+                    {/* TODO : Let only trainers and admins see this button */}
+                    <div className="w-max h-max mx-auto my-6">
+                        <Link to={"/list"} className="btn-primary">
+                            Retour à la liste
+                        </Link>
+                    </div>
 
-                                    <AnnualAverage userCourse={userCourse} />
-                                </div>
-                            ))
+                    {apprenticeSchoolReport && apprenticeSchoolReport.user_course ?
+                        <>
+
+                            <Apprentice apprentice={apprenticeSchoolReport} showLink={false} />
+
+                            {apprenticeSchoolReport.user_course.teaching_domains.map(
+                                teachingDomain => <TeachingDomain key={teachingDomain.id} teachingDomain={teachingDomain} />
+                            )}
+
+                            <AnnualAverage userCourse={apprenticeSchoolReport.user_course} />
+                        </>
                     :
                         <NoResults />
                     }

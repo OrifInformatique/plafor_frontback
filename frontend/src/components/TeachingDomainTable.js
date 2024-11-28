@@ -1,6 +1,3 @@
-import { roundNumber } from "../utils/numberUtils";
-import { CalculateModulesAverage, CalculateSubjectAverage } from "../utils/teachingUtils";
-
 /**
  * Displays the details of a teaching domain.
  *
@@ -44,8 +41,6 @@ const TeachingDomainTable = ({ subjects = null, modules = null }) =>
                     date: null,
                 });
             }
-
-            subject.average = roundNumber(CalculateSubjectAverage(subject));
         })
     }
 
@@ -55,9 +50,6 @@ const TeachingDomainTable = ({ subjects = null, modules = null }) =>
 
         schoolModules.modules = modules.filter(module => module.is_school);
         nonSchoolModules.modules = modules.filter(module => !module.is_school);
-
-        schoolModules.average = CalculateModulesAverage(schoolModules.modules);
-        nonSchoolModules.average = CalculateModulesAverage(nonSchoolModules.modules);
     }
 
     else
@@ -75,6 +67,7 @@ const TeachingDomainTable = ({ subjects = null, modules = null }) =>
                     ))}
                 </tr>
             </thead>
+
             <tbody>
                 {subjects?.map(subject => (
                     <tr key={subject.id}>
@@ -103,7 +96,7 @@ const TeachingDomainTable = ({ subjects = null, modules = null }) =>
                                         Modules professionnels (80%)
                                     </th>
 
-                                    <th>{schoolModules.average}</th>
+                                    <th>{modules.schoolModulesAverage}</th>
                                 </tr>
 
                                 {schoolModules.modules.map(schoolModule => (
@@ -125,7 +118,7 @@ const TeachingDomainTable = ({ subjects = null, modules = null }) =>
                                         Modules interentreprises (20%)
                                     </th>
 
-                                    <th>{nonSchoolModules.average}</th>
+                                    <th>{modules.nonSchoolModulesAverage}</th>
                                 </tr>
 
                                 {nonSchoolModules.modules.map(nonSchoolModule => (

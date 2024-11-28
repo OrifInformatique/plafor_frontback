@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import YearFilter from "./YearFilter";
 import AnnualAverageDomain from "./AnnualAverageDomain";
 import Grade from "./Grade";
-import { roundNumber } from "../utils/numberUtils";
-import { CalculateDomainModulesAverage } from "../utils/teachingUtils";
+import NoResults from "./NoResults";
 
 /**
  * Displays the annual averages of a user course.
@@ -26,99 +25,30 @@ const AnnualAverage = ({ userCourse }) =>
     const [yearlyUserCourse, setYearlyUserCourse] = useState([]);
 
     /**
-     * Arrange user course data to consider only domains and subjects
-     * that contains at least one grade during the selected year.\
-     * The subjects and domains weightings are considered in the calculation
-     * of the averages.
+     * Selects data corresponding to the year selected.
      *
      * @param {array} userCourse User course of the apprentice.
      *
-     * @param {Date} year Year selected via the filters, in `yyyy-mm-dd` format.
+     * @param {Date} selectedYear Year selected via the filters, in `yyyy-mm-dd` format.
      *
      * @returns {void}
      *
      */
-    const getYearlyUserCourse = (userCourse, year) =>
+    const getYearlyUserCourse = (userCourse, selectedYear) =>
     {
-        const yearDateBegin = Date.parse(year[0]);
-        const yearDateEnd   = Date.parse(year[1]);
+        let year = 1;
 
-        let yearlyUserCourse = userCourse.teaching_domains.map(teachingDomain =>
+        yearsList.forEach(schoolYear =>
         {
-            let subjects = null;
-            let modules = null;
-            let domainAverage = null;
-
-            if(teachingDomain.subjects && !teachingDomain.modules)
+            if(schoolYear[0] === selectedYear[0]
+                && schoolYear[1] === selectedYear[1])
             {
-                subjects = teachingDomain.subjects?.map(subject =>
-                {
-                    // Only keep grades that have been made during the year
-                    const grades = subject.grades?.filter(grade =>
-                    {
-                        const gradeDate = Date.parse(grade.date);
-
-                        return gradeDate >= yearDateBegin && gradeDate <= yearDateEnd;
-                    });
-
-                    if(grades?.length > 0)
-                    {
-                        const subjectAverage = grades.reduce((sum, grade) => sum + grade.grade, 0) / grades.length;
-                        return { ...subject, grades: grades, average: subjectAverage}
-                    }
-
-                    return null;
-
-                }).filter(subject => subject);
-
-                if(subjects?.length > 0)
-                {
-                    const weightSum = subjects.reduce((sum, subject) => sum + subject.weight, 0);
-
-                    domainAverage = subjects?.reduce(
-                        (sum, subject) => sum + subject.average * subject.weight, 0) / weightSum;
-                }
+                setYearlyUserCourse(userCourse.yearly_reports.find(
+                    yearlyReport => yearlyReport.year === year));
             }
 
-            else if(teachingDomain.modules && !teachingDomain.subjects)
-            {
-                // Only keep grades that have been made during the year
-                modules = teachingDomain.modules?.filter(module =>
-                {
-                    const moduleDate = Date.parse(module.grade_date);
-
-                    return moduleDate >= yearDateBegin && moduleDate <= yearDateEnd;
-                });
-
-                if(modules?.length > 0)
-                {
-                    let schoolModules = modules.filter(module => module.is_school);
-                    let nonSchoolModules = modules.filter(module => !module.is_school);
-
-                    domainAverage = CalculateDomainModulesAverage(schoolModules, nonSchoolModules);
-                }
-            }
-
-            else
-            {
-                console.error("The teaching domain has both subject and modules defined or empty/undefined.")
-                return null;
-            }
-
-            domainAverage = roundNumber(domainAverage);
-
-            return { ...teachingDomain, subjects: subjects, modules: modules, average: domainAverage };
-        }).filter(teachingDomain => teachingDomain);
-
-        const domainsWeightSum = yearlyUserCourse.reduce(
-            (sum, teachingDomain) => sum + teachingDomain.weight, 0);
-
-        const globalAverage = yearlyUserCourse.reduce(
-            (sum, teachingDomain) => sum + teachingDomain.average * teachingDomain.weight, 0) / domainsWeightSum;
-
-        yearlyUserCourse.globalAverage = roundNumber(globalAverage);
-
-        setYearlyUserCourse(yearlyUserCourse);
+            year += 1;
+        });
     }
 
     /**
@@ -148,10 +78,7 @@ const AnnualAverage = ({ userCourse }) =>
         const currentYear = new Date().getFullYear();
 
         if(currentYear >= beginYear && currentYear < endYear)
-        {
-            const currentSchoolYear = [`${currentYear}-08-01`, `${currentYear + 1}-07-31`];
-            setSelectedYear(currentSchoolYear);
-        }
+            setSelectedYear([`${currentYear}-08-01`, `${currentYear + 1}-07-31`]);
     }
 
     useEffect(() =>
@@ -163,7 +90,9 @@ const AnnualAverage = ({ userCourse }) =>
     useEffect(() =>
     {
         getYearlyUserCourse(userCourse, selectedYear)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userCourse, selectedYear]);
+
 
     return (
         <div className="w-full p-3 bg-beige-light
@@ -180,21 +109,23 @@ const AnnualAverage = ({ userCourse }) =>
                 ))}
             </div>
 
-            <div className="w-full py-2 px-5 bg-blue-light flex justify-between items-center space-x-2 text-white rounded-lg">
+            {yearlyUserCourse ?
+                <>
+                    <div className="w-full py-2 px-5 bg-blue-light flex justify-between items-center space-x-2 text-white rounded-lg">
                         <strong className="text-lg">
                             Moyenne de l'année
                         </strong>
 
                         <strong>
-                            <Grade grade={yearlyUserCourse.globalAverage} />
+                            <Grade grade={yearlyUserCourse.yearly_average} />
                         </strong>
                     </div>
 
-            <div className="">
-                {yearlyUserCourse.length > 0 &&
-                    <AnnualAverageDomain yearlyUserCourse={yearlyUserCourse} />
-                }
-            </div>
+                    <AnnualAverageDomain teachingDomains={yearlyUserCourse.teaching_domains} />
+                </>
+            :
+                <NoResults />
+            }
         </div>
     )
 }

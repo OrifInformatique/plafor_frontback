@@ -1,8 +1,5 @@
 import Grade from "./Grade"
 import TeachingDomainTable from "./TeachingDomainTable"
-import { useState, useEffect } from "react";
-import { roundNumber } from "../utils/numberUtils";
-import { CalculateSubjectAverage, CalculateDomainModulesAverage } from "../utils/teachingUtils";
 
 /**
  * Displays the details of a teaching domain, in the school report details.
@@ -14,30 +11,11 @@ import { CalculateSubjectAverage, CalculateDomainModulesAverage } from "../utils
  */
 const TeachingDomain = ({ teachingDomain }) =>
 {
-    const [domainAverage, setDomainAverage] = useState(null);
-
-    useEffect(() =>
+    if(teachingDomain.modules)
     {
-        if(teachingDomain.subjects)
-        {
-            const domainAverage = teachingDomain.subjects.reduce((sum, subject) => {
-                const subjectAverage = CalculateSubjectAverage(subject);
-                return sum + subjectAverage * subject.weight;
-            }, 0);
-
-            setDomainAverage(roundNumber(domainAverage));
-        }
-
-        else if(teachingDomain.modules)
-        {
-            const schoolModules = teachingDomain.modules.filter(module => module.is_school);
-            const nonSchoolModules = teachingDomain.modules.filter(module => !module.is_school);
-
-            const modulesAverage = CalculateDomainModulesAverage(schoolModules, nonSchoolModules);
-
-            setDomainAverage(roundNumber(modulesAverage));
-        }
-    }, [teachingDomain]);
+        teachingDomain.modules.schoolModulesAverage = teachingDomain.school_modules_average;
+        teachingDomain.modules.nonSchoolModulesAverage = teachingDomain.non_school_modules_average;
+    }
 
     /**
      * Opens or closes the details of a teaching domain.
@@ -81,7 +59,7 @@ const TeachingDomain = ({ teachingDomain }) =>
                 </p>
 
                 <div className="flex flex-col justify-center content-center select-none">
-                    <Grade grade={domainAverage} />
+                    <Grade grade={teachingDomain.average} />
 
                     <p className="-mt-2">
                         ({teachingDomain.weight * 100}%)
@@ -94,11 +72,11 @@ const TeachingDomain = ({ teachingDomain }) =>
                 sm:w-1/2 sm:m-auto sm:rounded-b-md
                 xl:w-1/3
                 max-h-0 overflow-hidden transition-all duration-[425ms]">
-                {teachingDomain.subjects &&
+                {teachingDomain.subjects && !teachingDomain.modules &&
                     <TeachingDomainTable subjects={teachingDomain.subjects} />
                 }
 
-                {teachingDomain.modules &&
+                {!teachingDomain.subjects && teachingDomain.modules &&
                     <TeachingDomainTable modules={teachingDomain.modules} />
                 }
             </div>

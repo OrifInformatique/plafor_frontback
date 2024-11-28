@@ -8,11 +8,11 @@ import Grade from "./Grade";
  * @returns {JSX.Element}
  *
  */
-const AnnualAverageDomain = ({ yearlyUserCourse }) =>
+const AnnualAverageDomain = ({ teachingDomains }) =>
 {
    return (
        <>
-           {yearlyUserCourse.map(teachingDomain => (
+           {teachingDomains?.map(teachingDomain => (
                 <div key={teachingDomain.id} className="my-4">
                     <div className="w-full p-2 bg-white flex justify-between items-center space-x-2 border-b-4 border-b-blue text-blue">
                         <p className="text-lg">
@@ -53,7 +53,7 @@ const AnnualAverageDomain = ({ yearlyUserCourse }) =>
                         {teachingDomain.modules?.map(module => (
                             <div key={module.id} className="bg-white flex justify-between items-center space-x-2 p-2">
                                 <p className="text-lg">
-                                    {module.name}
+                                    {module.module_number + " - " + module.name}
                                 </p>
 
                                 <Grade grade={module.grade} />
