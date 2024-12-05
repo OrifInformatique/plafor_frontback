@@ -7,7 +7,7 @@ It is made using React and Tailwind.
 ## Run in local
 
 1. `cd frontend`.
-2. `npm start`.
+2. `npm run serve`.
 3. Go to [http://localhost:3000](http://localhost:3000).
 
 ## Testing

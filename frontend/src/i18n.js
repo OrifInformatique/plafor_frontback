@@ -19,7 +19,7 @@ i18n
             loadPath: "/locales/{{lng}}/{{ns}}.json"
         },
 
-        ns: ["common", "annualAverage", "titles", "teachingDomain", "texts"],
+        ns: ["annualAverage", "apprenticesList", "buttons", "teachingDomain", "texts", "titles"],
 
         detection:
         {

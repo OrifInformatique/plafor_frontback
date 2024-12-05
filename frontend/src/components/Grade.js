@@ -1,3 +1,5 @@
+import React from 'react';
+
 /**
  * Displays a grade.\
  * The grade will be in red if it is inferior than 4.
