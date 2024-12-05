@@ -16,10 +16,10 @@ i18n
 
         backend:
         {
-            loadPath: "/locales/{{lng}}/{{ns}}.json"
+            loadPath: `${process.env.APP_ROOT !== "/" && process.env.APP_ROOT}/locales/{{lng}}/{{ns}}.json`
         },
 
-        ns: ["common", "annualAverage", "titles", "teachingDomain", "texts"],
+        ns: ["annualAverage", "apprenticesList", "buttons", "teachingDomain", "texts", "titles"],
 
         detection:
         {

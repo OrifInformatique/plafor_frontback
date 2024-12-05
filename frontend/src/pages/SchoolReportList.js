@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -131,7 +132,7 @@ const SchoolReportList = () =>
                         {t("unassigned", { ns: "apprenticesList" })}
                     </option>
 
-                    {trainers.map(trainer => (
+                    {trainers?.map(trainer => (
                         <option key={trainer.user_id} value={trainer.user_id}>
                             {trainer.username.length > 40 ?
                                 trainer.username.slice(0, 39) + "..."

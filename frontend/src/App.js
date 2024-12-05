@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import React, { Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Layout from "./layouts/Layout";
@@ -20,7 +20,7 @@ const App = () =>
 {
     return (
         <Suspense fallback={<Loading />}>
-            <BrowserRouter>
+            <BrowserRouter basename={process.env.APP_ROOT}>
                 <Routes>
                     <Route element={<Layout />}>
                         <Route path="/" element={<SchoolReportList />}/>

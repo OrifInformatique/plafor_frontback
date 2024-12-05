@@ -8,7 +8,7 @@ export const getSchoolReportsSummaries = async () =>
 {
     try
     {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/school_reports`);
+        const response = await fetch(`${process.env.API_URL}/school_reports`);
         const data = await response.json();
 
         return data;
@@ -35,7 +35,7 @@ export const getApprenticeSchoolReport = async (userCourseId = null) =>
 {
     try
     {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/school_report/${userCourseId}`);
+        const response = await fetch(`${process.env.API_URL}/school_report/${userCourseId}`);
         const data = await response.json();
 
         return data;
