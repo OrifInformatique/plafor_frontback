@@ -14,7 +14,7 @@ import React from 'react';
 const Grade = ({ grade, isLarge = true }) =>
 {
     return (
-        <p className={`${isLarge && "note"} ${grade < 4 && "text-rose-500"}`}>
+        <p className={`${isLarge && "note"} ${grade < 4 && "text-rose-500"}`} data-testid="grade-container">
             {grade}
         </p>
     )
