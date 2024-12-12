@@ -3,9 +3,9 @@ import { screen } from '@testing-library/react';
 /**
  * Gets HTML elements for testing.
  *
- * @param {string|Array<String>} testIds Names of data-testid attrbutes defined in elements.
+ * @param {string|string[]} testIds Names of data-testid attrbutes defined in elements.
  *
- * @returns {Array<HTMLElement>}
+ * @returns {HTMLElement|HTMLElement[]}
  *
  */
 export const getElementsByTestIds = (testIds) =>

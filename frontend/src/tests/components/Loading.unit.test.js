@@ -42,7 +42,7 @@ test("Elements structure is correct", () =>
 
 test("Text contains the correct loading text", () =>
 {
-    renderComponent(<Loading />, true);
+    renderComponent(<Loading />);
 
     const loadingText = getElementsByTestIds("loading-text");
 
