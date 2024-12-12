@@ -12,8 +12,8 @@ const NoResults = () =>
     const { t } = useTranslation("texts");
 
     return (
-        <div className="w-max mx-auto">
-            <strong className="text-lg">
+        <div className="w-max mx-auto" data-testid="no-results-container">
+            <strong className="text-lg" data-testid="no-results-text">
                 {t("no_results")}
             </strong>
         </div>
