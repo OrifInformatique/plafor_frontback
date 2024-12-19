@@ -7,7 +7,7 @@
  * @returns {object}
  *
  */
-export const setYearsFilters = (userCourse = null) =>
+export const setYearsFilters = (userCourse) =>
 {
     if(!userCourse || !userCourse.date_begin || !userCourse.date_end)
         return {
@@ -43,13 +43,16 @@ export const setYearsFilters = (userCourse = null) =>
  *
  * @param {string[]} yearsList List of years of course plan.
  *
- * @param {Date} selectedYear Year selected via the filters, in `yyyy-mm-dd` format.
+ * @param {string[]} selectedYear Year selected via the filters, in `yyyy-mm-dd` format.
  *
  * @returns {?array}
  *
  */
 export const getYearlyUserCourse = (userCourse, yearsList, selectedYear) =>
 {
+    if(!userCourse || !yearsList || !selectedYear)
+        return null;
+
     let year = 1;
 
     for(const schoolYear of yearsList)
