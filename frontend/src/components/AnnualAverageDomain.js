@@ -18,7 +18,8 @@ const AnnualAverageDomain = ({ teachingDomains }) =>
    return (
        <>
            {teachingDomains?.map(teachingDomain => (
-                <div key={teachingDomain.id} className="my-4">
+                <div key={teachingDomain.id} className="my-4"
+                data-testid="annual-average-domain-container">
                     <div className="w-full p-2 bg-white flex justify-between items-center space-x-2 border-b-4 border-b-blue text-blue">
                         <p className="text-lg">
                             {teachingDomain.title}

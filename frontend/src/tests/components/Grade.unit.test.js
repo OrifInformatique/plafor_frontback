@@ -1,5 +1,6 @@
 import React from 'react';
 import { cleanup } from '@testing-library/react';
+
 import { getElementsByTestIds } from "../utils/getElementsByTestIds";
 import { renderComponent } from '../utils/renderComponent';
 
@@ -69,7 +70,6 @@ test("Grade color is applied correctly based on value", () =>
         cleanup();
     });
 });
-
 
 test("Grade size is correct based on isLarge prop", () =>
 {

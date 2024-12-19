@@ -1,10 +1,11 @@
 import React from 'react';
+
 import { getElementsByTestIds } from "../utils/getElementsByTestIds";
 import { renderComponent } from '../utils/renderComponent';
 
-import frTexts from "../../../public/locales/fr/texts.json";
-
 import Loading from "../../components/Loading";
+
+import frTexts from "../../../public/locales/fr/texts.json";
 
 test("Component contains 5 elements", () =>
 {
