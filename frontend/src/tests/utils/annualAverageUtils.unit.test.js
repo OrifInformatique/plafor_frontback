@@ -1,6 +1,6 @@
 import { setYearsFilters, getYearlyUserCourse } from "../../utils/annualAverageUtils";
 
-import { getMockedUserCourseData, getMockedUserCourseDataWithSameDates, getMockedYearlyUserCourse } from "./getUserCourseData"
+import { getMockedUserCourseData, getMockedUserCourseDataWithSameDates } from "./getUserCourseData"
 
 const userCourse = getMockedUserCourseData();
 const userCourseWithSameYears = getMockedUserCourseDataWithSameDates();

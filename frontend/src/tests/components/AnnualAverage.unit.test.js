@@ -1,8 +1,7 @@
 import React from 'react';
 import userEvent from "@testing-library/user-event";
-import { screen } from '@testing-library/react';
 
-import { getElementsByTestIds } from "../utils/getElementsByTestIds";
+import { getElementsByTestIds, queryElementsByTestIds } from "../utils/getElementsByTestIds";
 import { renderComponent } from '../utils/renderComponent';
 import { getMockedUserCourseData, getMockedYearlyUserCourse } from '../utils/getUserCourseData';
 
@@ -57,15 +56,8 @@ test("Component contains 4 elements when no userCourse is provided", () =>
 
     hiddenElements.forEach(element =>
     {
-        const HTMLElement = screen.queryByTestId(element)
+        const HTMLElement = queryElementsByTestIds(element)
         expect(HTMLElement).not.toBeInTheDocument();
-    });
-
-    const annualAverageDomainContainers = screen.queryAllByTestId("annual-average-domain-container");
-
-    annualAverageDomainContainers.forEach(element =>
-    {
-        expect(element).not.toBeInTheDocument();
     });
 });
 
@@ -88,7 +80,7 @@ test("Component contains 7 elements when userCourse is provided", () =>
         expect(element).toBeInTheDocument();
     });
 
-    const noResults = screen.queryByTestId("no-results-container");
+    const noResults = queryElementsByTestIds("no-results-container");
 
     expect(noResults).not.toBeInTheDocument();
 

@@ -12,12 +12,34 @@ export const getElementsByTestIds = (testIds) =>
 {
     if(!Array.isArray(testIds))
     {
-        return screen.getByTestId(testIds)
+        return screen.getByTestId(testIds);
     }
 
     return testIds.reduce((acc, testId) =>
     {
         acc[testId] = screen.getByTestId(testId);
+        return acc;
+    }, {});
+};
+
+/**
+ * Queries HTML elements for testing.
+ *
+ * @param {string|string[]} testIds Names of data-testid attrbutes defined in elements.
+ *
+ * @returns {HTMLElement|HTMLElement[]}
+ *
+ */
+export const queryElementsByTestIds = (testIds) =>
+{
+    if(!Array.isArray(testIds))
+    {
+        return screen.queryByTestId(testIds);
+    }
+
+    return testIds.reduce((acc, testId) =>
+    {
+        acc[testId] = screen.queryByTestId(testId);
         return acc;
     }, {});
 };
