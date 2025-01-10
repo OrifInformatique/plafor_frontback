@@ -8,72 +8,79 @@ import Grade from "./Grade";
  *
  * @param {array} apprentice
  *
- * @param {boolean} showLink Defines whether to put a link to the school report details of the user course on the user course official name.
+ * @param {boolean} [showLink=false] Defines whether to put a link to the school report details of the user course on the user course official name. False by default.
  *
  * @returns {JSX.Element}
  *
  */
-const Apprentice = ({ apprentice, showLink }) =>
+const Apprentice = ({ apprentice, showLink = false }) =>
 {
-    if(apprentice && Array.isArray(apprentice.user_courses))
+    let apprenticeUserCourses = {};
+
+    if(!apprentice)
     {
-        return (
-            <div className="w-full p-3 bg-beige-light
-                sm:w-1/2 sm:m-auto sm:rounded-md
-                xl:w-1/3">
-                <div>
-                    <h2 className="text-blue text-xl tracking-wide">{apprentice.username}</h2>
-                </div>
-
-                <div className="divide-y divide-blue">
-                    {apprentice.user_courses.map(user_course => (
-                        <div className="flex justify-between items-center py-3" key={user_course.id}>
-                            {showLink ?
-                                <Link to={`/details/${user_course.id}`} className="w-fit sm:w-5/6">
-                                    <p>{user_course.official_name}</p>
-                                </Link>
-                            :
-                                <p>{user_course.official_name}</p>
-                            }
-
-                            <div className="ml-3">
-                                <Grade grade={user_course.global_average} />
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        );
+        return;
     }
 
-    else if(apprentice && apprentice.user_course)
+    else if(Array.isArray(apprentice.user_courses))
     {
-        return (
-            <div className="w-full p-3 bg-beige-light
-                sm:w-1/2 sm:m-auto sm:rounded-md
-                xl:w-1/3">
-                <div>
-                    <h2 className="text-blue text-xl tracking-wide">{apprentice.username}</h2>
-                </div>
+        apprenticeUserCourses = apprentice.user_courses;
+    }
 
-                <div className="divide-y divide-blue">
-                    <div className="flex justify-between items-center py-3">
+    else if(apprentice.user_course)
+    {
+        apprenticeUserCourses = [apprentice.user_course];
+    }
+
+    return (
+        <div
+            className="w-full p-3 bg-beige-light sm:w-1/2 sm:m-auto sm:rounded-md xl:w-1/3"
+            data-testid="apprentice-container"
+        >
+            <h2
+                className="text-blue text-xl tracking-wide"
+                data-testid="apprentice-name"
+            >
+                {apprentice.username}
+            </h2>
+
+            <div
+                className="divide-y divide-blue"
+                data-testid="apprentice-user-courses-container"
+            >
+                {apprenticeUserCourses.map(user_course => (
+                    <div
+                        key={user_course.id}
+                        className="flex justify-between items-center py-3"
+                        data-testid="apprentice-user-course"
+                    >
                         {showLink ?
-                            <Link to={`/details/${apprentice.user_course.id}`} title="Voir le bulletin de notes" className="w-fit sm:w-5/6">
-                                <p>{apprentice.user_course.official_name}</p>
+                            <Link
+                                to={`/details/${user_course.id}`}
+                                className="w-fit sm:w-5/6"
+                                data-testid="apprentice-user-course-name-link"
+                            >
+                                <p data-testid="apprentice-user-course-name">
+                                    {user_course.official_name}
+                                </p>
                             </Link>
                         :
-                            <p>{apprentice.user_course.official_name}</p>
+                            <p data-testid="apprentice-user-course-name">
+                                {user_course.official_name}
+                            </p>
                         }
 
-                        <div className="ml-3">
-                            <Grade grade={apprentice.user_course.global_average} />
+                        <div
+                            className="ml-3"
+                            data-testid="apprentice-global-average-container"
+                        >
+                            <Grade grade={user_course.global_average} />
                         </div>
                     </div>
-                </div>
+                ))}
             </div>
-        );
-    }
+        </div>
+    );
 }
 
 export default Apprentice;
