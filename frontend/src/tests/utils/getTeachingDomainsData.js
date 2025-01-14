@@ -107,3 +107,31 @@ export const getTeachingDomainsWithSubjectsAndModules = () =>
         }
     ];
 }
+
+/**
+ * Returns teaching domains data that is eliminatory.
+ *
+ * @returns {Object}
+ *
+ */
+export const getEliminatoryTeachingDomain = () =>
+{
+    return {
+        "id": 1,
+        "title": "Compétences de base élargies",
+        "is_eliminatory": true,
+        "average": 5,
+        "subjects":
+        [
+            {
+                "id": 1,
+                "name": "Mathématiques",
+                "average": 4,
+                "grades":
+                [
+                    { "id": 2, "grade": 4 }
+                ]
+            }
+        ],
+    };
+}

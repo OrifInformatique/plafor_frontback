@@ -20,7 +20,7 @@ const App = () =>
 {
     return (
         <Suspense fallback={<Loading />}>
-            <BrowserRouter basename={process.env.APP_ROOT}>
+            <BrowserRouter basename={process.env.APP_ROOT} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                 <Routes>
                     <Route element={<Layout />}>
                         <Route path="/" element={<SchoolReportList />}/>
