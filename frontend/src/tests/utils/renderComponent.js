@@ -8,6 +8,7 @@ import { MemoryRouter } from "react-router-dom";
 
 import frAnnualAverage from "../../../public/locales/fr/annualAverage.json";
 import frTeachingDomain from "../../../public/locales/fr/teachingDomain.json";
+import frTitles from "../../../public/locales/fr/titles.json";
 import frTexts from "../../../public/locales/fr/texts.json";
 
 /**
@@ -42,6 +43,7 @@ const initLanguage = () =>
             {
                 annualAverage: frAnnualAverage,
                 teachingDomain: frTeachingDomain,
+                titles: frTitles,
                 texts: frTexts,
             },
         },

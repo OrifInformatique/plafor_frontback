@@ -15,18 +15,32 @@ const Layout = () =>
 
     return (
         <>
-            <header className="bg-blue font-bold tracking-wide text-white text-center py-2 mb-4">
-                <Link to={"/"} className="hover:no-underline hover:text-white">
+            <header
+                className="bg-blue font-bold tracking-wide text-white text-center py-2 mb-4"
+                data-testid="layout-header"
+            >
+                <Link
+                    to={"/"}
+                    className="hover:no-underline hover:text-white"
+                    data-testid="layout-header-link"
+                >
                     {t("react_school_report")}
                 </Link>
             </header>
 
-            <main>
+            <main data-testid="layout-main">
                 <Outlet />
             </main>
 
-            <footer className="bg-blue-dark text-white text-center py-2 mt-4">
-                <Link to={"https://plafor.sectioninformatique.ch"} target="_blank">
+            <footer
+                className="bg-blue-dark text-white text-center py-2 mt-4"
+                data-testid="layout-footer"
+            >
+                <Link
+                    to={"https://plafor.sectioninformatique.ch"}
+                    target="_blank"
+                    data-testid="layout-footer-link"
+                >
                     Plafor
                 </Link>
             </footer>
