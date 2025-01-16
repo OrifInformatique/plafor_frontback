@@ -44,7 +44,7 @@ test("Component shows no results when no data is fetched", async () =>
         const noResults = getElementsByTestIds("no-results-container");
 
         expect(noResults).toBeInTheDocument();
-    })
+    });
 });
 
 test("Component shows data when data is fetched", async () =>

@@ -30,7 +30,7 @@ const SchoolReportDetails = () =>
      * @returns {void}
      *
      */
-    const fetchSchoolReportData = async () =>
+    const fetchSchoolReportDetails = async () =>
     {
         /* TODO : Add user course ID as param */
         const data = await getApprenticeSchoolReport();
@@ -40,10 +40,7 @@ const SchoolReportDetails = () =>
         setIsLoading(false);
     }
 
-    useEffect(() =>
-    {
-        fetchSchoolReportData();
-    }, []);
+    useEffect(() => fetchSchoolReportDetails, []);
 
     return (
         <>

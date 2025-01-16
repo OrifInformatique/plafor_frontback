@@ -57,7 +57,7 @@ const SchoolReportList = () =>
         setTrainerFilter(event.target.value)
     }
 
-    // Filters the list by apprentice name when typing in the searchbar
+    // Filters the list when selecting a trainer or typing in the searchbar
     useEffect(() =>
     {
         let filteredData = schoolReportsSummaries;
@@ -87,53 +87,73 @@ const SchoolReportList = () =>
             );
 
         setFilteredList(filteredData);
+
     }, [searchBar, trainerFilter, schoolReportsSummaries])
+
+    /**
+     * Fetches school report summaries.
+     *
+     * @returns {void}
+     *
+     */
+    const fetchSchoolReportSummaries = async () =>
+    {
+        const data = await getSchoolReportsSummaries();
+
+        if(data?.apprentices && data?.trainers)
+        {
+            setSchoolReportsSummaries(data.apprentices);
+            setFilteredList(data.apprentices);
+            setTrainers(data.trainers);
+        }
+
+        setIsLoading(false);
+    }
 
     useEffect(() =>
     {
-        const fetchData = async () =>
-        {
-            try
-            {
-                const data = await getSchoolReportsSummaries();
-                setSchoolReportsSummaries(data.apprentices);
-                setFilteredList(data.apprentices);
-                setTrainers(data.trainers);
-            }
-
-            catch(error)
-            {
-                console.error("Erreur lors de l'affichage des données.", error)
-            }
-
-            finally
-            {
-                setIsLoading(false);
-            }
-        }
-
-        fetchData();
+        fetchSchoolReportSummaries();
     }, [])
 
     return (
-        <div className="space-y-4">
-            <h1>{t("school_report_list", { ns: "titles" })}</h1>
+        <div
+            className="space-y-4"
+            data-testid="school-summaries-container"
+        >
+            <h1 data-testid="school-summaries-title">
+                {t("school_report_list", { ns: "titles" })}
+            </h1>
 
-            <div className="w-full p-3 bg-beige-light space-x-2 flex justify-between items-center
-                sm:w-1/2 sm:m-auto sm:rounded-md
-                xl:w-1/3">
-                <select className="basis-1/3 max-w-24 sm:max-w-36 px-2 py-1 rounded-sm"
-                    onChange={handleTrainersFilter}>
-                    <option value="all">
+            <div
+                className="w-full p-3 bg-beige-light space-x-2 flex justify-between items-center
+                sm:w-1/2 sm:m-auto sm:rounded-md xl:w-1/3"
+                data-testid="school-summaries-filters-container"
+            >
+                <select
+                    className="basis-1/3 max-w-24 sm:max-w-36 px-2 py-1 rounded-sm"
+                    onChange={handleTrainersFilter}
+                    data-testid="school-summaries-trainer-filter"
+                >
+                    <option
+                        value="all"
+                        data-testid="school-summaries-trainers-filters-all-option"
+                    >
                         {t("all", { ns: "apprenticesList" })}
                     </option>
 
-                    <option value="unassigned">
+                    <option
+                        value="unassigned"
+                        data-testid="school-summaries-trainers-filters-unassigned-option"
+                    >
                         {t("unassigned", { ns: "apprenticesList" })}
                     </option>
 
                     {trainers?.map(trainer => (
-                        <option key={trainer.user_id} value={trainer.user_id}>
+                        <option
+                            key={trainer.user_id}
+                            value={trainer.user_id}
+                            data-testid="school-summaries-trainers-filters-dynamic-option"
+                        >
                             {trainer.username.length > 40 ?
                                 trainer.username.slice(0, 39) + "..."
                             :
@@ -143,9 +163,13 @@ const SchoolReportList = () =>
                     ))}
                 </select>
 
-                <input type="text" value={searchBar}
-                    onChange={handleSearchBar} placeholder={t("search_for_apprentice", { ns: "apprenticesList" })}
+                <input
+                    type="text"
+                    value={searchBar}
+                    onChange={handleSearchBar}
+                    placeholder={t("search_for_apprentice", { ns: "apprenticesList" })}
                     className="basis-2/3 px-2 py-1 rounded-sm"
+                    data-testid="school-summaries-apprentice-name-filter"
                 />
             </div>
 
@@ -154,15 +178,17 @@ const SchoolReportList = () =>
             :
                 <>
                     {filteredList?.length > 0 ?
-                        filteredList?.map(schoolReportSummary =>
+                        filteredList.map(schoolReportSummary =>
                         (
-                            <Apprentice key={schoolReportSummary.user_id}
-                                apprentice={schoolReportSummary} showLink={true} />
+                            <Apprentice
+                                key={schoolReportSummary.user_id}
+                                apprentice={schoolReportSummary}
+                                showLink={true}
+                            />
                         ))
                     :
                         <NoResults />
                     }
-
                 </>
             }
         </div>

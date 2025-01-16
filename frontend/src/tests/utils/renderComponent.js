@@ -7,6 +7,7 @@ import { I18nextProvider } from "react-i18next";
 import { MemoryRouter } from "react-router-dom";
 
 import frAnnualAverage from "../../../public/locales/fr/annualAverage.json";
+import frApprenticesList from "../../../public/locales/fr/apprenticesList.json";
 import frButtons from "../../../public/locales/fr/buttons.json";
 import frTeachingDomain from "../../../public/locales/fr/teachingDomain.json";
 import frTitles from "../../../public/locales/fr/titles.json";
@@ -43,6 +44,7 @@ const initLanguage = () =>
             fr:
             {
                 annualAverage: frAnnualAverage,
+                apprenticesList: frApprenticesList,
                 buttons: frButtons,
                 teachingDomain: frTeachingDomain,
                 titles: frTitles,
