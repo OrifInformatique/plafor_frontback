@@ -40,7 +40,10 @@ const SchoolReportDetails = () =>
         setIsLoading(false);
     }
 
-    useEffect(() => fetchSchoolReportDetails, []);
+    useEffect(() =>
+    {
+        fetchSchoolReportDetails();
+    }, []);
 
     return (
         <>

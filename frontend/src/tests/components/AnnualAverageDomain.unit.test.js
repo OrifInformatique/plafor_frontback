@@ -53,7 +53,7 @@ test("Component contains the correct elements according to teachingDomains' cont
 
         const averageElements = getElementsByTestIds(
         [
-            "annual-average-domain-container", "annual-average-container", "annual-average-text",
+            "annual-average-domain-container", "annual-average-domain-head-container", "annual-average-text",
             "annual-average-subjects-modules-container"
         ]);
 
@@ -130,7 +130,7 @@ test("Elements structure is correct", () =>
 
     const elements = getElementsByTestIds(
     [
-        "annual-average-domain-container", "annual-average-container", "annual-average-text",
+        "annual-average-domain-container", "annual-average-domain-head-container", "annual-average-text",
         "annual-average-subjects-modules-container", "annual-average-subject-container",
         "annual-average-subject-name-container", "annual-average-subject-name",
         "annual-average-semester-grades-text", "annual-average-subject-grade-container",
@@ -138,12 +138,12 @@ test("Elements structure is correct", () =>
         "annual-average-module", "annual-average-module-name"
     ]);
 
-    expect(elements["annual-average-domain-container"]).toContainElement(elements["annual-average-container"]);
+    expect(elements["annual-average-domain-container"]).toContainElement(elements["annual-average-domain-head-container"]);
     expect(elements["annual-average-domain-container"]).toContainElement(elements["annual-average-subjects-modules-container"]);
 
-    expect(elements["annual-average-container"]).toContainElement(elements["annual-average-text"]);
+    expect(elements["annual-average-domain-head-container"]).toContainElement(elements["annual-average-text"]);
 
-    expect(elements["annual-average-container"]).toContainElement(elements["annual-average-container"]);
+    expect(elements["annual-average-domain-head-container"]).toContainElement(elements["annual-average-domain-head-container"]);
 
     expect(elements["annual-average-subjects-modules-container"]).toContainElement(elements["annual-average-subject-container"]);
     expect(elements["annual-average-subjects-modules-container"]).toContainElement(elements["annual-average-module"]);
@@ -167,13 +167,13 @@ test("Elements have important classes for render", () =>
 
     const elements = getElementsByTestIds(
     [
-        "annual-average-container", "annual-average-text",
+        "annual-average-domain-head-container", "annual-average-text",
         "annual-average-subjects-modules-container", "annual-average-subject-name",
         "annual-average-semester-grades-text", "annual-average-subject-semester-grade",
         "annual-average-module-name"
     ]);
 
-    expect(elements["annual-average-container"]).toHaveClass("border-b-4 border-b-blue text-blue");
+    expect(elements["annual-average-domain-head-container"]).toHaveClass("border-b-4 border-b-blue text-blue");
 
     expect(elements["annual-average-text"]).toHaveClass("text-lg");
 

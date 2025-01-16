@@ -47,27 +47,43 @@ const AnnualAverage = ({ userCourse }) =>
     }, [userCourse, yearsList, selectedYear]);
 
     return (
-        <div className="w-full p-3 bg-beige-light
-            sm:w-1/2 sm:m-auto sm:rounded-md xl:w-1/3"
-            data-testid="annual-average-container">
-            <h2 className="text-blue text-xl tracking-wide" data-testid="annual-average-heading">
+        <div
+            className="w-full p-3 bg-beige-light sm:w-1/2 sm:m-auto sm:rounded-md xl:w-1/3"
+            data-testid="annual-average-container"
+        >
+            <h2
+                className="text-blue text-xl tracking-wide"
+                data-testid="annual-average-heading"
+            >
                 {t("yearly_average")}
             </h2>
 
-            <div className="flex justify-evenly content-center my-2 px-3 py-1 overflow-auto space-x-5"
-                data-testid="years-filters-container">
+            <div
+                className="flex justify-evenly content-center my-2 px-3 py-1 overflow-auto space-x-5"
+                data-testid="years-filters-container"
+            >
                 {yearsList?.map((year, index) => (
-                    <YearFilter key={index} yearNum={index+1} year={year} setSelectedYear={setSelectedYear}
-                    selected={(year[0] === selectedYear[0] && year[1] === selectedYear[1])} />
+                    <YearFilter
+                        key={index}
+                        yearNum={index+1}
+                        year={year}
+                        setSelectedYear={setSelectedYear}
+                        selected={(year[0] === selectedYear[0] && year[1] === selectedYear[1])}
+                    />
                 ))}
             </div>
 
             {yearlyUserCourse ?
                 <>
-                    <div className="w-full py-2 px-5 bg-blue-light flex justify-between items-center space-x-2 text-white rounded-lg"
-                        data-testid="annual-average-grade-container">
-                        <strong className="text-lg"
-                            data-testid="annual-average-grade-text">
+                    <div
+                        className="w-full py-2 px-5 bg-blue-light flex justify-between
+                        items-center space-x-2 text-white rounded-lg"
+                        data-testid="annual-average-grade-container"
+                    >
+                        <strong
+                            className="text-lg"
+                            data-testid="annual-average-grade-text"
+                        >
                             {t("average_of_the_year")}
                         </strong>
 

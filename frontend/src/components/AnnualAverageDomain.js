@@ -25,7 +25,7 @@ const AnnualAverageDomain = ({ teachingDomains }) =>
                 >
                     <div
                         className="w-full p-2 bg-white flex justify-between items-center space-x-2 border-b-4 border-b-blue text-blue"
-                        data-testid="annual-average-container"
+                        data-testid="annual-average-domain-head-container"
                     >
                         <p
                             className="text-lg"

@@ -1,5 +1,6 @@
 import React from 'react';
 import userEvent from "@testing-library/user-event";
+import { screen } from "@testing-library/react";
 
 import { getElementsByTestIds, queryElementsByTestIds } from "../utils/getElementsByTestIds";
 import { renderComponent } from '../utils/renderComponent';
