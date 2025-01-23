@@ -10,5 +10,6 @@
     "grade": "Note",
 
     "school_modules": "Modules professionnels",
-    "non_school_modules": "Modules interentreprises"
+    "non_school_modules": "Modules interentreprises",
+    "unordered_modules": "Modules non-classés"
 }

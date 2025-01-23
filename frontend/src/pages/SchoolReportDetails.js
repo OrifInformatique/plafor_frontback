@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { getApprenticeSchoolReport } from "../services/api/school_reports";
@@ -19,6 +19,7 @@ import TeachingDomain from "../components/TeachingDomain";
  */
 const SchoolReportDetails = () =>
 {
+    const { userCourseId } = useParams();
     const { t } = useTranslation(["titles", "buttons"]);
 
     const [apprenticeSchoolReport, setApprenticeSchoolReport] = useState([]);
@@ -32,8 +33,7 @@ const SchoolReportDetails = () =>
      */
     const fetchSchoolReportDetails = async () =>
     {
-        /* TODO : Add user course ID as param */
-        const data = await getApprenticeSchoolReport();
+        const data = await getApprenticeSchoolReport(userCourseId);
 
         setApprenticeSchoolReport(data);
 

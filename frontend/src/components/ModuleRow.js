@@ -6,14 +6,14 @@ import { useTranslation } from "react-i18next";
  *
  * @param {?array} modules An array of either school or non-school modules.
  *
- * @param {float} [average=0] The average of the modules provided to this component. 0 by default.
+ * @param {float} [average=null] The average of the modules provided to this component. 0 by default.
  *
- * @param {bool} [isSchool=true] Indicates if the modules are made in school or not. True by default.
+ * @param {bool} [isSchool=null] Indicates if the modules are made in school or not. True by default.
  *
  * @returns {JSX.Element}
  *
  */
-const ModuleRow = ({ modules = null, average = 0, isSchool = true }) =>
+const ModuleRow = ({ modules = null, average = null, isSchool = null }) =>
 {
     const { t } = useTranslation("teachingDomain");
 
@@ -27,10 +27,9 @@ const ModuleRow = ({ modules = null, average = 0, isSchool = true }) =>
                     colSpan={2}
                     data-testid="module-head-text-cell"
                 >
-                    {isSchool ?
-                        t("school_modules") + " (80%)" :
-                        t("non_school_modules") + " (20%)"
-                    }
+                    {isSchool === true && t("school_modules") + " (80%)"}
+                    {isSchool === false && t("non_school_modules") + " (20%)"}
+                    {isSchool === null && t("unordered_modules")}
                 </th>
 
                 <th data-testid="module-head-average-cell">

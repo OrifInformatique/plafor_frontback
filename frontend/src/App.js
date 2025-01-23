@@ -37,7 +37,7 @@ const App = () =>
                         />
 
                         <Route
-                            path="/details/:apprentice_id"
+                            path="/details/:userCourseId"
                             element={<SchoolReportDetails />}
                         />
                     </Route>

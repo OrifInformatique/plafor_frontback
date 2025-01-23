@@ -20,6 +20,7 @@ const TeachingDomainTable = ({ subjects = null, modules = null }) =>
     let tableHeaders = [];
     let schoolModules = [];
     let nonSchoolModules = [];
+    let unorderedModules = [];
 
     if(subjects && !modules)
     {
@@ -54,8 +55,9 @@ const TeachingDomainTable = ({ subjects = null, modules = null }) =>
     {
         tableHeaders.push(t("module_number"), t("title"), t("grade"));
 
-        schoolModules = modules.filter(module => module.is_school);
-        nonSchoolModules = modules.filter(module => !module.is_school);
+        schoolModules = modules.filter(module => module.is_school === true);
+        nonSchoolModules = modules.filter(module => module.is_school === false);
+        unorderedModules = modules.filter(module => module.is_school === null);
     }
 
     else
@@ -113,6 +115,7 @@ const TeachingDomainTable = ({ subjects = null, modules = null }) =>
                             <ModuleRow
                                 modules={schoolModules}
                                 average={modules.schoolModulesAverage}
+                                isSchool={true}
                             />
                         )}
 
@@ -121,6 +124,14 @@ const TeachingDomainTable = ({ subjects = null, modules = null }) =>
                                 modules={nonSchoolModules}
                                 average={modules.nonSchoolModulesAverage}
                                 isSchool={false}
+                            />
+                        )}
+
+                        {unorderedModules.length > 0 && (
+                            <ModuleRow
+                                modules={unorderedModules}
+                                average={null}
+                                isSchool={null}
                             />
                         )}
                     </>
