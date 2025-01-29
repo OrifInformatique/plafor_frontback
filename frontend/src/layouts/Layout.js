@@ -11,20 +11,27 @@ import { useTranslation } from "react-i18next";
  */
 const Layout = () =>
 {
-    const { t } = useTranslation("titles");
+    const { t } = useTranslation(["titles", "texts"]);
 
     return (
         <>
             <header
-                className="bg-blue font-bold tracking-wide text-white text-center py-2 mb-4"
+                className="flex justify-center sm:!justify-between items-center bg-blue font-bold tracking-wide text-white p-2 mb-4"
                 data-testid="layout-header"
             >
+                <img
+                    src="/images/logo.png"
+                    alt={t("ORIF_logo_alt", { ns: "texts" })}
+                    className="sm:!block hidden bg-white rounded-lg p-1"
+                    data-testid="layout-header-orif-logo"
+                />
+
                 <Link
                     to={"/"}
                     className="hover:no-underline hover:text-white"
                     data-testid="layout-header-link"
                 >
-                    {t("react_school_report")}
+                    {t("course_plans_management", { ns: "titles" })}
                 </Link>
             </header>
 
@@ -36,13 +43,9 @@ const Layout = () =>
                 className="bg-blue-dark text-white text-center py-2 mt-4"
                 data-testid="layout-footer"
             >
-                <Link
-                    to={"https://plafor.sectioninformatique.ch"}
-                    target="_blank"
-                    data-testid="layout-footer-link"
-                >
-                    Plafor
-                </Link>
+                <p data-testid="layout-footer-text">
+                    {t("app_created_by_the_IT_department_of_ORIF", { ns: "texts" })}
+                </p>
             </footer>
         </>
     )
