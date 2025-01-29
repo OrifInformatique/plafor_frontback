@@ -11,6 +11,9 @@ import Loading from "../components/Loading";
 import NoResults from "../components/NoResults";
 import TeachingDomain from "../components/TeachingDomain";
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClipboardList } from "@fortawesome/free-solid-svg-icons";
+
 /**
  * Displays the school report details of an apprentice user course.
  *
@@ -65,6 +68,11 @@ const SchoolReportDetails = () =>
                             className="btn-primary"
                             data-testid="back-to-list-button"
                         >
+                            <FontAwesomeIcon
+                                icon={faClipboardList}
+                                className="text-xl pr-2"
+                            />
+
                             {t("back_to_list", { ns: "buttons" })}
                         </Link>
                     </div>

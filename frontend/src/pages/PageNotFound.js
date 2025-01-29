@@ -2,6 +2,9 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHouse } from "@fortawesome/free-solid-svg-icons";
+
 /**
  * Displays a 404 error page.
  *
@@ -30,6 +33,11 @@ const PageNotFound = () =>
                 className="btn-primary"
                 data-testid="back-to-home-button"
             >
+                <FontAwesomeIcon
+                    icon={faHouse}
+                    className="text-xl pr-2"
+                />
+
                 {t("back_to_home", { ns: "buttons" })}
             </Link>
         </div>
