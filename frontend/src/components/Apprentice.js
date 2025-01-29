@@ -8,12 +8,14 @@ import Grade from "./Grade";
  *
  * @param {array} apprentice
  *
+ * @param {boolean} [showApprenticeName=true] Defines whether to show the apprentice's name. True by default.
+ *
  * @param {boolean} [showLink=false] Defines whether to put a link to the school report details of the user course on the user course official name. False by default.
  *
  * @returns {JSX.Element}
  *
  */
-const Apprentice = ({ apprentice, showLink = false }) =>
+const Apprentice = ({ apprentice, showApprenticeName = true ,showLink = false }) =>
 {
     let apprenticeUserCourses = {};
 
@@ -37,12 +39,14 @@ const Apprentice = ({ apprentice, showLink = false }) =>
             className="w-full p-3 bg-beige-light sm:w-1/2 sm:m-auto sm:rounded-md xl:w-1/3"
             data-testid="apprentice-container"
         >
-            <h2
-                className="text-blue text-xl tracking-wide"
-                data-testid="apprentice-name"
-            >
-                {apprentice.username}
-            </h2>
+            {showApprenticeName &&
+                <h2
+                    className="text-blue text-xl tracking-wide"
+                    data-testid="apprentice-name"
+                >
+                    {apprentice.username}
+                </h2>
+            }
 
             <div
                 className="divide-y divide-blue"
@@ -57,7 +61,7 @@ const Apprentice = ({ apprentice, showLink = false }) =>
                         {showLink ?
                             <Link
                                 to={`/details/${user_course.id}`}
-                                className="w-fit sm:w-5/6"
+                                className="text-lg w-fit sm:w-5/6"
                                 data-testid="apprentice-user-course-name-link"
                             >
                                 <p data-testid="apprentice-user-course-name">
@@ -65,7 +69,10 @@ const Apprentice = ({ apprentice, showLink = false }) =>
                                 </p>
                             </Link>
                         :
-                            <p data-testid="apprentice-user-course-name">
+                            <p
+                                className="text-lg"
+                                data-testid="apprentice-user-course-name"
+                            >
                                 {user_course.official_name}
                             </p>
                         }

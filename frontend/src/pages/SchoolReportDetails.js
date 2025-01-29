@@ -74,7 +74,7 @@ const SchoolReportDetails = () =>
                         && apprenticeSchoolReport.user_course.teaching_domains
                     ?
                         <>
-                            <Apprentice apprentice={apprenticeSchoolReport} />
+                            <Apprentice apprentice={apprenticeSchoolReport} showApprenticeName={false} />
 
                             {apprenticeSchoolReport.user_course.teaching_domains.map(teachingDomain =>
                             (
