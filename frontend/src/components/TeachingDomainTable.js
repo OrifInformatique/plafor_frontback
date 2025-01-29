@@ -68,7 +68,7 @@ const TeachingDomainTable = ({ subjects = null, modules = null }) =>
 
     return (
         <table
-            className={`${subjects && "subject-table w-max"}`}
+            className={subjects && "subject-table w-max"}
             data-testid="teaching-domain-table"
         >
             <thead data-testid="teaching-domain-table-head">

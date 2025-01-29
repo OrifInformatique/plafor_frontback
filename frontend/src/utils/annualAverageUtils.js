@@ -26,13 +26,13 @@ export const setYearsFilters = (userCourse) =>
         return [`${year}-08-01`, `${year + 1}-07-31`];
     });
 
-    const currentYear = new Date().getFullYear();
+    const currentDate = new Date();
+    const selectedYear = years.find(([start, end]) =>
+        currentDate >= new Date(start) && currentDate <= new Date(end));
 
     return {
         list: years,
-        selectedYear: currentYear >= beginYear && currentYear < endYear
-        ? [`${currentYear}-08-01`, `${currentYear + 1}-07-31`]
-        : null
+        selectedYear: selectedYear || null
     }
 }
 
