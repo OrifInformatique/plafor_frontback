@@ -11,7 +11,7 @@ import frTeachingDomain from "../../../public/locales/fr/teachingDomain.json";
 
 test("Component is empty if no modules are provided", () =>
 {
-    renderComponent(<ModuleRow />)
+    renderComponent(<table><tbody><ModuleRow /></tbody></table>)
 
     const elements = queryElementsByTestIds(
     [
@@ -27,7 +27,7 @@ test("Component is empty if no modules are provided", () =>
 
 test("Component contains 7 elements", () =>
 {
-    renderComponent(<ModuleRow modules={getSchoolModule()} />);
+    renderComponent(<table><tbody><ModuleRow modules={getSchoolModule()} /></tbody></table>);
 
     const elements = getElementsByTestIds(
     [
@@ -43,7 +43,7 @@ test("Component contains 7 elements", () =>
 
 test("Elements structure is correct", () =>
 {
-    renderComponent(<ModuleRow modules={getSchoolModule()} />);
+    renderComponent(<table><tbody><ModuleRow modules={getSchoolModule()} /></tbody></table>);
 
     const elements = getElementsByTestIds(
     [
@@ -65,7 +65,7 @@ test("Correct traductions are shown", () =>
 
     tests.forEach(isSchoolValue =>
     {
-        renderComponent(<ModuleRow modules={getSchoolModule()} isSchool={isSchoolValue} />);
+        renderComponent(<table><tbody><ModuleRow modules={getSchoolModule()} isSchool={isSchoolValue} /></tbody></table>);
 
         const text = getElementsByTestIds("module-head-text-cell");
 
