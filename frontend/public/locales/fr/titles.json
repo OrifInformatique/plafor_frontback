@@ -1,8 +1,8 @@
 {
-    "react_school_report": "Bulletin de notes en React",
+    "course_plans_management": "Gestion des plans de formation",
 
     "school_report_list": "Liste des bulletins de notes",
-    "school_report_details": "Bulletin de notes de",
+    "school_report_details": "Bulletin de notes",
 
     "404_not_found": "Page introuvable"
 }

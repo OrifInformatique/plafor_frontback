@@ -6,7 +6,7 @@ import React from 'react';
  *
  * @param {string} grade The vaule of the grade.
  *
- * @param {boolean} [isLarge=true] Defines whether the grade is displayed bigger. True dy befault.
+ * @param {boolean} [isLarge=true] Defines whether the grade is displayed bigger. True by befault.
  *
  * @returns {JSX.Element}
  *
@@ -14,7 +14,10 @@ import React from 'react';
 const Grade = ({ grade, isLarge = true }) =>
 {
     return (
-        <p className={`${isLarge && "note"} ${grade < 4 && "text-rose-500"}`}>
+        <p
+            className={`${isLarge && "note"} ${grade < 4 && "text-rose-500"}`}
+            data-testid="grade-container"
+        >
             {grade}
         </p>
     )

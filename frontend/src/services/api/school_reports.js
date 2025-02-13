@@ -16,7 +16,7 @@ export const getSchoolReportsSummaries = async () =>
 
     catch(error)
     {
-        console.error("Erreur :" + error);
+        console.error("Error while fetching school report summaries : " + error);
         return [];
     }
 }
@@ -43,7 +43,7 @@ export const getApprenticeSchoolReport = async (userCourseId = null) =>
 
     catch(error)
     {
-        console.error("Erreur :" + error);
+        console.error("Error while fetching apprentice school report : " + error);
         return [];
     }
 }

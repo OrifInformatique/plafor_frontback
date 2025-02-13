@@ -16,7 +16,7 @@ i18n
 
         backend:
         {
-            loadPath: `${process.env.APP_ROOT !== "/" && process.env.APP_ROOT}/locales/{{lng}}/{{ns}}.json`
+            loadPath: `${process.env.APP_ROOT !== "/" ? process.env.APP_ROOT : ""}/locales/{{lng}}/{{ns}}.json`
         },
 
         ns: ["annualAverage", "apprenticesList", "buttons", "teachingDomain", "texts", "titles"],

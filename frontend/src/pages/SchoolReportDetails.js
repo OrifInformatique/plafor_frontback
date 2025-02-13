@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { getApprenticeSchoolReport } from "../services/api/school_reports";
@@ -11,6 +11,9 @@ import Loading from "../components/Loading";
 import NoResults from "../components/NoResults";
 import TeachingDomain from "../components/TeachingDomain";
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClipboardList } from "@fortawesome/free-solid-svg-icons";
+
 /**
  * Displays the school report details of an apprentice user course.
  *
@@ -19,41 +22,31 @@ import TeachingDomain from "../components/TeachingDomain";
  */
 const SchoolReportDetails = () =>
 {
+    const { userCourseId } = useParams();
     const { t } = useTranslation(["titles", "buttons"]);
 
     const [apprenticeSchoolReport, setApprenticeSchoolReport] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    /**
+     * Fetches school report details data.
+     *
+     * @returns {void}
+     *
+     */
+    const fetchSchoolReportDetails = async () =>
+    {
+        const data = await getApprenticeSchoolReport(userCourseId);
+
+        setApprenticeSchoolReport(data);
+
+        setIsLoading(false);
+    }
+
     useEffect(() =>
     {
-        /**
-         * Fetches school report details data.
-         *
-         * @returns {void}
-         *
-         */
-        const fetchData = async () =>
-        {
-            try
-            {
-                /* TODO : Add user course ID as param */
-                const data = await getApprenticeSchoolReport();
-                setApprenticeSchoolReport(data);
-            }
-
-            catch(error)
-            {
-                console.error("Erreur lors de l'affichage des données.", error)
-            }
-
-            finally
-            {
-                setIsLoading(false);
-            }
-        }
-
-        fetchData();
-    }, [])
+        fetchSchoolReportDetails();
+    }, []);
 
     return (
         <>
@@ -61,26 +54,43 @@ const SchoolReportDetails = () =>
                 <Loading />
             :
                 <>
-                    <h1>
+                    <h1 data-testid="school-report-details-title">
                         {t("school_report_details", { ns: "titles" })}<br/>
                         {apprenticeSchoolReport?.username}
                     </h1>
 
-                    {/* TODO : Let only trainers and admins see this button */}
-                    <div className="w-max h-max mx-auto my-6">
-                        <Link to={"/list"} className="btn-primary">
+                    <div
+                        className="w-max h-max mx-auto my-6"
+                        data-testid="back-to-list-button-container"
+                    >
+                        <Link
+                            to={"/list"}
+                            className="btn-primary"
+                            data-testid="back-to-list-button"
+                        >
+                            <FontAwesomeIcon
+                                icon={faClipboardList}
+                                className="text-xl pr-2"
+                            />
+
                             {t("back_to_list", { ns: "buttons" })}
                         </Link>
                     </div>
 
-                    {apprenticeSchoolReport && apprenticeSchoolReport.user_course ?
+                    {apprenticeSchoolReport
+                        && apprenticeSchoolReport.user_course
+                        && apprenticeSchoolReport.user_course.teaching_domains
+                    ?
                         <>
+                            <Apprentice apprentice={apprenticeSchoolReport} showApprenticeName={false} />
 
-                            <Apprentice apprentice={apprenticeSchoolReport} showLink={false} />
-
-                            {apprenticeSchoolReport.user_course.teaching_domains.map(
-                                teachingDomain => <TeachingDomain key={teachingDomain.id} teachingDomain={teachingDomain} />
-                            )}
+                            {apprenticeSchoolReport.user_course.teaching_domains.map(teachingDomain =>
+                            (
+                                <TeachingDomain
+                                    key={teachingDomain.id}
+                                    teachingDomain={teachingDomain}
+                                />
+                            ))}
 
                             <AnnualAverage userCourse={apprenticeSchoolReport.user_course} />
                         </>

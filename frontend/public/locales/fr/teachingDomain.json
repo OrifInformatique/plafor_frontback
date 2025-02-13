@@ -9,6 +9,7 @@
     "title": "Titre",
     "grade": "Note",
 
-    "school_modules": "Modules professionnels",
-    "non_school_modules": "Modules interentreprises"
+    "school_modules": "Modules école professionnelle",
+    "non_school_modules": "Modules interentreprises",
+    "unordered_modules": "Modules non-classés"
 }

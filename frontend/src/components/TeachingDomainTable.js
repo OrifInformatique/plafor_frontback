@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslation } from "react-i18next";
 
+import ModuleRow from './ModuleRow';
+
 /**
  * Displays the details of a teaching domain.
  *
@@ -18,6 +20,7 @@ const TeachingDomainTable = ({ subjects = null, modules = null }) =>
     let tableHeaders = [];
     let schoolModules = [];
     let nonSchoolModules = [];
+    let unorderedModules = [];
 
     if(subjects && !modules)
     {
@@ -30,20 +33,19 @@ const TeachingDomainTable = ({ subjects = null, modules = null }) =>
 
         subjects.forEach(subject =>
         {
-            if(subject.grades.length > 8)
+            if(subject.grades?.length > 8)
             {
                 console.error(`The subject ${subject.name} has more than 8 grades.`)
                 return;
             }
 
-            while(subject.grades.length < 8)
+            while(subject.grades?.length < 8)
             {
                 subject.grades.push(
                 {
                     // Prevent duplicate keys
                     id: Math.random(),
-                    grade: null,
-                    date: null,
+                    grade: null
                 });
             }
         })
@@ -53,8 +55,9 @@ const TeachingDomainTable = ({ subjects = null, modules = null }) =>
     {
         tableHeaders.push(t("module_number"), t("title"), t("grade"));
 
-        schoolModules.modules = modules.filter(module => module.is_school);
-        nonSchoolModules.modules = modules.filter(module => !module.is_school);
+        schoolModules = modules.filter(module => module.is_school === true);
+        nonSchoolModules = modules.filter(module => module.is_school === false);
+        unorderedModules = modules.filter(module => module.is_school === null);
     }
 
     else
@@ -64,29 +67,43 @@ const TeachingDomainTable = ({ subjects = null, modules = null }) =>
     }
 
     return (
-        <table className={`${subjects && "subject-table w-max"}`}>
-            <thead>
-                <tr>
+        <table
+            className={subjects && "subject-table w-max"}
+            data-testid="teaching-domain-table"
+        >
+            <thead data-testid="teaching-domain-table-head">
+                <tr data-testid="teaching-domain-table-head-row">
                     {tableHeaders.map(col => (
-                        <th key={col}>{col}</th>
+                        <th
+                            key={col}
+                            data-testid="teaching-domain-table-head-cell"
+                        >
+                            {col}
+                        </th>
                     ))}
                 </tr>
             </thead>
 
-            <tbody>
+            <tbody data-testid="teaching-domain-table-body">
                 {subjects?.map(subject => (
-                    <tr key={subject.id}>
-                        <td>
+                    <tr
+                        key={subject.id}
+                        data-testid="teaching-domain-table-subject-row"
+                    >
+                        <td data-testid="teaching-domain-table-subject-name">
                             {subject.name}
                         </td>
 
                         {subject.grades?.map(grade => (
-                            <td key={grade.id}>
+                            <td
+                                key={grade.id}
+                                data-testid="teaching-domain-table-subject-grade"
+                            >
                                 {grade.grade}
                             </td>
                         ))}
 
-                        <td>
+                        <td data-testid="teaching-domain-table-subject-average">
                             {subject.average}
                         </td>
                     </tr>
@@ -94,48 +111,28 @@ const TeachingDomainTable = ({ subjects = null, modules = null }) =>
 
                 {modules && (
                     <>
-                        {schoolModules && (
-                            <>
-                                <tr>
-                                    <th colSpan={2}>
-                                        {t("school_modules")} (80%)
-                                    </th>
-
-                                    <th>{modules.schoolModulesAverage}</th>
-                                </tr>
-
-                                {schoolModules.modules.map(schoolModule => (
-                                    <tr key={schoolModule.id}>
-                                        <td>{schoolModule.module_number}</td>
-
-                                        <td>{schoolModule.name}</td>
-
-                                        <td>{schoolModule.grade}</td>
-                                    </tr>
-                                ))}
-                            </>
+                        {schoolModules.length > 0 && (
+                            <ModuleRow
+                                modules={schoolModules}
+                                average={modules.schoolModulesAverage}
+                                isSchool={true}
+                            />
                         )}
 
-                        {nonSchoolModules && (
-                            <>
-                                <tr>
-                                    <th colSpan={2}>
-                                        {t("non_school_modules")} (20%)
-                                    </th>
+                        {nonSchoolModules.length > 0 && (
+                            <ModuleRow
+                                modules={nonSchoolModules}
+                                average={modules.nonSchoolModulesAverage}
+                                isSchool={false}
+                            />
+                        )}
 
-                                    <th>{modules.nonSchoolModulesAverage}</th>
-                                </tr>
-
-                                {nonSchoolModules.modules.map(nonSchoolModule => (
-                                    <tr key={nonSchoolModule.id}>
-                                        <td>{nonSchoolModule.module_number}</td>
-
-                                        <td>{nonSchoolModule.name}</td>
-
-                                        <td>{nonSchoolModule.grade}</td>
-                                    </tr>
-                                ))}
-                            </>
+                        {unorderedModules.length > 0 && (
+                            <ModuleRow
+                                modules={unorderedModules}
+                                average={null}
+                                isSchool={null}
+                            />
                         )}
                     </>
                 )}
