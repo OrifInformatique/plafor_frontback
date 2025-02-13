@@ -1,5 +1,5 @@
 import React from 'react';
-import { waitFor } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 
 import { getElementsByTestIds } from "../utils/getElementsByTestIds";
 import { getApprenticeSummary } from "../utils/getApprenticeData"
@@ -22,11 +22,11 @@ beforeEach(() =>
     jest.resetAllMocks();
 });
 
-test("Component shows a loading animation on render", () =>
+test("Component shows a loading animation on render", async () =>
 {
     getSchoolReportsSummaries.mockImplementationOnce(() => new Promise(() => {}));
 
-    renderComponent(<SchoolReportList />);
+    await act(async () => renderComponent(<SchoolReportList />))
 
     const loading = getElementsByTestIds("loading-container");
 
@@ -37,7 +37,7 @@ test("Component shows no results when no data is fetched", async () =>
 {
     getSchoolReportsSummaries.mockReturnValueOnce(null);
 
-    renderComponent(<SchoolReportList />);
+    await act(async () => renderComponent(<SchoolReportList />))
 
     await waitFor(() =>
     {
@@ -47,9 +47,9 @@ test("Component shows no results when no data is fetched", async () =>
     });
 });
 
-test("Component contains 7 static elements", () =>
+test("Component contains 7 static elements", async () =>
 {
-    renderComponent(<SchoolReportList />)
+    await act(async () => renderComponent(<SchoolReportList />))
 
     const elements = getElementsByTestIds(
     [
@@ -65,9 +65,9 @@ test("Component contains 7 static elements", () =>
     });
 });
 
-test("Static elements structure is correct", () =>
+test("Static elements structure is correct", async() =>
 {
-    renderComponent(<SchoolReportList />)
+    await act(async () => renderComponent(<SchoolReportList />))
 
     const elements = getElementsByTestIds(
     [
@@ -87,9 +87,9 @@ test("Static elements structure is correct", () =>
     expect(elements["school-summaries-trainer-filter"]).toContainElement(elements["school-summaries-trainers-filters-unassigned-option"]);
 });
 
-test("Traductions for static elements are correct", () =>
+test("Traductions for static elements are correct", async () =>
 {
-    renderComponent(<SchoolReportList />)
+    await act(async () => renderComponent(<SchoolReportList />))
 
     const elements = getElementsByTestIds(
     [
