@@ -75,10 +75,10 @@ test("Filter is underlined and colored if selected", () =>
         const yearFilterContainer = getElementsByTestIds("year-filter-container");
 
         if(shouldAppearSelected)
-            expect(yearFilterContainer).toHaveClass("border-b-blue-light text-blue-light");
+            expect(yearFilterContainer).toHaveClass("border-b-blue text-blue");
 
         else
-            expect(yearFilterContainer).not.toHaveClass("border-b-blue-light text-blue-light");
+            expect(yearFilterContainer).not.toHaveClass("border-b-blue text-blue");
 
         cleanup();
     })
