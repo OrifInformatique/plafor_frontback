@@ -1,24 +1,54 @@
-import Layout from "./layouts/Layout";
+import React, { Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SchoolReportList from "./pages/SchoolReportList";
-import SchoolReportDetails from "./pages/SchoolReportDetails";
-import PageNotFound from "./pages/PageNotFound";
 
+import Layout from "./layouts/Layout";
+
+import PageNotFound from "./pages/PageNotFound";
+import SchoolReportDetails from "./pages/SchoolReportDetails";
+import SchoolReportList from "./pages/SchoolReportList";
+
+import Loading from "./components/Loading";
+
+
+/**
+ * Defines routes and is the app base.
+ *
+ * @returns {JSX.Element}
+ *
+ */
 const App = () =>
 {
     return (
-        <BrowserRouter>
+        <Suspense fallback={<Loading />}>
+            <BrowserRouter
+                basename={process.env.APP_ROOT}
+                future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+            >
                 <Routes>
                     <Route element={<Layout />}>
-                        <Route path="/" element={<SchoolReportList />}/>
-                        <Route path="/list" element={<SchoolReportList />}/>
+                        <Route
+                            path="/"
+                            element={<SchoolReportList />}
+                        />
 
-                        <Route path="/details/:apprentice_id" element={<SchoolReportDetails />}/>
+                        <Route
+                            path="/list"
+                            element={<SchoolReportList />}
+                        />
+
+                        <Route
+                            path="/details/:userCourseId"
+                            element={<SchoolReportDetails />}
+                        />
                     </Route>
 
-                    <Route path="*" element={<PageNotFound />}/>
+                    <Route
+                        path="*"
+                        element={<PageNotFound />}
+                    />
                 </Routes>
             </BrowserRouter>
+        </Suspense>
     );
 }
 

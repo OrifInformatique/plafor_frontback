@@ -1,0 +1,15 @@
+{
+    "eliminatory": "Éliminatoire",
+
+    "subject": "Matière",
+    "semester_prefix": "Sem.",
+    "average": "Moyenne",
+
+    "module_number": "Numéro",
+    "title": "Titre",
+    "grade": "Note",
+
+    "school_modules": "Modules école professionnelle",
+    "non_school_modules": "Modules interentreprises",
+    "unordered_modules": "Modules non-classés"
+}

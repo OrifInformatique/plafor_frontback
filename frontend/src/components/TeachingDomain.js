@@ -1,3 +1,6 @@
+import React from 'react';
+import { useTranslation } from "react-i18next";
+
 import Grade from "./Grade"
 import TeachingDomainTable from "./TeachingDomainTable"
 
@@ -11,6 +14,19 @@ import TeachingDomainTable from "./TeachingDomainTable"
  */
 const TeachingDomain = ({ teachingDomain }) =>
 {
+    const { t } = useTranslation("teachingDomain");
+
+    if(!teachingDomain)
+    {
+        return;
+    }
+
+    if(teachingDomain.modules)
+    {
+        teachingDomain.modules.schoolModulesAverage = teachingDomain.school_modules_average;
+        teachingDomain.modules.nonSchoolModulesAverage = teachingDomain.non_school_modules_average;
+    }
+
     /**
      * Opens or closes the details of a teaching domain.
      *
@@ -35,42 +51,59 @@ const TeachingDomain = ({ teachingDomain }) =>
     }
 
     return (
-        <div className="my-4">
-            <div id={`teaching-domain-${teachingDomain.id}`}
+        <div
+            className="my-4"
+            data-testid="teaching-domain-container"
+        >
+            <div
+                id={`teaching-domain-${teachingDomain.id}`}
                 className="w-full p-3 bg-beige-light flex justify-between items-center transition-colors space-x-2
-                sm:w-1/2 sm:m-auto sm:rounded-t-md sm:rounded-b-md
-                xl:w-1/3
-                hover:bg-beige-dark hover:cursor-pointer"
-                onClick={() => toggleDetails(teachingDomain.id)}>
-                <p className="text-lg select-none">
+                sm:w-1/2 sm:m-auto sm:rounded-t-md sm:rounded-b-md xl:w-1/3 hover:bg-beige-dark hover:cursor-pointer"
+                onClick={() => toggleDetails(teachingDomain.id)}
+                data-testid="teaching-domain-summary-container"
+            >
+                <p
+                    className="text-lg select-none"
+                    data-testid="teaching-domain-title-text"
+                >
                     {teachingDomain.title}
+
                     {teachingDomain.is_eliminatory && (
-                        <div className="-mt-6 text-sm text-rose-500">
-                            <br />
-                            <em>Éliminatoire</em>
-                        </div>
+                        <em
+                            className="block -mt-2 text-sm text-rose-500"
+                            data-testid="teaching-domain-is-eliminatory-text"
+                        >
+                            {t("eliminatory")}
+                        </em>
                     )}
                 </p>
 
-                <div className="flex flex-col justify-center content-center select-none">
+                <div
+                    className="flex flex-col justify-center content-center select-none"
+                    data-testid="teaching-domain-grade-weighing-container"
+                >
                     <Grade grade={teachingDomain.average} />
 
-                    <p className="-mt-2">
+                    <p
+                        className="-mt-2"
+                        data-testid="teaching-domain-weighting"
+                    >
                         ({teachingDomain.weight * 100}%)
                     </p>
                 </div>
             </div>
 
-            <div id={`teaching-domain-details-${teachingDomain.id}`}
+            <div
+                id={`teaching-domain-details-${teachingDomain.id}`}
                 className="w-full bg-beige flex flex-col content-center overflow-x-auto
-                sm:w-1/2 sm:m-auto sm:rounded-b-md
-                xl:w-1/3
-                max-h-0 overflow-hidden transition-all duration-[425ms]">
-                {teachingDomain.subjects &&
+                sm:w-1/2 sm:m-auto sm:rounded-b-md xl:w-1/3 max-h-0 overflow-hidden transition-all duration-[425ms]"
+                data-testid="teaching-domain-details-container"
+            >
+                {teachingDomain.subjects && !teachingDomain.modules &&
                     <TeachingDomainTable subjects={teachingDomain.subjects} />
                 }
 
-                {teachingDomain.modules &&
+                {!teachingDomain.subjects && teachingDomain.modules &&
                     <TeachingDomainTable modules={teachingDomain.modules} />
                 }
             </div>

@@ -8,7 +8,7 @@ export const getSchoolReportsSummaries = async () =>
 {
     try
     {
-        const response = await fetch("http://localhost/plafor/public/api/school_reports");
+        const response = await fetch(`${process.env.API_URL}/school_reports`);
         const data = await response.json();
 
         return data;
@@ -16,7 +16,7 @@ export const getSchoolReportsSummaries = async () =>
 
     catch(error)
     {
-        console.error("Erreur :" + error);
+        console.error("Error while fetching school report summaries : " + error);
         return [];
     }
 }
@@ -26,16 +26,16 @@ export const getSchoolReportsSummaries = async () =>
 /**
  * Gets the all school report data of a specified apprentice user course.
  *
- * @param {int} user_course_id ID of the user course.
+ * @param {int} userCourseId ID of the user course.
  *
  * @return {array}
  *
  */
-export const getApprenticeSchoolReport = async (user_course_id = null) =>
+export const getApprenticeSchoolReport = async (userCourseId = null) =>
 {
     try
     {
-        const response = await fetch(`http://localhost/plafor/public/api/school_report/${user_course_id}`);
+        const response = await fetch(`${process.env.API_URL}/school_report/${userCourseId}`);
         const data = await response.json();
 
         return data;
@@ -43,7 +43,7 @@ export const getApprenticeSchoolReport = async (user_course_id = null) =>
 
     catch(error)
     {
-        console.error("Erreur :" + error);
+        console.error("Error while fetching apprentice school report : " + error);
         return [];
     }
 }

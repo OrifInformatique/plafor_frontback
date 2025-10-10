@@ -10,8 +10,8 @@ The frontend is made using React and Tailwind.
 
 1. `cd frontend`
 2. `npm install`
-3. `npm start`
-4. Go to [http://localhost:3000](http://localhost:3000).
+2. `npm run serve`
+3. Go to [http://localhost:4000](http://localhost:4000)
 
 ### Testing
 

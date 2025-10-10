@@ -1,4 +1,9 @@
+import React from 'react';
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHouse } from "@fortawesome/free-solid-svg-icons";
 
 /**
  * Displays a 404 error page.
@@ -8,14 +13,32 @@ import { Link } from "react-router-dom";
  */
 const PageNotFound = () =>
 {
+    const { t } = useTranslation(["titles", "texts", "buttons"]);
+
     return (
-        <div className="h-screen w-screen flex flex-col justify-center content-center text-center">
-            <h1>Page introuvable</h1>
+        <div
+            className="h-screen w-screen flex flex-col justify-center content-center text-center"
+            data-testid="page-not-found-container"
+        >
+            <h1 data-testid="page-not-found-title">
+                {t("404_not_found", { ns: "titles" })}
+            </h1>
 
-            <p>Il n'y a rien à faire ici...</p>
+            <p data-testid="page-not-found-text">
+                {t("nothing_to_do_here", { ns: "texts" })}
+            </p>
 
-            <Link to="/" className="btn-primary">
-                Retourner à l'accueil
+            <Link
+                to="/"
+                className="btn-primary"
+                data-testid="back-to-home-button"
+            >
+                <FontAwesomeIcon
+                    icon={faHouse}
+                    className="text-xl pr-2"
+                />
+
+                {t("back_to_home", { ns: "buttons" })}
             </Link>
         </div>
     )
