@@ -1,0 +1,48 @@
+/* ── Layout ─────────────────────────────────────────────────── */
+.report-line {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+}
+
+/* ── Label ──────────────────────────────────────────────────── */
+.report-line__label {
+  flex: 1 1 0; /* grows to fill remaining space */
+  min-width: 100px; /* prevents label from shrinking below 100px */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* ── Bar wrapper ────────────────────────────────────────────── */
+.report-line__bar-wrapper {
+  --bar-height: 20px; /* unique, shared value */
+  flex: 0 0 200px; /* fixed 200 px on large screens */
+  height: var(--bar-height); /* defines the height ReportBar inherits */
+}
+
+/* ── Small screens (≤ 600 px) ──────────────────────────────── */
+@media (max-width: 600px) {
+  .report-line {
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .report-line__label {
+    flex: none;
+    white-space: normal; /* allows line breaks */
+    text-overflow: clip; /* disables “...” on mobile devices */
+    width: 100%; /* occupies the entire width */
+  }
+
+  .report-line__bar-wrapper {
+    --bar-height: 18px;
+    flex: none;
+    width: 100%;
+    height: var(--bar-height);
+  }
+}
