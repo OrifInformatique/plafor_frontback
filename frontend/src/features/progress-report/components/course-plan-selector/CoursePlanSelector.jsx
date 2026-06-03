@@ -12,7 +12,7 @@ export default function CoursePlanSelector({
       <SingleSelect
         name="course-plan"
         label="Formation(s) suivie(s)"
-        options={coursePlans}
+        options={coursePlans.map((cp) => ({ value: cp.id, label: cp.label }))}
         selectedValue={selectedCoursePlan?.id}
         onChangeFunction={onCoursePlanChange}
       />
