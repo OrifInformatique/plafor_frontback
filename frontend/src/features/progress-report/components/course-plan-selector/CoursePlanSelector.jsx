@@ -1,6 +1,7 @@
 import React from "react";
 import { SingleSelect } from "@orif-informatique/react-components-library";
 import PropTypes from "prop-types";
+import "./CoursePlanSelector.css";
 
 export default function CoursePlanSelector({
   coursePlans = [],
@@ -17,12 +18,30 @@ export default function CoursePlanSelector({
         onChangeFunction={onCoursePlanChange}
       />
       <div className="course-plan-selector__info">
-        <span>Date début</span>
-        <span>{selectedCoursePlan?.startDate}</span>
-        <span>Date fin</span>
-        <span>{selectedCoursePlan?.endDate}</span>
-        <span>Status de la formation</span>
-        <span>{selectedCoursePlan?.status}</span>
+        <div className="course-plan-selector__info-block">
+          <span className="course-plan-selector__info-block-label">
+            Date début :
+          </span>
+          <span className="course-plan-selector__info-block-value">
+            {selectedCoursePlan?.startDate}
+          </span>
+        </div>
+        <div className="course-plan-selector__info-block">
+          <span className="course-plan-selector__info-block-label">
+            Date fin :
+          </span>
+          <span className="course-plan-selector__info-block-value">
+            {selectedCoursePlan?.endDate}
+          </span>
+        </div>
+        <div className="course-plan-selector__info-block">
+          <span className="course-plan-selector__info-block-label">
+            Status de la formation :
+          </span>
+          <span className="course-plan-selector__info-block-value">
+            {selectedCoursePlan?.status}
+          </span>
+        </div>
       </div>
     </div>
   );
