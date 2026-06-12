@@ -11,7 +11,6 @@ import React from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { percentagePlugin } from "./percentage-plugin";
-import "./DoughnutChart.css";
 
 // Register elements and the custom plugin once at module level
 ChartJS.register(ArcElement, Tooltip, Legend, percentagePlugin);
@@ -101,6 +100,10 @@ export default function DoughnutChart({ data = [], showLegend = false }) {
   };
 
   return (
-    <Doughnut data={chartData} options={options} className="doughnut-shadow" />
+    <Doughnut
+      data={chartData}
+      options={options}
+      style={{ filter: "drop-shadow(0 10px 18px rgba(0,0,0,0.14)) drop-shadow(0 4px 8px rgba(0,0,0,0.25))" }}
+    />
   );
 }

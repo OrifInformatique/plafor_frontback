@@ -11,7 +11,6 @@
  */
 
 import React from "react";
-import "./ReportBar.css";
 
 // Default colors: autonome, exercé, expliqué, non expliqué
 const DEFAULT_COLORS = ["#005BA9", "#4D8DC3", "#CCDEEE", "#F2F2F7"];
@@ -68,13 +67,14 @@ export default function ReportBar({ data = [] }) {
   const total = segments.reduce((sum, s) => sum + s.value, 0);
 
   return (
-    <div className="report-bar">
+    <div className="flex h-full min-h-4 min-w-[110px] rounded-[7px] overflow-hidden ring-[3px] ring-[#8e8e93]">
       {segments.map((segment, i) => {
         const width = total > 0 ? (segment.value / total) * 100 : 0;
         return (
           <div
             key={i}
-            className="report-bar__segment"
+            data-testid="report-bar-segment"
+            className="shrink-0 [transition:flex-basis_600ms_ease]"
             style={{
               flexBasis: `${width}%`,
               backgroundColor: segment.color,
