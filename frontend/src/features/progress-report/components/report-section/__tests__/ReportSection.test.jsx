@@ -87,11 +87,12 @@ describe("ReportSection", () => {
       expect(button).toHaveAttribute("aria-expanded", "false");
     });
 
-    it("adds the open modifier class to the lines wrapper when clicked", async () => {
-      const wrapper = document.querySelector(".report-section__lines-wrapper");
-      expect(wrapper).not.toHaveClass("report-section__lines-wrapper--open");
+    it("shows the lines wrapper when the toggle button is clicked", async () => {
+      const wrapper = screen.getByTestId("lines-wrapper");
+      expect(wrapper.className).toContain("max-sm:hidden");
       await userEvent.click(screen.getByRole("button"));
-      expect(wrapper).toHaveClass("report-section__lines-wrapper--open");
+      expect(wrapper.className).not.toContain("max-sm:hidden");
+      expect(wrapper.className).toContain("max-sm:grid");
     });
   });
 

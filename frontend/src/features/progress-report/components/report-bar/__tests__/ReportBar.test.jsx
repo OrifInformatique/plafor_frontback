@@ -1,19 +1,19 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import ReportBar from "../ReportBar";
 import skillsData from "../__fixtures__/skills-data.json";
 import badData from "../__fixtures__/bad-data.json";
 
 describe("ReportBar", () => {
   it("renders the correct number of segments with valid data", () => {
-    const { container } = render(<ReportBar data={skillsData} />);
-    const segments = container.querySelectorAll(".report-bar__segment");
+    render(<ReportBar data={skillsData} />);
+    const segments = screen.getAllByTestId("report-bar-segment");
     expect(segments).toHaveLength(skillsData.length);
   });
 
   it("uses the gray 100% fallback when data is empty", () => {
-    const { container } = render(<ReportBar data={[]} />);
-    const segments = container.querySelectorAll(".report-bar__segment");
+    render(<ReportBar data={[]} />);
+    const segments = screen.getAllByTestId("report-bar-segment");
 
     expect(segments).toHaveLength(1);
     expect(segments[0].style.flexBasis).toBe("100%");
@@ -22,8 +22,8 @@ describe("ReportBar", () => {
   });
 
   it("distributes segment widths proportionally to values", () => {
-    const { container } = render(<ReportBar data={skillsData} />);
-    const segments = container.querySelectorAll(".report-bar__segment");
+    render(<ReportBar data={skillsData} />);
+    const segments = screen.getAllByTestId("report-bar-segment");
 
     // skillsData total = 100 → Autonome 40%, Exercé 30%, Expliqué 20%, Non expliqué 10%
     expect(parseFloat(segments[0].style.flexBasis)).toBeCloseTo(40);
@@ -33,8 +33,8 @@ describe("ReportBar", () => {
   });
 
   it("normalizes invalid values: strings → numbers, negatives → 0, null → 0, null labels → 'Item X'", () => {
-    const { container } = render(<ReportBar data={badData} />);
-    const segments = container.querySelectorAll(".report-bar__segment");
+    render(<ReportBar data={badData} />);
+    const segments = screen.getAllByTestId("report-bar-segment");
 
     // badData: "40"→40, -5→0 (clamped), null→0, 0→0  |  total = 40
     // Autonome: 40/40 = 100%, others: 0%
@@ -48,8 +48,8 @@ describe("ReportBar", () => {
   });
 
   it("assigns default colors in input order", () => {
-    const { container } = render(<ReportBar data={skillsData} />);
-    const segments = container.querySelectorAll(".report-bar__segment");
+    render(<ReportBar data={skillsData} />);
+    const segments = screen.getAllByTestId("report-bar-segment");
 
     // DEFAULT_COLORS[0] = #005BA9 → rgb(0, 91, 169)
     expect(segments[0].style.backgroundColor).toBe("rgb(0, 91, 169)");

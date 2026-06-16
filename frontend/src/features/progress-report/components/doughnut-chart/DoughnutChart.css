@@ -1,5 +1,0 @@
-/* Shadow around the donut, twice to create a more realistic effect */
-.doughnut-shadow {
-  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.14))
-    drop-shadow(0 4px 8px rgba(0, 0, 0, 0.25));
-}

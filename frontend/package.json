@@ -19,7 +19,7 @@
   "dependencies": {
     "@headlessui/react": "^2.1.9",
     "@heroicons/react": "^2.1.5",
-    "@orif-informatique/react-components-library": "^1.0.1",
+    "@orif-informatique/react-components-library": "^1.2.2",
     "axios": "^1.11.0",
     "chart.js": "^4.5.1",
     "clsx": "^2.1.1",

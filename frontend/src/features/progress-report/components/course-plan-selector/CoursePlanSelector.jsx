@@ -9,7 +9,7 @@ export default function CoursePlanSelector({
   onCoursePlanChange,
 }) {
   return (
-    <div className="course-plan-selector">
+    <div className="course-plan-selector flex flex-col gap-2">
       <SingleSelect
         name="course-plan"
         label="Formation(s) suivie(s)"
@@ -17,28 +17,28 @@ export default function CoursePlanSelector({
         selectedValue={selectedCoursePlan?.id}
         onChangeFunction={onCoursePlanChange}
       />
-      <div className="course-plan-selector__info">
-        <div className="course-plan-selector__info-block">
-          <span className="course-plan-selector__info-block-label">
+      <div className="flex flex-row justify-between max-sm:flex-col max-sm:gap-1">
+        <div className="flex flex-col gap-1 max-sm:flex-row max-sm:justify-between max-sm:items-center">
+          <span className="font-semibold text-[0.9rem]">
             Date début :
           </span>
-          <span className="course-plan-selector__info-block-value">
+          <span className="text-[0.95rem]">
             {selectedCoursePlan?.startDate}
           </span>
         </div>
-        <div className="course-plan-selector__info-block">
-          <span className="course-plan-selector__info-block-label">
+        <div className="flex flex-col gap-1 max-sm:flex-row max-sm:justify-between max-sm:items-center">
+          <span className="font-semibold text-[0.9rem]">
             Date fin :
           </span>
-          <span className="course-plan-selector__info-block-value">
+          <span className="text-[0.95rem]">
             {selectedCoursePlan?.endDate}
           </span>
         </div>
-        <div className="course-plan-selector__info-block">
-          <span className="course-plan-selector__info-block-label">
+        <div className="flex flex-col gap-1 max-sm:flex-row max-sm:justify-between max-sm:items-center">
+          <span className="font-semibold text-[0.9rem]">
             Status de la formation :
           </span>
-          <span className="course-plan-selector__info-block-value">
+          <span className="text-[0.95rem]">
             {selectedCoursePlan?.status}
           </span>
         </div>
