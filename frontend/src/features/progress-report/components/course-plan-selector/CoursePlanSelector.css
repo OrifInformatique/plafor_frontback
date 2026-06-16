@@ -1,0 +1,52 @@
+/* ── Root container ─────────────────────────────────────────── */
+.course-plan-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── Override library label gap ─────────────────────────────── */
+.course-plan-selector label {
+  gap: 8px;
+}
+
+/* ── Info row: three blocks side by side ────────────────────── */
+.course-plan-selector__info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+/* ── Individual info block: label stacked above value ───────── */
+.course-plan-selector__info-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ── Label text ─────────────────────────────────────────────── */
+.course-plan-selector__info-block-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* ── Value text ─────────────────────────────────────────────── */
+.course-plan-selector__info-block-value {
+  font-size: 0.95rem;
+}
+
+/* ── Small screens (≤ 600 px) ──────────────────────────────── */
+@media (max-width: 600px) {
+  /* Stack the three blocks vertically */
+  .course-plan-selector__info {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  /* Each block displays label and value on the same line */
+  .course-plan-selector__info-block {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

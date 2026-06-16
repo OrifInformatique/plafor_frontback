@@ -9,6 +9,9 @@ import SchoolReportList from "./pages/SchoolReportList";
 
 import Loading from "./components/Loading";
 
+// Styles
+import "@orif-informatique/react-components-library/styles.css";
+
 
 /**
  * Defines routes and is the app base.

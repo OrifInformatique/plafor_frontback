@@ -1,0 +1,28 @@
+{
+  "coursePlans": [
+    {
+      "id": "1",
+      "label": "Informaticienne / informaticien avec CFC, orientation développement d’applications",
+      "startDate": "01.08.2025",
+      "endDate": "31.07.2029",
+      "status": "En cours"
+    },
+    {
+      "id": "2",
+      "label": "[2014-2020] Informaticienne, informaticien avec CFC, orientation développement d’applications",
+      "startDate": "01.08.2020",
+      "endDate": "31.07.2022",
+      "status": "Abandonnée"
+    }
+  ],
+
+  "selectedCoursePlan": null,
+
+  "selectedCoursePlanFilled": {
+    "id": "1",
+    "label": "Informaticienne / informaticien avec CFC, orientation développement d'applications",
+    "startDate": "01.08.2025",
+    "endDate": "31.07.2029",
+    "status": "En cours"
+  }
+}
