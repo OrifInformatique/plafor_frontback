@@ -22,6 +22,7 @@ i18n
       "apprenticesList",
       "buttons",
       "coursePlanSelector",
+      "progressReport",
       "teachingDomain",
       "texts",
       "titles",
