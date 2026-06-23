@@ -13,7 +13,7 @@ export default function CoursePlanSelector({
     <div className="course-plan-selector flex flex-col gap-2">
       <SingleSelect
         name="course-plan"
-        label="Formation(s) suivie(s)"
+        label={t("course_plan_label")}
         options={coursePlans.map((cp) => ({ value: cp.id, label: cp.label }))}
         selectedValue={selectedCoursePlan?.id}
         onChangeFunction={onCoursePlanChange}
