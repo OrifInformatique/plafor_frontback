@@ -38,7 +38,7 @@ export default function ProgressReport({
         onCoursePlanChange={onCoursePlanChange}
       />
 
-      <h2 className="text-[1.7rem] font-bold text-center py-6">{t("title")}</h2>
+      <h2 className="text-[1.7rem] font-bold text-center py-6 max-sm:text-[1.2rem] max-sm:py-3">{t("title")}</h2>
 
       <div data-testid="progress-report-sections">
         {sections.map((section) => (
