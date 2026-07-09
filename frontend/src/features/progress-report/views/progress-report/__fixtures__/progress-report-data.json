@@ -1,0 +1,101 @@
+{
+  "coursePlans": [
+    {
+      "id": "1",
+      "label": "Informaticienne / informaticien avec CFC, orientation développement d’applications",
+      "startDate": "01.08.2025",
+      "endDate": "31.07.2029",
+      "status": "En cours"
+    },
+    {
+      "id": "2",
+      "label": "[2014-2020] Informaticienne, informaticien avec CFC, orientation développement d’applications",
+      "startDate": "01.08.2020",
+      "endDate": "31.07.2022",
+      "status": "Abandonnée"
+    }
+  ],
+
+  "selectedCoursePlan": {
+    "id": "1",
+    "label": "Informaticienne / informaticien avec CFC, orientation développement d’applications",
+    "startDate": "01.08.2025",
+    "endDate": "31.07.2029",
+    "status": "En cours"
+  },
+
+  "sections": [
+    {
+      "id": "A",
+      "label": "A Suivi des projets ICT",
+      "doughnutChartData": [
+        { "label": "Autonome", "value": 30 },
+        { "label": "Exercé", "value": 30 },
+        { "label": "Expliqué", "value": 15 },
+        { "label": "Non expliqué", "value": 25 }
+      ],
+      "reportLines": [
+        {
+          "label": "A1 Clarifier et documenter les besoins des parties prenantes dans le cadre d'un projet ICT",
+          "data": [
+            { "label": "Autonome", "value": 40 },
+            { "label": "Exercé", "value": 30 },
+            { "label": "Expliqué", "value": 20 },
+            { "label": "Non expliqué", "value": 10 }
+          ]
+        },
+        {
+          "label": "A2 Définir un modèle de procédure pour un projet ICT",
+          "data": [
+            { "label": "Autonome", "value": 0 },
+            { "label": "Exercé", "value": 0 },
+            { "label": "Expliqué", "value": 0 },
+            { "label": "Non expliqué", "value": 0 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "label": "B Assistance et conseils dans l'environnement ICT",
+      "doughnutChartData": [
+        { "label": "Autonome", "value": 25 },
+        { "label": "Exercé", "value": 25 },
+        { "label": "Expliqué", "value": 25 },
+        { "label": "Non expliqué", "value": 25 }
+      ],
+      "reportLines": [
+        {
+          "label": "B1 Installer un PC monoposte",
+          "data": [
+            { "label": "Autonome", "value": 0 },
+            { "label": "Exercé", "value": 0 },
+            { "label": "Expliqué", "value": 0 },
+            { "label": "Non expliqué", "value": 0 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "H",
+      "label": "H Délivrance et fonctionnement des applications",
+      "doughnutChartData": [
+        { "label": "Autonome", "value": 100 },
+        { "label": "Exercé", "value": 0 },
+        { "label": "Expliqué", "value": 0 },
+        { "label": "Non expliqué", "value": 0 }
+      ],
+      "reportLines": [
+        {
+          "label": "H1 Définir la plateforme appropriée pour la livraison des applications",
+          "data": [
+            { "label": "Autonome", "value": 100 },
+            { "label": "Exercé", "value": 0 },
+            { "label": "Expliqué", "value": 0 },
+            { "label": "Non expliqué", "value": 0 }
+          ]
+        }
+      ]
+    }
+  ]
+}
