@@ -32,8 +32,13 @@ export default function ProgressReportContainer() {
     let ignore = false;
 
     getCoursePlans()
-      .then((plans) => {
+      .then((data) => {
         if (ignore) return;
+        // Normalize ids to strings once, here at the boundary: a native
+        // <select> always reports its value as a string, so aligning the whole
+        // feature on strings keeps comparisons (and PropTypes) consistent
+        // whatever the API sends.
+        const plans = data.map((plan) => ({ ...plan, id: String(plan.id) }));
         setCoursePlans(plans);
         // Convenience: preselect the first course plan if there is one.
         if (plans.length > 0) setSelectedId(plans[0].id);
@@ -89,7 +94,9 @@ export default function ProgressReportContainer() {
   // 4) The handler only changes the id; the effect above reloads
   //    the sections on its own.
   const handleCoursePlanChange = (value) => {
-    setSelectedId(value);
+    // The native <select> already reports a string; String() states the
+    // invariant explicitly in case the selector is ever swapped out.
+    setSelectedId(String(value));
   };
 
   // Edge states.
