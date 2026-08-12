@@ -8,10 +8,10 @@ import {
 /**
  * ProgressReportContainer
  *
- * Composant "smart" de la feature progress-report. Il détient l'état
- * (formation sélectionnée + sections), va chercher les données via le service
- * `course-plans`, gère le chargement / les erreurs, puis alimente le composant
- * bête <ProgressReport />. La vue reste 100 % présentationnelle.
+ * "Smart" component of the progress-report feature. It owns the state
+ * (selected course plan + sections), fetches the data through the
+ * `course-plans` service, handles loading / errors, then feeds the dumb
+ * <ProgressReport /> component. The view stays 100% presentational.
  */
 export default function ProgressReportContainer() {
   const [coursePlans, setCoursePlans] = useState([]);
@@ -20,7 +20,7 @@ export default function ProgressReportContainer() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // 1) Charger la liste des formations, une seule fois, au montage.
+  // 1) Load the list of course plans once, on mount.
   useEffect(() => {
     let ignore = false;
 
@@ -28,7 +28,7 @@ export default function ProgressReportContainer() {
       .then((plans) => {
         if (ignore) return;
         setCoursePlans(plans);
-        // Confort : présélectionner la première formation s'il y en a une.
+        // Convenience: preselect the first course plan if there is one.
         if (plans.length > 0) setSelectedId(plans[0].id);
       })
       .catch((err) => {
@@ -43,7 +43,7 @@ export default function ProgressReportContainer() {
     };
   }, []);
 
-  // 2) Recharger les sections à chaque changement de formation sélectionnée.
+  // 2) Reload the sections whenever the selected course plan changes.
   useEffect(() => {
     if (!selectedId) {
       setSections([]);
@@ -60,25 +60,25 @@ export default function ProgressReportContainer() {
         if (!ignore) setError(err);
       });
 
-    // Garde-fou : si la sélection change avant l'arrivée de la réponse,
-    // on ignore cette réponse-là (protection contre les réponses en désordre).
+    // Safeguard: if the selection changes before the response arrives,
+    // we ignore that response (protection against out-of-order responses).
     return () => {
       ignore = true;
     };
   }, [selectedId]);
 
-  // 3) Dérivé (pas un état) : on retrouve l'objet complet depuis l'id.
-  //    Source unique de vérité = selectedId.
+  // 3) Derived (not state): we look up the full object from the id.
+  //    Single source of truth = selectedId.
   const selectedCoursePlan =
     coursePlans.find((cp) => cp.id === selectedId) ?? null;
 
-  // 4) Le handler ne fait que changer l'id ; l'effet ci-dessus recharge
-  //    les sections tout seul.
+  // 4) The handler only changes the id; the effect above reloads
+  //    the sections on its own.
   const handleCoursePlanChange = (value) => {
     setSelectedId(value);
   };
 
-  // États de bord : à remplacer par tes composants/traductions dédiés.
+  // Edge states: to be replaced by dedicated components/translations.
   if (loading) {
     return <div data-testid="progress-report-loading">Chargement…</div>;
   }
