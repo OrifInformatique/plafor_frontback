@@ -4,6 +4,8 @@ import {
   getCoursePlans,
   getCoursePlanSections,
 } from "../../../../services/api/course-plans";
+import { useTranslation } from "react-i18next";
+import Loading from "../../../../components/Loading";
 
 /**
  * ProgressReportContainer
@@ -14,6 +16,8 @@ import {
  * <ProgressReport /> component. The view stays 100% presentational.
  */
 export default function ProgressReportContainer() {
+  const { t } = useTranslation("progressReport");
+
   const [coursePlans, setCoursePlans] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [sections, setSections] = useState([]);
@@ -78,15 +82,15 @@ export default function ProgressReportContainer() {
     setSelectedId(value);
   };
 
-  // Edge states: to be replaced by dedicated components/translations.
+  // Edge states.
   if (loading) {
-    return <div data-testid="progress-report-loading">Chargement…</div>;
+    return <Loading />;
   }
 
   if (error) {
     return (
-      <div data-testid="progress-report-error">
-        Une erreur est survenue lors du chargement des formations.
+      <div className="text-center" data-testid="progress-report-error">
+        <strong className="text-lg">{t("loading_error")}</strong>
       </div>
     );
   }
