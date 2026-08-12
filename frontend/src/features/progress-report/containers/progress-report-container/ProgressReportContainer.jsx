@@ -22,7 +22,10 @@ export default function ProgressReportContainer() {
   const [selectedId, setSelectedId] = useState(null);
   const [sections, setSections] = useState([]);
   const [loading, setLoading] = useState(true);
+  // Blocking error: the initial load failed, there is nothing to display.
   const [error, setError] = useState(null);
+  // Non-blocking error: only the sections failed, the selector stays usable.
+  const [sectionsError, setSectionsError] = useState(null);
 
   // 1) Load the list of course plans once, on mount.
   useEffect(() => {
@@ -51,17 +54,24 @@ export default function ProgressReportContainer() {
   useEffect(() => {
     if (!selectedId) {
       setSections([]);
+      setSectionsError(null);
       return;
     }
 
     let ignore = false;
+
+    // Reset the previous error: this is a new attempt.
+    setSectionsError(null);
 
     getCoursePlanSections(selectedId)
       .then((data) => {
         if (!ignore) setSections(data);
       })
       .catch((err) => {
-        if (!ignore) setError(err);
+        if (ignore) return;
+        // Drop the previous plan's sections so no stale data is shown.
+        setSections([]);
+        setSectionsError(err);
       });
 
     // Safeguard: if the selection changes before the response arrives,
@@ -101,6 +111,7 @@ export default function ProgressReportContainer() {
       selectedCoursePlan={selectedCoursePlan}
       onCoursePlanChange={handleCoursePlanChange}
       sections={sections}
+      hasSectionsError={Boolean(sectionsError)}
     />
   );
 }

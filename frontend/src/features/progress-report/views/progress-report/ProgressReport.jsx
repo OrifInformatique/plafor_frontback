@@ -21,12 +21,14 @@ import ReportSection from "../../components/report-section/ReportSection";
  * @param {Object}   props.selectedCoursePlan  - Currently selected formation, forwarded to CoursePlanSelector.
  * @param {Function} props.onCoursePlanChange  - Called when the user picks another formation.
  * @param {Array}    props.sections            - One entry per competency domain: { id, label, doughnutChartData, reportLines }.
+ * @param {boolean}  props.hasSectionsError    - When true, show an error in place of the sections; the selector stays usable.
  */
 export default function ProgressReport({
   coursePlans = [],
   selectedCoursePlan = null,
   onCoursePlanChange,
   sections = [],
+  hasSectionsError = false,
 }) {
   const { t } = useTranslation("progressReport");
 
@@ -41,14 +43,23 @@ export default function ProgressReport({
       <h2 className="text-[1.7rem] font-bold text-center py-6 max-sm:text-[1.2rem] max-sm:py-3">{t("title")}</h2>
 
       <div data-testid="progress-report-sections">
-        {sections.map((section) => (
-          <ReportSection
-            key={section.id}
-            label={section.label}
-            doughnutChartData={section.doughnutChartData}
-            reportLines={section.reportLines}
-          />
-        ))}
+        {hasSectionsError ? (
+          <p
+            className="text-center"
+            data-testid="progress-report-sections-error"
+          >
+            {t("sections_error")}
+          </p>
+        ) : (
+          sections.map((section) => (
+            <ReportSection
+              key={section.id}
+              label={section.label}
+              doughnutChartData={section.doughnutChartData}
+              reportLines={section.reportLines}
+            />
+          ))
+        )}
       </div>
     </div>
   );
@@ -66,4 +77,5 @@ ProgressReport.propTypes = {
       reportLines: PropTypes.array,
     }),
   ),
+  hasSectionsError: PropTypes.bool,
 };
