@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import CoursePlanSelector from "../../components/course-plan-selector/CoursePlanSelector";
 import ReportSection from "../../components/report-section/ReportSection";
+import Loading from "../../../../components/Loading";
 
 /**
  * ProgressReport view
@@ -21,6 +22,7 @@ import ReportSection from "../../components/report-section/ReportSection";
  * @param {Object}   props.selectedCoursePlan  - Currently selected formation, forwarded to CoursePlanSelector.
  * @param {Function} props.onCoursePlanChange  - Called when the user picks another formation.
  * @param {Array}    props.sections            - One entry per competency domain: { id, label, doughnutChartData, reportLines }.
+ * @param {boolean}  props.isSectionsLoading   - When true, show a loading indicator in place of the sections.
  * @param {boolean}  props.hasSectionsError    - When true, show an error in place of the sections; the selector stays usable.
  */
 export default function ProgressReport({
@@ -28,9 +30,34 @@ export default function ProgressReport({
   selectedCoursePlan = null,
   onCoursePlanChange,
   sections = [],
+  isSectionsLoading = false,
   hasSectionsError = false,
 }) {
   const { t } = useTranslation("progressReport");
+
+  // Only the sections area varies: loading, then error, then the data itself.
+  const renderSections = () => {
+    if (isSectionsLoading) {
+      return <Loading />;
+    }
+
+    if (hasSectionsError) {
+      return (
+        <p className="text-center" data-testid="progress-report-sections-error">
+          {t("sections_error")}
+        </p>
+      );
+    }
+
+    return sections.map((section) => (
+      <ReportSection
+        key={section.id}
+        label={section.label}
+        doughnutChartData={section.doughnutChartData}
+        reportLines={section.reportLines}
+      />
+    ));
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -40,27 +67,11 @@ export default function ProgressReport({
         onCoursePlanChange={onCoursePlanChange}
       />
 
-      <h2 className="text-[1.7rem] font-bold text-center py-6 max-sm:text-[1.2rem] max-sm:py-3">{t("title")}</h2>
+      <h2 className="text-[1.7rem] font-bold text-center py-6 max-sm:text-[1.2rem] max-sm:py-3">
+        {t("title")}
+      </h2>
 
-      <div data-testid="progress-report-sections">
-        {hasSectionsError ? (
-          <p
-            className="text-center"
-            data-testid="progress-report-sections-error"
-          >
-            {t("sections_error")}
-          </p>
-        ) : (
-          sections.map((section) => (
-            <ReportSection
-              key={section.id}
-              label={section.label}
-              doughnutChartData={section.doughnutChartData}
-              reportLines={section.reportLines}
-            />
-          ))
-        )}
-      </div>
+      <div data-testid="progress-report-sections">{renderSections()}</div>
     </div>
   );
 }
@@ -77,5 +88,6 @@ ProgressReport.propTypes = {
       reportLines: PropTypes.array,
     }),
   ),
+  isSectionsLoading: PropTypes.bool,
   hasSectionsError: PropTypes.bool,
 };

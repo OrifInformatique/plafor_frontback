@@ -26,6 +26,8 @@ export default function ProgressReportContainer() {
   const [error, setError] = useState(null);
   // Non-blocking error: only the sections failed, the selector stays usable.
   const [sectionsError, setSectionsError] = useState(null);
+  // Sections being (re)loaded after a course plan change.
+  const [sectionsLoading, setSectionsLoading] = useState(false);
 
   // 1) Load the list of course plans once, on mount.
   useEffect(() => {
@@ -60,23 +62,28 @@ export default function ProgressReportContainer() {
     if (!selectedId) {
       setSections([]);
       setSectionsError(null);
+      setSectionsLoading(false);
       return;
     }
 
     let ignore = false;
 
-    // Reset the previous error: this is a new attempt.
+    // New attempt: drop the previous plan's sections right away, so the old
+    // competencies are never shown under the newly selected plan, and reset
+    // the previous error.
+    setSections([]);
     setSectionsError(null);
+    setSectionsLoading(true);
 
     getCoursePlanSections(selectedId)
       .then((data) => {
         if (!ignore) setSections(data);
       })
       .catch((err) => {
-        if (ignore) return;
-        // Drop the previous plan's sections so no stale data is shown.
-        setSections([]);
-        setSectionsError(err);
+        if (!ignore) setSectionsError(err);
+      })
+      .finally(() => {
+        if (!ignore) setSectionsLoading(false);
       });
 
     // Safeguard: if the selection changes before the response arrives,
@@ -118,6 +125,7 @@ export default function ProgressReportContainer() {
       selectedCoursePlan={selectedCoursePlan}
       onCoursePlanChange={handleCoursePlanChange}
       sections={sections}
+      isSectionsLoading={sectionsLoading}
       hasSectionsError={Boolean(sectionsError)}
     />
   );
