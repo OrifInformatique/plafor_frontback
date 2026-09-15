@@ -1,0 +1,16 @@
+{
+    "actions": "Actions",
+    "show_deleted": "Show deleted items",
+    "no_items": "No items to display.",
+    "id": "ID",
+    "firstName": "First Name",
+    "lastName" : "Last Name",
+    "login" : "Login",
+    "mainRole" : "Main Role",
+    "appSpecificRoles" : "App Specific Roles",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At",
+    "confirm_hard_delete": "Confirm Permanent Deletion",
+    "confirm_hard_delete_text": "Are you sure you want to permanently delete this user ? This action cannot be undone.",
+    "no_user_found": "No user found"
+}

@@ -1,0 +1,16 @@
+{
+    "actions": "Actions",
+    "show_deleted": "Afficher les éléments supprimés",
+    "no_items": "Aucun élément à afficher.",
+    "id": "ID",
+    "firstName": "Prénom",
+    "lastName" : "Nom",
+    "login" : "Email",
+    "mainRole": "Role principal",
+    "appSpecificRoles" : "Roles spécifique de l'app",
+    "createdAt": "Créé le",
+    "updatedAt": "Mis à jour le",
+    "confirm_hard_delete": "Confirmer la suppression permanente",
+    "confirm_hard_delete_text": "Êtes-vous sûr de vouloir supprimer définitivement cet utilisateur ?",
+    "no_user_found" : "Aucun utilisateur trouvé"
+}

@@ -1,0 +1,13 @@
+{
+    "actions": "Actions",
+    "show_deleted": "Show deleted items",
+    "no_items": "No items to display.",
+    "id": "ID",
+    "name": "Name",
+    "description": "Description",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At",
+    "author": "Author",
+    "confirm_hard_delete": "Confirm Permanent Deletion",
+    "confirm_hard_delete_text": "Are you sure you want to permanently delete this item? This action cannot be undone."
+}
