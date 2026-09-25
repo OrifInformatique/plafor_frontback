@@ -16,6 +16,7 @@ import AzureCallback from './features/auth/ui/login/AzureCallback';
 import ChangePassword from './features/auth/ui/change-password';
 import ResetPassword from './features/auth/ui/reset-password';
 import ApiAuthCall from './features/auth';
+import BulletinInterface from './features/bulletin';
 
 // Utils
 import Redirect from './common/utils/Redirect'
@@ -79,6 +80,11 @@ root.render(
                     <Route
                         path="/reset-password"
                         element={<ResetPassword />}
+                    />
+
+                    <Route
+                        path="/bulletin"
+                        element={<BulletinInterface />}
                     />
                 </Route>
             </Routes>

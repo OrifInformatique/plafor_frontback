@@ -1,0 +1,59 @@
+{
+    "subjects": [
+        {
+            "name": "Culture Générale",
+            "teaching_subjects": [
+                {
+                    "id": 1,
+                    "subject_name": "ECG"
+                },
+                {
+                    "id": 2,
+                    "subject_name": "TPA"
+                },
+                {
+                    "id": 3,
+                    "subject_name": "Examen final"
+                }
+            ]
+
+        },
+        {
+            "name": "Compétences de base élargies",
+            "teaching_subjects": [
+                {
+                    "id": 4,
+                    "subject_name": "Mathématiques"
+                },
+                {
+                    "id": 5,
+                    "subject_name": "Anglais"
+                },
+                {
+                    "id": 6,
+                    "subject_name": "Allemand"
+                }
+            ]
+        },
+        {
+            "name": "Modules",
+            "teaching_module": [
+                {
+                    "id": 7,
+                    "module_number": 106,
+                    "module_name": "Interroger, traiter et assurer la maintenance des bases de données"
+                },
+                {
+                    "id": 8,
+                    "module_number": 122,
+                    "module_name": "Automatiser des procédures à l'aide de scripts"
+                },
+                {
+                    "id": 9,
+                    "module_number": 187,
+                    "module_name": "Mettre en service un poste de travail ICT avec le système d'exploitation"                    
+                }
+            ]
+        }
+    ]
+}

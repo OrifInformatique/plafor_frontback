@@ -1,0 +1,159 @@
+{
+  "user": {
+    "id": 77,
+    "login": "noah.perret@etml-es.ch",
+    "first_name": "Noah",
+    "last_name": "Perret"
+  },
+  "user_course": {
+    "id": 205,
+    "fk_course_plan": 8,
+    "course_plan_official_name": "Médiamaticien·ne avec CFC",
+    "date_begin": "2023-08-01",
+    "date_end": "2027-07-31"
+  },
+  "teaching_domains": [
+    {
+      "teaching_domain_id": 15,
+      "title": "Compétences de base élargies",
+      "domain_weight": 0.10,
+      "is_eliminatory": false,
+      "round_multiple": 0.1,
+      "unrounded_average": 4.75,
+      "rounded_average": 4.8,
+      "teaching_subjects": [
+        {
+          "teaching_subject_id": 24,
+          "name": "Allemand",
+          "subject_weight": 0.00,
+          "round_multiple": 0.1,
+          "grades": [
+            { "grade_id": 7001, "date": "2024-01-22", "grade": 4.0, "is_school": true },
+            { "grade_id": 7002, "date": "2024-06-24", "grade": 4.5, "is_school": true }
+          ],
+          "unrounded_average": 4.25,
+          "rounded_average": 4.3
+        },
+        {
+          "teaching_subject_id": 25,
+          "name": "Anglais",
+          "subject_weight": 0.00,
+          "round_multiple": 0.1,
+          "grades": [
+            { "grade_id": 7010, "date": "2024-02-05", "grade": 5.0, "is_school": true },
+            { "grade_id": 7011, "date": "2024-06-17", "grade": 5.5, "is_school": true }
+          ],
+          "unrounded_average": 5.25,
+          "rounded_average": 5.3
+        }
+      ]
+    },
+    {
+      "teaching_domain_id": 16,
+      "title": "Culture générale",
+      "domain_weight": 0.20,
+      "is_eliminatory": false,
+      "round_multiple": 0.1,
+      "unrounded_average": 5.17,
+      "rounded_average": 5.2,
+      "teaching_subjects": [
+        {
+          "teaching_subject_id": 26,
+          "name": "Culture générale",
+          "subject_weight": 0.00,
+          "round_multiple": 0.1,
+          "grades": [
+            { "grade_id": 7100, "date": "2024-01-26", "grade": 5.0, "is_school": true },
+            { "grade_id": 7101, "date": "2024-06-28", "grade": 5.0, "is_school": true },
+            { "grade_id": 7102, "date": "2025-01-24", "grade": 5.5, "is_school": true }
+          ],
+          "unrounded_average": 5.17,
+          "rounded_average": 5.2
+        }
+      ]
+    },
+    {
+      "teaching_domain_id": 17,
+      "title": "Médiamatique",
+      "domain_weight": 0.30,
+      "is_eliminatory": true,
+      "round_multiple": 0.1,
+      "subgroups": [
+        {
+          "name": "Modules école",
+          "weight": 0.8,
+          "round_multiple": 0.1,
+          "unrounded_average": 4.95,
+          "rounded_average": 5.0,
+          "teaching_modules": [
+            {
+              "teaching_module_id": 65,
+              "module_number": 264,
+              "official_name": "Préparer des productions de médias numériques",
+              "grades": [
+                { "grade_id": 7200, "date": "2024-03-11", "grade": 5.0, "is_school": true }
+              ],
+              "unrounded_average": 5.00,
+              "rounded_average": 5.0
+            },
+            {
+              "teaching_module_id": 76,
+              "module_number": 278,
+              "official_name": "Analyser le marché et en déduire les objectifs",
+              "grades": [
+                { "grade_id": 7220, "date": "2025-02-24", "grade": 4.5, "is_school": true }
+              ],
+              "unrounded_average": 4.50,
+              "rounded_average": 4.5
+            }
+          ]
+        },
+        {
+          "name": "Modules interentreprises",
+          "weight": 0.2,
+          "round_multiple": 0.1,
+          "unrounded_average": 5.50,
+          "rounded_average": 5.5,
+          "teaching_modules": [
+            {
+              "teaching_module_id": 68,
+              "module_number": 271,
+              "official_name": "Elaborer des données vectorielles et traiter des images",
+              "grades": [
+                { "grade_id": 7210, "date": "2024-09-16", "grade": 5.5, "is_school": false }
+              ],
+              "unrounded_average": 5.50,
+              "rounded_average": 5.5
+            }
+          ]
+        }
+      ],
+      "unrounded_average": 5.06,
+      "rounded_average": 5.1
+    },
+    {
+      "teaching_domain_id": 18,
+      "title": "Travail pratique individuel",
+      "domain_weight": 0.40,
+      "is_eliminatory": true,
+      "round_multiple": 0.1,
+      "unrounded_average": 5.50,
+      "rounded_average": 5.5,
+      "teaching_subjects": [
+        {
+          "teaching_subject_id": 27,
+          "name": "Travail pratique individuel (TPI)",
+          "subject_weight": 0.00,
+          "round_multiple": 0.1,
+          "grades": [
+            { "grade_id": 7300, "date": "2027-05-14", "grade": 5.5, "is_school": false }
+          ],
+          "unrounded_average": 5.50,
+          "rounded_average": 5.5
+        }
+      ]
+    }
+  ],
+  "unrounded_general_average": 5.25,
+  "rounded_general_average": 5.3
+}

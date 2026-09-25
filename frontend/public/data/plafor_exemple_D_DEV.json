@@ -1,0 +1,213 @@
+{
+  "user": {
+    "id": 88,
+    "login": "maya.jaquet@etml-es.ch",
+    "first_name": "Maya",
+    "last_name": "Jaquet"
+  },
+  "user_course": {
+    "id": 402,
+    "fk_course_plan": 6,
+    "course_plan_official_name": "Informaticienne / Informaticien avec CFC, orientation développement d'applications",
+    "date_begin": "2022-08-01",
+    "date_end": "2026-07-31"
+  },
+  "teaching_domains": [
+    {
+      "teaching_domain_id": 5,
+      "title": "Compétences de base élargies",
+      "domain_weight": 0.10,
+      "is_eliminatory": false,
+      "round_multiple": 0.5,
+      "unrounded_average": 5.38,
+      "rounded_average": 5.5,
+      "teaching_subjects": [
+        {
+          "teaching_subject_id": 7,
+          "name": "Mathématiques",
+          "subject_weight": 0.00,
+          "round_multiple": 0.1,
+          "grades": [
+            { "grade_id": 8001, "date": "2023-01-20", "grade": 5.5, "is_school": true },
+            { "grade_id": 8002, "date": "2023-06-16", "grade": 5.0, "is_school": true },
+            { "grade_id": 8003, "date": "2024-01-19", "grade": 6.0, "is_school": true }
+          ],
+          "unrounded_average": 5.50,
+          "rounded_average": 5.5
+        },
+        {
+          "teaching_subject_id": 8,
+          "name": "Anglais technique",
+          "subject_weight": 0.00,
+          "round_multiple": 0.1,
+          "grades": [
+            { "grade_id": 8010, "date": "2023-02-10", "grade": 5.0, "is_school": true },
+            { "grade_id": 8011, "date": "2023-06-23", "grade": 5.5, "is_school": true }
+          ],
+          "unrounded_average": 5.25,
+          "rounded_average": 5.3
+        }
+      ]
+    },
+    {
+      "teaching_domain_id": 6,
+      "title": "Culture générale",
+      "domain_weight": 0.20,
+      "is_eliminatory": false,
+      "round_multiple": 0.1,
+      "unrounded_average": 5.25,
+      "rounded_average": 5.3,
+      "teaching_subjects": [
+        {
+          "teaching_subject_id": 9,
+          "name": "ECG",
+          "subject_weight": 0.00,
+          "round_multiple": 0.1,
+          "grades": [
+            { "grade_id": 8100, "date": "2023-01-25", "grade": 5.0, "is_school": true },
+            { "grade_id": 8101, "date": "2023-06-28", "grade": 5.5, "is_school": true },
+            { "grade_id": 8102, "date": "2024-01-24", "grade": 5.0, "is_school": true },
+            { "grade_id": 8103, "date": "2024-06-26", "grade": 5.5, "is_school": true }
+          ],
+          "unrounded_average": 5.25,
+          "rounded_average": 5.3
+        },
+        {
+          "teaching_subject_id": 10,
+          "name": "Travail personnel d'approfondissement (TPA)",
+          "subject_weight": 0.00,
+          "round_multiple": 0.1,
+          "grades": [
+            { "grade_id": 8110, "date": "2025-11-14", "grade": 5.0, "is_school": true }
+          ],
+          "unrounded_average": 5.00,
+          "rounded_average": 5.0
+        },
+        {
+          "teaching_subject_id": 11,
+          "name": "Examen final",
+          "subject_weight": 0.00,
+          "round_multiple": 0.1,
+          "grades": [
+            { "grade_id": 8120, "date": "2026-06-05", "grade": 5.5, "is_school": true }
+          ],
+          "unrounded_average": 5.50,
+          "rounded_average": 5.5
+        }
+      ]
+    },
+    {
+      "teaching_domain_id": 7,
+      "title": "Informatique",
+      "domain_weight": 0.30,
+      "is_eliminatory": true,
+      "round_multiple": 0.1,
+      "subgroups": [
+        {
+          "name": "Modules école",
+          "weight": 0.8,
+          "round_multiple": 0.1,
+          "unrounded_average": 5.25,
+          "rounded_average": 5.3,
+          "teaching_modules": [
+            {
+              "teaching_module_id": 51,
+              "module_number": 320,
+              "official_name": "Programmer orienté objet",
+              "grades": [
+                { "grade_id": 8200, "date": "2023-03-15", "grade": 5.5, "is_school": true }
+              ],
+              "unrounded_average": 5.50,
+              "rounded_average": 5.5
+            },
+            {
+              "teaching_module_id": 50,
+              "module_number": 319,
+              "official_name": "Concevoir et implémenter des applications",
+              "grades": [
+                { "grade_id": 8210, "date": "2024-02-14", "grade": 5.0, "is_school": true }
+              ],
+              "unrounded_average": 5.00,
+              "rounded_average": 5.0
+            },
+            {
+              "teaching_module_id": 45,
+              "module_number": 295,
+              "official_name": "Réaliser le back-end pour des applications",
+              "grades": [
+                { "grade_id": 8220, "date": "2024-09-20", "grade": 5.0, "is_school": true }
+              ],
+              "unrounded_average": 5.00,
+              "rounded_average": 5.0
+            },
+            {
+              "teaching_module_id": 44,
+              "module_number": 294,
+              "official_name": "Réaliser le front-end d'une application Web interactive",
+              "grades": [
+                { "grade_id": 8230, "date": "2025-02-28", "grade": 5.5, "is_school": true }
+              ],
+              "unrounded_average": 5.50,
+              "rounded_average": 5.5
+            }
+          ]
+        },
+        {
+          "name": "Modules interentreprises",
+          "weight": 0.2,
+          "round_multiple": 0.1,
+          "unrounded_average": 5.25,
+          "rounded_average": 5.3,
+          "teaching_modules": [
+            {
+              "teaching_module_id": 59,
+              "module_number": 426,
+              "official_name": "Développer un logiciel avec des méthodes agiles",
+              "grades": [
+                { "grade_id": 8240, "date": "2024-11-08", "grade": 5.0, "is_school": false }
+              ],
+              "unrounded_average": 5.00,
+              "rounded_average": 5.0
+            },
+            {
+              "teaching_module_id": 62,
+              "module_number": 450,
+              "official_name": "Tester des applications",
+              "grades": [
+                { "grade_id": 8250, "date": "2025-04-25", "grade": 5.5, "is_school": false }
+              ],
+              "unrounded_average": 5.50,
+              "rounded_average": 5.5
+            }
+          ]
+        }
+      ],
+      "unrounded_average": 5.25,
+      "rounded_average": 5.3
+    },
+    {
+      "teaching_domain_id": 8,
+      "title": "Travail pratique individuel",
+      "domain_weight": 0.40,
+      "is_eliminatory": true,
+      "round_multiple": 0.1,
+      "unrounded_average": 5.50,
+      "rounded_average": 5.5,
+      "teaching_subjects": [
+        {
+          "teaching_subject_id": 12,
+          "name": "Travail pratique individuel (TPI)",
+          "subject_weight": 0.00,
+          "round_multiple": 0.1,
+          "grades": [
+            { "grade_id": 8300, "date": "2026-05-15", "grade": 5.5, "is_school": false }
+          ],
+          "unrounded_average": 5.50,
+          "rounded_average": 5.5
+        }
+      ]
+    }
+  ],
+  "unrounded_general_average": 5.40,
+  "rounded_general_average": 5.4
+}
