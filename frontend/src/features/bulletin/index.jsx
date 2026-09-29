@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getDataExemplePopup, getDataExempleINFRA, getDataExempleMEDIA, getDataExempleOPE, getDataExempleDEV } from "/src/common/services/dataService";
 import Popup from './components/popup';
 import ListeDeroulante from './components/listeDeroulante';
+import LigneTableauBulletin from './components/ligneTableauBulletin';
 
 const BulletinInterface = ({ userData }) => {
 
@@ -91,6 +92,21 @@ const BulletinInterface = ({ userData }) => {
     //==================
 
     const fieldsModules = [
+        {
+            name: "typeModule",
+            label: "Type de module",
+            type: "radio",
+            options: [
+                {
+                    value: "ecole",
+                    label: "Module école"
+                },
+                {
+                    value: "interentreprise",
+                    label: "Module interentreprise"
+                },
+            ],
+        },
         {
             name: "module",
             label: "Module",
@@ -220,26 +236,9 @@ const BulletinInterface = ({ userData }) => {
         },
     ];
 
-    //===================
-    //      Fonctions
-    //===================
-
     const toggleLigne = (id) => {
         setLigneOuverte(ligneOuverte === id ? null : id);
     };    
-
-    function getSemestre(dateDebut, dateNote) {
-        const debut = new Date(dateDebut);
-        const note = new Date(dateNote);
-
-        const moisEcoules = 
-            (note.getFullYear() - debut.getFullYear()) * 12 +
-            (note.getMonth() - debut.getMonth());
-
-        const semestre = Math.floor(moisEcoules / 6) + 1;
-
-        return Math.min(Math.max(semestre, 1), 8);
-    }
 
     return (<>
 
@@ -251,258 +250,62 @@ const BulletinInterface = ({ userData }) => {
         <div className="flex flex-row w-full justify-around">
             <table className="w-full max-w-2/3 border-collapse border mt-5">
                 <tbody>
+
                     {/* Ligne TPI */}
-                    <tr className="border-b p-5 bg-blue-200 hover:bg-blue-300">
-                        <td className="p-4">
-                            <button onClick={() => setPopupType("tpi")} className="w-8 h-8 rounded-full bg-blue-500 text-white hover:bg-blue-600">+</button>
-                        </td>
-                        <td className="p-4 font-bold">
-                            TPI
-                        </td>
-                        <td className="p-4 text-center font-bold"> 
-                            {moyenneTPI}
-                        </td>
-                        <td className="p-4 text-center">
-                            <button className="accordion-button w-8 h-8" disabled>
-                                <span className={`inline-block transition-transform duration-200 ${ligneOuverte === 1 ? "rotate-180" : ""}`}></span>
-                            </button>
-                        </td>
-                    </tr>
+                    <LigneTableauBulletin 
+                        id={0}
+                        nom="TPI"
+                        moyenne={moyenneTPI}
+                        ligneOuverte={ligneOuverte}
+                        toggleLigne={toggleLigne}
+                        onAdd={() => setPopupType("tpi")}
+                        showAccordeon={false}
+                    />
 
-                    {/* Ligne Culture Générale */}
-                    <tr className="border-b p-5 bg-blue-200 hover:bg-blue-300">
-                        <td className="p-4">
-                            <button onClick={() => setPopupType("culture")} className="w-8 h-8 rounded-full bg-blue-500 text-white hover:bg-blue-600">+</button>
-                        </td>
-                        <td className="p-4 font-bold">
-                            Culture Générale
-                        </td>
-                        <td className="p-4 text-center font-bold"> 
-                            {dataCultureGen?.rounded_average ?? "N/A"}
-                        </td>
-                        <td className="p-4 text-center">
-                            <button className="accordion-button w-8 h-8" onClick={() => toggleLigne(1)}>
-                                <span className={`inline-block transition-transform duration-200 ${ligneOuverte === 1 ? "rotate-180" : ""}`}>▼</span>
-                            </button>
-                        </td>
-                    </tr>
-
-                    {/* Sous-tableau caché */}
+                    {/* Ligne Culture générale */}
+                    <LigneTableauBulletin
+                        id={1}
+                        nom="Culture générale"
+                        moyenne={dataCultureGen?.rounded_average}
+                        ligneOuverte={ligneOuverte}
+                        toggleLigne={toggleLigne}
+                        onAdd={() => setPopupType("culture")}
+                    />
+                    
+                    {/* Sous-tableau de culture générale caché */}
                     {ligneOuverte === 1 && (
-                        
                         <ListeDeroulante typeMatiere={matiereCultureGen} dateDebutFormation={dateDebutFormation} type="matiere"/>
-
-                        /*
-                        <tr className="w-full">
-                            <td colSpan="4" className="p-4">
-                                <table className="w-full">
-                                    <tbody>
-
-                                        {matiereCultureGen.map((matiere) => (
-                                            <React.Fragment key={matiere.teaching_subject_id}>
-                                                <tr>
-                                                    <td className="text-left p-2 font-bold pt-3">
-                                                        {matiere.name}
-                                                    </td>
-                                                    <td className="text-center p-2 font-bold pt-3 rounded-full bg-blue-200">
-                                                        {matiere.rounded_average ?? "N/A"}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colSpan="2">
-                                                        <table>
-                                                            <thead>
-                                                                <tr>
-                                                                    {[1, 2, 3, 4, 5, 6, 7, 8]. map((semestre) => (
-                                                                        <th key={semestre} className="border bg-gray-300 p-2">
-                                                                            Sem {semestre}
-                                                                        </th>
-                                                                    ))}
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    {[1, 2, 3, 4, 5, 6, 7, 8].map((semestre) => {
-                                                                        const note = matiere.grades?.find((note) => 
-                                                                            getSemestre(dateDebutFormation, note.date) === semestre
-                                                                        );
-
-                                                                        return (
-                                                                            <td key={semestre} className="border p-2 text-center">
-                                                                                {note?.grade ?? "-"}
-                                                                            </td>
-                                                                        );
-                                                                    })}
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </React.Fragment>
-                                        ))}
-
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        */
                     )}
 
                     {/* Ligne CBE */}
-                    <tr className="border-b p-5 bg-blue-200 hover:bg-blue-300">
-                        <td className="p-4">
-                            <button onClick={() => setPopupType("cbe")} className="w-8 h-8 rounded-full bg-blue-500 text-white hover:bg-blue-600">+</button>
-                        </td>
-                        <td className="p-4 font-bold">
-                            CBE
-                        </td>
-                        <td className="p-4 text-center font-bold"> 
-                            {dataCBE?.rounded_average ?? "N/A"}
-                        </td>
-                        <td className="p-4 text-center">
-                            <button className="accordion-button w-8 h-8" onClick={() => toggleLigne(2)}>
-                                <span className={`inline-block transition-transform duration-200 ${ligneOuverte === 2 ? "rotate-180" : ""}`}>▼</span>
-                            </button>
-                        </td>
-                    </tr>
+                    <LigneTableauBulletin
+                        id={2}
+                        nom="CBE"
+                        moyenne={dataCBE?.rounded_average}
+                        ligneOuverte={ligneOuverte}
+                        toggleLigne={toggleLigne}
+                        onAdd={() => setPopupType("cbe")}
+                    />
 
-                    {/* Sous-tableau caché */}
+                    {/* Sous-tableau de CBE caché */}
                     {ligneOuverte === 2 && (
-                        
-
                         <ListeDeroulante typeMatiere={matiereCBE} dateDebutFormation={dateDebutFormation} type="matiere"/>
-                        /*
-                        <tr className="w-full">
-                            <td colSpan="4" className="p-4">
-                                <table className="w-full">
-                                    <tbody>
-
-                                        {matiereCBE.map((matiere) => (
-                                            <React.Fragment key={matiere.teaching_subject_id}>
-                                                <tr>
-                                                    <td className="text-left p-2 font-bold pt-3">
-                                                        {matiere.name}
-                                                    </td>
-                                                    <td className="text-center p-2 font-bold pt-3 rounded-full bg-blue-200">
-                                                        {matiere.rounded_average ?? "N/A"}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colSpan="2">
-                                                        <table>
-                                                            <thead>
-                                                                <tr>
-                                                                    {[1, 2, 3, 4, 5, 6, 7, 8]. map((semestre) => (
-                                                                        <th key={semestre} className="border bg-gray-300 p-2">
-                                                                            Sem {semestre}
-                                                                        </th>
-                                                                    ))}
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    {[1, 2, 3, 4, 5, 6, 7, 8].map((semestre) => {
-                                                                        const note = matiere.grades?.find((note) => 
-                                                                            getSemestre(dateDebutFormation, note.date) === semestre
-                                                                        );
-
-                                                                        return (
-                                                                            <td key={semestre} className="border p-2 text-center">
-                                                                                {note?.grade ?? "-"}
-                                                                            </td>
-                                                                        );
-                                                                    })}
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </React.Fragment>
-                                        ))}
-
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        */
                     )}
 
-                    {/* Ligne Modules */}
-                    <tr className="border-b p-5 bg-blue-200 hover:bg-blue-300">
-                        <td className="p-4">
-                            <button onClick={() => setPopupType("module")} className="w-8 h-8 rounded-full bg-blue-500 text-white hover:bg-blue-600">+</button>
-                        </td>
-                        <td className="p-4 font-bold">
-                            Modules
-                        </td>
-                        <td className="p-4 text-center font-bold" /> 
-                        <td className="p-4 text-center">
-                            <button className="accordion-button w-8 h-8" onClick={() => toggleLigne(3)}>
-                                <span className={`inline-block transition-transform duration-200 ${ligneOuverte === 3 ? "rotate-180" : ""}`}>▼</span>
-                            </button>
-                        </td>
-                    </tr>
+                    {/* Ligne Module */}
+                    <LigneTableauBulletin
+                        id={3}
+                        nom="Modules"
+                        ligneOuverte={ligneOuverte}
+                        toggleLigne={toggleLigne}
+                        onAdd={() => setPopupType("module")}
+                    />                    
 
-                    {/* Sous-tableau caché */}
+                    {/* Sous-tableau de modules caché */}
                     {ligneOuverte === 3 && (
-                        
-
                         <ListeDeroulante dataModuleEcole={dataModuleEcole} matiereModuleEcole={matiereModuleEcole} dataModuleInterentreprise={dataModuleInterentreprise} matiereModuleInterentreprise={matiereModuleInterentreprise} type="module"/>
-                        /*
-                        <tr className="w-full">
-                            <td colSpan="4" className="p-4">
-                                <table className="w-full">
-                                    <tbody>
-
-                                        <tr>
-                                            <td className="text-left p-2 font-bold pt-3">
-                                                Modules école
-                                            </td>
-                                            <td className="text-center p-2 font-bold pt-3 rounded-full bg-blue-200">
-                                                {dataModuleEcole?.rounded_average ?? "N/A"}
-                                            </td>
-                                        </tr>
-
-                                        {matiereModuleEcole.map((matiere) => (
-                                            <React.Fragment key={matiere.teaching_module_id}>
-                                                <tr>
-                                                    <td className="text-left p-2 pt-3">
-                                                        {matiere.module_number} {" : "} {matiere.official_name}
-                                                    </td>
-                                                    <td className="text-right p-2 font-bold pt-3">
-                                                        {matiere.rounded_average ?? "N/A"}
-                                                    </td>
-                                                </tr>
-                                            </React.Fragment>
-                                        ))}
-                                        
-                                        <tr>
-                                            <td className="text-left p-2 font-bold pt-3">
-                                                Modules interentreprise
-                                            </td>
-                                            <td className="text-center p-2 font-bold pt-3 rounded-full bg-blue-200">
-                                                {dataModuleInterentreprise?.rounded_average ?? "N/A"}
-                                            </td>
-                                        </tr>
-
-                                        {matiereModuleInterentreprise.map((matiere) => (
-                                            <React.Fragment key={matiere.teaching_module_id}>
-                                                <tr>
-                                                    <td className="text-left p-2 pt-3">
-                                                        {matiere.module_number} {" : "} {matiere.official_name}
-                                                    </td>
-                                                    <td className="text-right p-2 font-bold pt-3">
-                                                        {matiere.rounded_average ?? "N/A"}
-                                                    </td>
-                                                </tr>
-                                            </React.Fragment>
-                                        ))}                                      
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        */
                     )}
+
                 </tbody>
             </table>
             <div className="flex flex-col mt-5">

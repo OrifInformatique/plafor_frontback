@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 const Popup = ({
-    title,
+    title = "Nouveau popup",
     fields,
     onClose,
     onSubmit,
@@ -21,6 +21,11 @@ const Popup = ({
     const handleSubmit = () => {
         for (const field of fields) {
             const value = values[field.name];
+
+            if (field.type === "radio" && (!value) || value === "") {
+                setError(`Veuillez sélectionner un champs module`);
+                return;
+            }
 
             if (field.type === "select" && (!value || value === "")) {
                 setError(`Veuillez sélectionner : ${field.label}`);
@@ -42,7 +47,12 @@ const Popup = ({
             }
 
 
-            if (field.type === "date" && value) {
+            if (field.type === "date") {
+                if (!value || value === "") {
+                    setError(`Veuillez entrez une date`);
+                    return;
+                }
+
                 const selectedDate = new Date(value);
                 const today = new Date();
 
@@ -82,53 +92,106 @@ const Popup = ({
                 {/* Champs */}
                 {fields.map((field) => (
                     <div key={field.name} className="mb-4">
-                        <label className="mb-2 block font-medium">
-                            {field.label}
-                        </label>
 
-                        {/* SELECT */}
-                        {field.type === "select" ? (
-                            <select
-                                value={values[field.name] ?? ""}
-                                onChange={(e) => 
-                                    handleChange(
-                                        field.name,
-                                        e.target.value
-                                    )
-                                }
-                                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2"
-                            >
-                                <option value="">
-                                    {field.placeholder ?? "Sélectionner..."}
-                                </option>
+                        {/* RADIO */}
+                        {field.type === "radio" ? (
+                            <>
+                                <label className="mb-2 block font-medium">
+                                    {field.label}
+                                </label>
 
-                                {field.options?.map((option) => (
-                                    <option
-                                        key={option.value}
-                                        value={option.value}
-                                    >
-                                        {option.label}
+                                <div className="flex gap-6">
+                                    {field.options?.map((option) => (
+                                        <label
+                                            key={option.value}
+                                            htmlFor={`${field.name}-${option.value}`}
+                                            className="flex items-center gap-2"
+                                        >
+                                            <input
+                                                id={`${field.name}-${option.value}`}
+                                                type="radio"
+                                                name={field.name}
+                                                value={option.value}
+                                                checked={
+                                                    values[field.name] === option.value
+                                                }
+                                                onChange={(e) =>
+                                                    handleChange(
+                                                        field.name,
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
+
+                                            {option.label}
+                                        </label>
+                                    ))}
+                                </div>
+                            </>
+
+                        /* SELECT */
+                        ) : field.type === "select" ? (
+                            <>
+                                <label
+                                    htmlFor={field.name}
+                                    className="mb-2 block font-medium"
+                                >
+                                    {field.label}
+                                </label>
+
+                                <select
+                                    id={field.name}
+                                    value={values[field.name] ?? ""}
+                                    onChange={(e) =>
+                                        handleChange(
+                                            field.name,
+                                            e.target.value
+                                        )
+                                    }
+                                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2"
+                                >
+                                    <option value="">
+                                        {field.placeholder ?? "Sélectionner..."}
                                     </option>
-                                ))}
-                            </select>
-                        ) : (
 
-                            /* INPUT */
-                            <input 
-                                type={field.type ?? "text"}
-                                min={field.min}
-                                max={field.max}
-                                step={field.step}
-                                placeholder={field.placeholder}
-                                value={values[field.name] ?? ""}
-                                onChange={(e) => 
-                                    handleChange(
-                                        field.name,
-                                        e.target.value
-                                    )
-                                }
-                                className="w-full rounded-lg border border-gray-300 px-3 py-2"
-                            />
+                                    {field.options?.map((option) => (
+                                        <option
+                                            key={option.value}
+                                            value={option.value}
+                                        >
+                                            {option.label}
+                                        </option>
+                                    ))}
+                                </select>
+                            </>
+
+                        /* INPUT */
+                        ) : (
+                            <>
+                                <label
+                                    htmlFor={field.name}
+                                    className="mb-2 block font-medium"
+                                >
+                                    {field.label}
+                                </label>
+
+                                <input
+                                    id={field.name}
+                                    type={field.type ?? "text"}
+                                    min={field.min}
+                                    max={field.max}
+                                    step={field.step}
+                                    placeholder={field.placeholder}
+                                    value={values[field.name] ?? ""}
+                                    onChange={(e) =>
+                                        handleChange(
+                                            field.name,
+                                            e.target.value
+                                        )
+                                    }
+                                    className="w-full rounded-lg border border-gray-300 px-3 py-2"
+                                />
+                            </>
                         )}
                     </div>
                 ))}
