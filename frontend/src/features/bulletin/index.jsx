@@ -1,26 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { getDataExemplePopup, getDataExempleINFRA } from "/src/common/services/dataService";
+import { getDataExemplePopup, getDataExempleINFRA, getDataExempleMEDIA, getDataExempleOPE, getDataExempleDEV } from "/src/common/services/dataService";
+import Popup from './components/popup';
+import ListeDeroulante from './components/listeDeroulante';
 
 const BulletinInterface = ({ userData }) => {
 
     const [ligneOuverte, setLigneOuverte] = useState(null);
     const [data, setData] = useState(userData || null);
     const [dataExemplePopup, setDataExemplePopup] = useState(null);
-    const [newGrade, setNewGrade] = useState(false);
 
-    // Popup
-    const [matiereSelectionner, setMatiereSelectionner] = useState(null);
-    const [popupNote, setPopupNote] = useState("");
-    const [popupDate, setPopupDate] = useState("");
+    // Quel type de popup
+    // null | "module" | "culture" | "cbe" | "tpi"
+    const [popupType, setPopupType] = useState(null);
 
-
+    
     useEffect(() => {
         async function loadData() {
             try {
-                const result = await getDataExempleINFRA();
+                // Changer le getData pour voir les autres exemples
+                const result = await getDataExempleDEV();
                 setData(result.data);
-
+            
             } catch(err) {
+                console.error("Erreur de chargement des données : ", err);
                 setData(null);
             }
         }
@@ -29,23 +31,27 @@ const BulletinInterface = ({ userData }) => {
             try {
                 const result = await getDataExemplePopup();
                 setDataExemplePopup(result.data);
-
+            
             } catch(err) {
+                console.error("Erreur du chargement des données : ", err);
                 setDataExemplePopup(null);
             }
         }
 
         loadData();
         loadDataExemplePopup();
+    
     }, [userData]);
 
-    if (!data) return <div>Chargement...</div>;
+    if (!data) {
+        return <div> Chargement... </div>;
+    }
 
     const nom = data.user.last_name;
     const prenom = data.user.first_name;
     const formation = data.user_course.course_plan_official_name;
     const dateDebutFormation = data.user_course.date_begin;
-    
+
     // Data TPI
     const dataTPI = data.teaching_domains
         .flatMap(domain => domain.teaching_subjects ?? [])
@@ -62,27 +68,165 @@ const BulletinInterface = ({ userData }) => {
         .find(domain => domain.title === "Compétences de base élargies");
     const matiereCBE = dataCBE?.teaching_subjects ?? [];
 
-    // Data Modules
+    // Data Modules école
     const dataModuleEcole = data.teaching_domains
         .flatMap(domain => domain.subgroups ?? [])
         .find(subject => subject.name === "Modules école");
     const matiereModuleEcole = dataModuleEcole?.teaching_modules ?? [];
 
+    // Data Modules interentreprises
     const dataModuleInterentreprise = data.teaching_domains
         .flatMap(domain => domain.subgroups ?? [])
         .find(subject => subject.name === "Modules interentreprises");
     const matiereModuleInterentreprise = dataModuleInterentreprise?.teaching_modules ?? [];
 
-    // Exemple popup
-    const dataPopupModule = dataExemplePopup.subjects
+    // Data pour popup
+    const dataPopupModule = dataExemplePopup?.subjects
         .find(subject => subject.name === "Modules");
     const dataPopupModuleName = dataPopupModule?.teaching_module ?? [];
 
 
-    // Fonctions
+    //==================
+    //      Modules
+    //==================
+
+    const fieldsModules = [
+        {
+            name: "module",
+            label: "Module",
+            type: "select",
+            placeholder: "Sélectionner un module",
+            options: dataPopupModuleName.map(module => ({
+                value: module.id,
+                label: `${module.module_number} : ${module.module_name}`,
+            })),
+        },
+        {
+            name: "note",
+            label: "Note",
+            type: "number",
+            min: 1,
+            max: 6,
+            step: 0.1,
+            placeholder: "Ex. 5.5",
+        },
+        {
+            name: "date",
+            label: "Date",
+            type: "date",
+        },
+    ];
+
+    //==========================
+    //      Culture générale
+    //==========================
+
+    const fieldsCulture = [
+        {
+            name: "categorie",
+            label: "Catégorie",
+            type: "select",
+            placeholder: "Sélectionner une matière",
+            options: [
+                {
+                    value: "ECG",
+                    label: "ECG",
+                },
+                {
+                    value: "TPA",
+                    label: "TPA",
+                },
+                {
+                    value: "examen_final",
+                    label: "Examen final",
+                },
+            ],
+        },
+        {
+            name: "note",
+            label: "Note",
+            type: "number",
+            min: 1,
+            max: 6,
+            step: 0.1,
+            placeholder: "Ex. 5.5",
+        },
+        {
+            name: "date",
+            label: "Date",
+            type: "date",
+        },
+    ];
+
+    //==============
+    //      CBE
+    //==============
+
+    const fieldsCBE = [
+        {
+            name: "matiere",
+            label: "Matière",
+            type: "select",
+            placeholder: "Sélectionner une matière",
+            options: [
+                {
+                    value: "math",
+                    label: "Mathématiques",
+                },
+                {
+                    value: "anglais",
+                    label: "Anglais",
+                },
+                {
+                    value: "allemand",
+                    label: "Allemand",
+                },
+            ],
+        },
+        {
+            name: "note",
+            label: "Note",
+            type: "number",
+            min: 1,
+            max: 6,
+            step: 0.1,
+            placeholder: "Ex. 5.5",
+        },
+        {
+            name: "date",
+            label: "Date",
+            type: "date",
+        },
+    ];
+
+    //==============
+    //      TPI
+    //==============
+
+    const fieldsTPI = [
+        {
+            name: "note",
+            label: "Note",
+            type: "number",
+            min: 1,
+            max: 6,
+            step: 0.1,
+            placeholder: "Ex. 5.5",
+        },
+        {
+            name: "date",
+            label: "Date",
+            type: "date",
+        },
+    ];
+
+    //===================
+    //      Fonctions
+    //===================
+
     const toggleLigne = (id) => {
         setLigneOuverte(ligneOuverte === id ? null : id);
-    };
+    };    
 
     function getSemestre(dateDebut, dateNote) {
         const debut = new Date(dateDebut);
@@ -110,7 +254,7 @@ const BulletinInterface = ({ userData }) => {
                     {/* Ligne TPI */}
                     <tr className="border-b p-5 bg-blue-200 hover:bg-blue-300">
                         <td className="p-4">
-                            <button className="w-8 h-8 rounded-full bg-blue-500 text-white hover:bg-blue-600">+</button>
+                            <button onClick={() => setPopupType("tpi")} className="w-8 h-8 rounded-full bg-blue-500 text-white hover:bg-blue-600">+</button>
                         </td>
                         <td className="p-4 font-bold">
                             TPI
@@ -128,7 +272,7 @@ const BulletinInterface = ({ userData }) => {
                     {/* Ligne Culture Générale */}
                     <tr className="border-b p-5 bg-blue-200 hover:bg-blue-300">
                         <td className="p-4">
-                            <button className="w-8 h-8 rounded-full bg-blue-500 text-white hover:bg-blue-600">+</button>
+                            <button onClick={() => setPopupType("culture")} className="w-8 h-8 rounded-full bg-blue-500 text-white hover:bg-blue-600">+</button>
                         </td>
                         <td className="p-4 font-bold">
                             Culture Générale
@@ -146,6 +290,9 @@ const BulletinInterface = ({ userData }) => {
                     {/* Sous-tableau caché */}
                     {ligneOuverte === 1 && (
                         
+                        <ListeDeroulante typeMatiere={matiereCultureGen} dateDebutFormation={dateDebutFormation} type="matiere"/>
+
+                        /*
                         <tr className="w-full">
                             <td colSpan="4" className="p-4">
                                 <table className="w-full">
@@ -162,41 +309,34 @@ const BulletinInterface = ({ userData }) => {
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <table>
-                                                        <thead>
-                                                            <tr>
-                                                                <th className="border bg-gray-300 p-2">Sem 1</th>
-                                                                <th className="border bg-gray-300 p-2">Sem 2</th>
-                                                                <th className="border bg-gray-300 p-2">Sem 3</th>
-                                                                <th className="border bg-gray-300 p-2">Sem 4</th>
-                                                                <th className="border bg-gray-300 p-2">Sem 5</th>
-                                                                <th className="border bg-gray-300 p-2">Sem 6</th>
-                                                                <th className="border bg-gray-300 p-2">Sem 7</th>
-                                                                <th className="border bg-gray-300 p-2">Sem 8</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                {[1, 2, 3, 4, 5, 6, 7, 8].map((semestre) => {
-                                                                    const note = matiere.grades?.find((note) => {
-                                                                        return getSemestre(
-                                                                            dateDebutFormation,
-                                                                            note.date
-                                                                        ) === semestre;
-                                                                    });
+                                                    <td colSpan="2">
+                                                        <table>
+                                                            <thead>
+                                                                <tr>
+                                                                    {[1, 2, 3, 4, 5, 6, 7, 8]. map((semestre) => (
+                                                                        <th key={semestre} className="border bg-gray-300 p-2">
+                                                                            Sem {semestre}
+                                                                        </th>
+                                                                    ))}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    {[1, 2, 3, 4, 5, 6, 7, 8].map((semestre) => {
+                                                                        const note = matiere.grades?.find((note) => 
+                                                                            getSemestre(dateDebutFormation, note.date) === semestre
+                                                                        );
 
-                                                                    return (
-                                                                        <td
-                                                                            key={semestre}
-                                                                            className="border p-2 text-center"
-                                                                        >
-                                                                            {note?.grade ?? "-"}
-                                                                        </td>
-                                                                    );
-                                                                })}
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
+                                                                        return (
+                                                                            <td key={semestre} className="border p-2 text-center">
+                                                                                {note?.grade ?? "-"}
+                                                                            </td>
+                                                                        );
+                                                                    })}
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
                                                 </tr>
                                             </React.Fragment>
                                         ))}
@@ -205,12 +345,13 @@ const BulletinInterface = ({ userData }) => {
                                 </table>
                             </td>
                         </tr>
+                        */
                     )}
 
                     {/* Ligne CBE */}
                     <tr className="border-b p-5 bg-blue-200 hover:bg-blue-300">
                         <td className="p-4">
-                            <button className="w-8 h-8 rounded-full bg-blue-500 text-white hover:bg-blue-600">+</button>
+                            <button onClick={() => setPopupType("cbe")} className="w-8 h-8 rounded-full bg-blue-500 text-white hover:bg-blue-600">+</button>
                         </td>
                         <td className="p-4 font-bold">
                             CBE
@@ -228,6 +369,9 @@ const BulletinInterface = ({ userData }) => {
                     {/* Sous-tableau caché */}
                     {ligneOuverte === 2 && (
                         
+
+                        <ListeDeroulante typeMatiere={matiereCBE} dateDebutFormation={dateDebutFormation} type="matiere"/>
+                        /*
                         <tr className="w-full">
                             <td colSpan="4" className="p-4">
                                 <table className="w-full">
@@ -244,41 +388,34 @@ const BulletinInterface = ({ userData }) => {
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <table>
-                                                        <thead>
-                                                            <tr>
-                                                                <th className="border bg-gray-300 p-2">Sem 1</th>
-                                                                <th className="border bg-gray-300 p-2">Sem 2</th>
-                                                                <th className="border bg-gray-300 p-2">Sem 3</th>
-                                                                <th className="border bg-gray-300 p-2">Sem 4</th>
-                                                                <th className="border bg-gray-300 p-2">Sem 5</th>
-                                                                <th className="border bg-gray-300 p-2">Sem 6</th>
-                                                                <th className="border bg-gray-300 p-2">Sem 7</th>
-                                                                <th className="border bg-gray-300 p-2">Sem 8</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                {[1, 2, 3, 4, 5, 6, 7, 8].map((semestre) => {
-                                                                    const note = matiere.grades?.find((note) => {
-                                                                        return getSemestre(
-                                                                            dateDebutFormation,
-                                                                            note.date
-                                                                        ) === semestre;
-                                                                    });
+                                                    <td colSpan="2">
+                                                        <table>
+                                                            <thead>
+                                                                <tr>
+                                                                    {[1, 2, 3, 4, 5, 6, 7, 8]. map((semestre) => (
+                                                                        <th key={semestre} className="border bg-gray-300 p-2">
+                                                                            Sem {semestre}
+                                                                        </th>
+                                                                    ))}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    {[1, 2, 3, 4, 5, 6, 7, 8].map((semestre) => {
+                                                                        const note = matiere.grades?.find((note) => 
+                                                                            getSemestre(dateDebutFormation, note.date) === semestre
+                                                                        );
 
-                                                                    return (
-                                                                        <td
-                                                                            key={semestre}
-                                                                            className="border p-2 text-center"
-                                                                        >
-                                                                            {note?.grade ?? "-"}
-                                                                        </td>
-                                                                    );
-                                                                })}
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
+                                                                        return (
+                                                                            <td key={semestre} className="border p-2 text-center">
+                                                                                {note?.grade ?? "-"}
+                                                                            </td>
+                                                                        );
+                                                                    })}
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
                                                 </tr>
                                             </React.Fragment>
                                         ))}
@@ -287,106 +424,20 @@ const BulletinInterface = ({ userData }) => {
                                 </table>
                             </td>
                         </tr>
+                        */
                     )}
 
                     {/* Ligne Modules */}
                     <tr className="border-b p-5 bg-blue-200 hover:bg-blue-300">
                         <td className="p-4">
-                            <button className="w-8 h-8 rounded-full bg-blue-500 text-white hover:bg-blue-600" onClick={(() => setNewGrade(true))}>+</button>
-
-                            {newGrade && (
-                                <div className="fixed inset-0 flex items-center justify-center bg-black/50">
-                                    <div className="relative w-96 rounded-xl bg-white p-6 shadow-xl">
-                                        <button onClick={() => setNewGrade(false)} className="absolute right-4 top-4 text-xl text-gray-500 hover:text-gray-800">X</button>
-                                        <h2 className="mb-4 text-xl font-bold">Nouvelle note</h2>
-
-                                        <select
-                                            value={matiereSelectionner?.id ?? ""}
-                                            onChange={(e) => {
-                                                const moduleSelection = dataPopupModuleName.find(
-                                                    (matiere) => String(matiere.id) === e.target.value
-                                                );
-                                                setMatiereSelectionner(moduleSelection ?? null);
-                                            }}
-                                            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2"
-                                        >
-                                            <option value="">
-                                                Sélectionner une matière
-                                            </option>
-
-                                            {dataPopupModuleName.map((matiere) => (
-                                                <option key={matiere.id} value={matiere.id}>
-                                                    {matiere.module_number} : {matiere.module_name}
-                                                </option>
-                                            ))}
-                                        </select>
-
-                                        <div className="mb-4">
-                                            <label className="mb-2 block font-medium">Note</label>
-                                            <input 
-                                                type="number" 
-                                                min="1" 
-                                                max="6" 
-                                                step="0.1"
-                                                value={popupNote}
-                                                onChange={(e) => {
-                                                    const val = e.target.value;
-                                                    if (val === "" || (Number(val) >= 1 && Number(val) <= 6)) {
-                                                        setPopupNote(val);
-                                                    }
-                                                }}
-                                                placeholder="Ex. 5.5"
-                                                className="w-full rounded-lg border border-gray-300 px-3 py-2"
-                                            />
-                                        </div>
-
-                                        <div className="mb-6">
-                                            <label className="mb-2 block font-medium">
-                                                Date
-                                            </label>
-                                            <input
-                                                type="date"
-                                                value={popupDate}
-                                                onChange={(e) => setPopupDate(e.target.value)}
-                                                className="w-full rounded-lg border border-gray-300 px-3 py-2"
-                                            />
-                                        </div>
-
-                                        <div className="flex justify-end gap-3">
-                                            <button onClick={() => {
-                                                    setNewGrade(false);
-                                                    setMatiereSelectionner(null);
-                                                    setPopupNote("");
-                                                    setPopupDate("");
-                                                }}
-                                                className="rounded-lg bg-gray-200 px-4 py-2 hover:bg-gray-300"
-                                            >    
-                                                Annuler
-                                            </button>
-                                            <button 
-                                                onClick={() => {
-                                                    console.log("Module : ", matiereSelectionner?.module_number, ":", matiereSelectionner?.module_name);
-                                                    console.log("Note : ", popupNote);
-                                                    console.log("Date : ", popupDate);
-                                                }}
-                                                className="rounded-lg bg-blue-600 px-4 py-2 text-white jover:bg-blue-700"
-                                            >
-                                                Ajouter
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
+                            <button onClick={() => setPopupType("module")} className="w-8 h-8 rounded-full bg-blue-500 text-white hover:bg-blue-600">+</button>
                         </td>
                         <td className="p-4 font-bold">
                             Modules
                         </td>
-                        <td className="p-4 text-center font-bold"> 
-                            
-                        </td>
+                        <td className="p-4 text-center font-bold" /> 
                         <td className="p-4 text-center">
-                            <button className="accordion-button w-8 h-8" data-target="details-2" onClick={() => toggleLigne(3)}>
+                            <button className="accordion-button w-8 h-8" onClick={() => toggleLigne(3)}>
                                 <span className={`inline-block transition-transform duration-200 ${ligneOuverte === 3 ? "rotate-180" : ""}`}>▼</span>
                             </button>
                         </td>
@@ -395,16 +446,20 @@ const BulletinInterface = ({ userData }) => {
                     {/* Sous-tableau caché */}
                     {ligneOuverte === 3 && (
                         
+
+                        <ListeDeroulante dataModuleEcole={dataModuleEcole} matiereModuleEcole={matiereModuleEcole} dataModuleInterentreprise={dataModuleInterentreprise} matiereModuleInterentreprise={matiereModuleInterentreprise} type="module"/>
+                        /*
                         <tr className="w-full">
                             <td colSpan="4" className="p-4">
                                 <table className="w-full">
                                     <tbody>
+
                                         <tr>
                                             <td className="text-left p-2 font-bold pt-3">
                                                 Modules école
                                             </td>
                                             <td className="text-center p-2 font-bold pt-3 rounded-full bg-blue-200">
-                                                {dataModuleEcole.rounded_average ?? "N/A"}
+                                                {dataModuleEcole?.rounded_average ?? "N/A"}
                                             </td>
                                         </tr>
 
@@ -412,7 +467,7 @@ const BulletinInterface = ({ userData }) => {
                                             <React.Fragment key={matiere.teaching_module_id}>
                                                 <tr>
                                                     <td className="text-left p-2 pt-3">
-                                                        {matiere.module_number} : {matiere.official_name}
+                                                        {matiere.module_number} {" : "} {matiere.official_name}
                                                     </td>
                                                     <td className="text-right p-2 font-bold pt-3">
                                                         {matiere.rounded_average ?? "N/A"}
@@ -426,7 +481,7 @@ const BulletinInterface = ({ userData }) => {
                                                 Modules interentreprise
                                             </td>
                                             <td className="text-center p-2 font-bold pt-3 rounded-full bg-blue-200">
-                                                {dataModuleInterentreprise.rounded_average ?? "N/A"}
+                                                {dataModuleInterentreprise?.rounded_average ?? "N/A"}
                                             </td>
                                         </tr>
 
@@ -434,7 +489,7 @@ const BulletinInterface = ({ userData }) => {
                                             <React.Fragment key={matiere.teaching_module_id}>
                                                 <tr>
                                                     <td className="text-left p-2 pt-3">
-                                                        {matiere.module_number} : {matiere.official_name}
+                                                        {matiere.module_number} {" : "} {matiere.official_name}
                                                     </td>
                                                     <td className="text-right p-2 font-bold pt-3">
                                                         {matiere.rounded_average ?? "N/A"}
@@ -446,22 +501,87 @@ const BulletinInterface = ({ userData }) => {
                                 </table>
                             </td>
                         </tr>
+                        */
                     )}
                 </tbody>
             </table>
             <div className="flex flex-col mt-5">
-                <h2 className="font-bold text-xl text-center">Moyenne générale</h2>
-                <p className="text-center self-center max-w-20 text-xl font-bold bg-gray-200 p-4 m-4 border border-black rounded-full">5.6</p>
+                <h2 className="font-bold text-xl text-center">
+                    Moyenne générale
+                </h2>
+                <p className="text-center self-center max-w-20 text-xl font-bold bg-gray-200 p-4 m-4 border border-black rounded-full">
+                    5.6
+                </p>
+            </div>
+        </div>
+
+        <div className="fixed bottom-5 right-5 bg-black text-white p-4 rounded-lg">
+                Popup ouvert : 
+                
+                <strong className="ml-2">
+                    {popupType}
+                </strong>
+                <button className="ml-4" onClick={() => setPopupType(null)}> X </button>
             </div>
 
-        </div>
-    
-    
-    
-    
-    
-    
-    
+        {popupType && (
+            <>
+                {(() => {
+                    switch (popupType) {
+                        case "module":
+                            return (
+                                <Popup
+                                    title="Nouvelle note - Module"
+                                    fields={fieldsModules}
+                                    onClose={() => setPopupType(null)}
+                                    onSubmit={(values) => {
+                                        console.log(values);
+                                        setPopupType(null);
+                                    }}
+                                />
+                            );
+                        case "culture":
+                            return (
+                                <Popup
+                                    title="Nouvelle note - Culture générale"
+                                    fields={fieldsCulture}
+                                    onClose={() => setPopupType(null)}
+                                    onSubmit={(values) => {
+                                        console.log(values);
+                                        setPopupType(null);
+                                    }}
+                                />
+                            );
+                        case "cbe":
+                            return (
+                                <Popup
+                                    title="Nouvelle note - CBE"
+                                    fields={fieldsCBE}
+                                    onClose={() => setPopupType(null)}
+                                    onSubmit={(values) => {
+                                        console.log(values);
+                                        setPopupType(null);
+                                    }}
+                                />
+                            );   
+                        case "tpi":
+                            return (
+                                <Popup
+                                    title="Nouvelle note - TPI"
+                                    fields={fieldsTPI}
+                                    onClose={() => setPopupType(null)}
+                                    onSubmit={(values) => {
+                                        console.log(values);
+                                        setPopupType(null);
+                                    }}
+                                />
+                            );    
+                        default:
+                            return null;                                                 
+                    }
+                })()}
+            </>
+        )}
     </>);
 }
 
