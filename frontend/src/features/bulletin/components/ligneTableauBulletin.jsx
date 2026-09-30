@@ -8,6 +8,7 @@ const LigneTableauBulletin = ({
     ligneOuverte,
     toggleLigne,
     onAdd,
+    showMoyenne = true,
     showAccordeon = true,
 }) => { 
 
@@ -27,7 +28,10 @@ const LigneTableauBulletin = ({
 
             {/* Moyenne */}
             <td className="p-4 text-center font-bold"> 
-                {moyenne ?? "N/A"}
+                {showMoyenne && (
+                    moyenne ?? "N/A"
+                )}
+                
             </td>
 
             {/* Bouton accordéon */}

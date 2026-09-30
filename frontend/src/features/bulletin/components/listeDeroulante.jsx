@@ -16,9 +16,14 @@ const ListeDeroulante = ({
         const debut = new Date(dateDebut);
         const note = new Date(dateNote);
 
-        const moisEcoules =
+        let moisEcoules =
             (note.getFullYear() - debut.getFullYear()) * 12 +
             (note.getMonth() - debut.getMonth());
+
+        // Supposant que la fin du semestre finis le 20 février
+        if (note.getDate() < 20) {
+            moisEcoules--;
+        }
 
         const semestre = Math.floor(moisEcoules / 6) + 1;
 
@@ -47,8 +52,10 @@ const ListeDeroulante = ({
                                                 {matiere.name}
                                             </td>
 
-                                            <td className="text-center p-2 font-bold pt-3 rounded-full bg-blue-200">
-                                                {matiere.rounded_average ?? "N/A"}
+                                            <td className="text-right p-2">
+                                                <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-200 px-4 py-2 font-bold">
+                                                    {matiere.rounded_average ?? "N/A"}
+                                                </span>
                                             </td>
                                         </tr>
 
@@ -83,6 +90,7 @@ const ListeDeroulante = ({
                                                                                     note.date
                                                                                 ) === semestre
                                                                         );
+
 
                                                                     return (
                                                                         <td

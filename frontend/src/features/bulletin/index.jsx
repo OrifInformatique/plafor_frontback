@@ -10,8 +10,7 @@ const BulletinInterface = ({ userData }) => {
     const [data, setData] = useState(userData || null);
     const [dataExemplePopup, setDataExemplePopup] = useState(null);
 
-    // Quel type de popup
-    // null | "module" | "culture" | "cbe" | "tpi"
+    // Quel type de popup : null | "module" | "culture" | "cbe" | "tpi"
     const [popupType, setPopupType] = useState(null);
 
     
@@ -19,6 +18,9 @@ const BulletinInterface = ({ userData }) => {
         async function loadData() {
             try {
                 // Changer le getData pour voir les autres exemples
+                //const result = await getDataExempleINFRA();
+                //const result = await getDataExempleMEDIA();
+                //const result = await getDataExempleOPE();
                 const result = await getDataExempleDEV();
                 setData(result.data);
             
@@ -52,6 +54,7 @@ const BulletinInterface = ({ userData }) => {
     const prenom = data.user.first_name;
     const formation = data.user_course.course_plan_official_name;
     const dateDebutFormation = data.user_course.date_begin;
+    const moyenneFormation = data.rounded_general_average;
 
     // Data TPI
     const dataTPI = data.teaching_domains
@@ -299,6 +302,7 @@ const BulletinInterface = ({ userData }) => {
                         ligneOuverte={ligneOuverte}
                         toggleLigne={toggleLigne}
                         onAdd={() => setPopupType("module")}
+                        showMoyenne={false}
                     />                    
 
                     {/* Sous-tableau de modules caché */}
@@ -313,19 +317,21 @@ const BulletinInterface = ({ userData }) => {
                     Moyenne générale
                 </h2>
                 <p className="text-center self-center max-w-20 text-xl font-bold bg-gray-200 p-4 m-4 border border-black rounded-full">
-                    5.6
+                    {moyenneFormation}
                 </p>
             </div>
         </div>
 
         <div className="fixed bottom-5 right-5 bg-black text-white p-4 rounded-lg">
-                Popup ouvert : 
+            Popup ouvert : 
                 
-                <strong className="ml-2">
-                    {popupType}
-                </strong>
-                <button className="ml-4" onClick={() => setPopupType(null)}> X </button>
-            </div>
+            <strong className="ml-2">
+                {popupType}
+            </strong>
+            <button className="ml-4" onClick={() => setPopupType(null)}>
+                X 
+            </button>
+        </div>
 
         {popupType && (
             <>
