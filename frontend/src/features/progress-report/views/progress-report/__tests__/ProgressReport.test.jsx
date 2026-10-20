@@ -237,6 +237,10 @@ describe("ProgressReport", () => {
       ).toHaveTextContent("sections_error");
     });
 
+    it("exposes the error message as an alert for assistive technologies", () => {
+      expect(screen.getByRole("alert")).toHaveTextContent("sections_error");
+    });
+
     it("does not render the ReportSections on error", () => {
       expect(screen.queryAllByTestId("mock-report-section")).toHaveLength(0);
     });
@@ -260,6 +264,17 @@ describe("ProgressReport", () => {
       expect(
         screen.getByTestId("progress-report-sections-empty"),
       ).toHaveTextContent("sections_empty");
+    });
+
+    it("exposes the empty state message as a status for assistive technologies", () => {
+      render(
+        <ProgressReport
+          coursePlans={fixture.coursePlans}
+          selectedCoursePlan={fixture.selectedCoursePlan}
+          sections={[]}
+        />,
+      );
+      expect(screen.getByRole("status")).toHaveTextContent("sections_empty");
     });
 
     it("renders no ReportSections in the empty state", () => {

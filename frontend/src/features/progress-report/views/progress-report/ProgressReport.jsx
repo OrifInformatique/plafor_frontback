@@ -44,20 +44,31 @@ export default function ProgressReport({
       return <Loading />;
     }
 
+    // Same markup as <Loading />, which these messages replace in place.
+    // role="alert" announces the error right away; the empty state is not
+    // urgent, so role="status" lets screen readers announce it politely.
     if (hasSectionsError) {
       return (
-        <p className="text-center" data-testid="progress-report-sections-error">
-          {t("sections_error")}
-        </p>
+        <div
+          className="text-center"
+          role="alert"
+          data-testid="progress-report-sections-error"
+        >
+          <strong className="text-lg">{t("sections_error")}</strong>
+        </div>
       );
     }
 
     // Without a selected formation, "no competency for this formation" makes no sense.
     if (selectedCoursePlan && sections.length === 0) {
       return (
-        <p className="text-center" data-testid="progress-report-sections-empty">
-          {t("sections_empty")}
-        </p>
+        <div
+          className="text-center"
+          role="status"
+          data-testid="progress-report-sections-empty"
+        >
+          <strong className="text-lg">{t("sections_empty")}</strong>
+        </div>
       );
     }
 
