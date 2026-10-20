@@ -10,9 +10,19 @@ import badData from "../__fixtures__/bad-data.json";
 // the mocks surface the props they receive, so we can assert the wiring without
 // depending on the children's real implementation.
 
+// t() returns the key itself: assertions do not depend on the French copy,
+// and no i18next instance is needed (no NO_I18NEXT_INSTANCE warning).
+jest.mock("react-i18next", () => ({
+  useTranslation: () => ({ t: (key) => key }),
+}));
+
+// The real module is spread so its exported PropTypes shapes stay available.
 jest.mock(
   "../../../components/course-plan-selector/CoursePlanSelector",
   () => ({
+    ...jest.requireActual(
+      "../../../components/course-plan-selector/CoursePlanSelector",
+    ),
     __esModule: true,
     default: ({ coursePlans, selectedCoursePlan, onCoursePlanChange }) => (
       <div data-testid="mock-course-plan-selector">
@@ -33,6 +43,7 @@ jest.mock(
 );
 
 jest.mock("../../../components/report-section/ReportSection", () => ({
+  ...jest.requireActual("../../../components/report-section/ReportSection"),
   __esModule: true,
   default: ({ label, doughnutChartData, reportLines }) => (
     <div
@@ -50,17 +61,24 @@ jest.mock("../../../../../components/Loading", () => ({
   default: () => <div data-testid="mock-loading" />,
 }));
 
+// Renders the view with a complete, valid data set; each test overrides
+// only the props it is about.
+const renderWithFixture = (props = {}) =>
+  render(
+    <ProgressReport
+      coursePlans={fixture.coursePlans}
+      selectedCoursePlan={fixture.selectedCoursePlan}
+      sections={fixture.sections}
+      {...props}
+    />,
+  );
+
 // --- Tests ---
 describe("ProgressReport", () => {
+  // Verifies that the view renders its core structure and forwards the data.
   describe("Initial render", () => {
     beforeEach(() => {
-      render(
-        <ProgressReport
-          coursePlans={fixture.coursePlans}
-          selectedCoursePlan={fixture.selectedCoursePlan}
-          sections={fixture.sections}
-        />,
-      );
+      renderWithFixture();
     });
 
     it("renders the CoursePlanSelector", () => {
@@ -81,8 +99,10 @@ describe("ProgressReport", () => {
       );
     });
 
-    it("renders the section title heading", () => {
-      expect(screen.getByRole("heading", { level: 2 })).toBeInTheDocument();
+    it("renders the page title heading", () => {
+      expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
+        "title",
+      );
     });
 
     it("renders as many ReportSections as there are in the data", () => {
@@ -111,19 +131,20 @@ describe("ProgressReport", () => {
         );
       });
     });
+
+    it("marks the sections area as not busy", () => {
+      expect(screen.getByTestId("progress-report-sections")).toHaveAttribute(
+        "aria-busy",
+        "false",
+      );
+    });
   });
 
+  // Verifies that a change reported by the selector reaches the parent callback.
   describe("Interaction", () => {
     it("calls onCoursePlanChange when the selector reports a change", async () => {
       const onCoursePlanChange = jest.fn();
-      render(
-        <ProgressReport
-          coursePlans={fixture.coursePlans}
-          selectedCoursePlan={fixture.selectedCoursePlan}
-          onCoursePlanChange={onCoursePlanChange}
-          sections={fixture.sections}
-        />,
-      );
+      renderWithFixture({ onCoursePlanChange });
 
       await userEvent.click(screen.getByTestId("cps-change"));
 
@@ -132,20 +153,27 @@ describe("ProgressReport", () => {
     });
   });
 
+  // Verifies the sections area while sections are being (re)loaded.
   describe("Sections loading state", () => {
     beforeEach(() => {
-      render(
-        <ProgressReport
-          coursePlans={fixture.coursePlans}
-          selectedCoursePlan={fixture.selectedCoursePlan}
-          sections={fixture.sections}
-          isSectionsLoading
-        />,
-      );
+      renderWithFixture({ isSectionsLoading: true });
     });
 
     it("shows the loading indicator", () => {
       expect(screen.getByTestId("mock-loading")).toBeInTheDocument();
+    });
+
+    it("shows the loading indicator inside the status live region", () => {
+      expect(screen.getByRole("status")).toContainElement(
+        screen.getByTestId("mock-loading"),
+      );
+    });
+
+    it("marks the sections area as busy", () => {
+      expect(screen.getByTestId("progress-report-sections")).toHaveAttribute(
+        "aria-busy",
+        "true",
+      );
     });
 
     it("does not render the ReportSections while loading", () => {
@@ -159,6 +187,136 @@ describe("ProgressReport", () => {
     });
   });
 
+  // Verifies the non-blocking error shown when sections failed to load.
+  describe("Sections error state", () => {
+    it("shows the sections error message", () => {
+      renderWithFixture({ hasSectionsError: true });
+      expect(
+        screen.getByTestId("progress-report-sections-error"),
+      ).toHaveTextContent("sections_error");
+    });
+
+    it("exposes the error message as an alert for assistive technologies", () => {
+      renderWithFixture({ hasSectionsError: true });
+      expect(screen.getByRole("alert")).toHaveTextContent("sections_error");
+    });
+
+    it("does not render the ReportSections on error", () => {
+      renderWithFixture({ hasSectionsError: true });
+      expect(screen.queryAllByTestId("mock-report-section")).toHaveLength(0);
+    });
+
+    it("keeps the CoursePlanSelector rendered on error", () => {
+      renderWithFixture({ hasSectionsError: true });
+      expect(
+        screen.getByTestId("mock-course-plan-selector"),
+      ).toBeInTheDocument();
+    });
+
+    // A retry after a failure sets both flags: the loading must win.
+    it("gives priority to the loading state over the error state", () => {
+      renderWithFixture({ isSectionsLoading: true, hasSectionsError: true });
+      expect(screen.getByTestId("mock-loading")).toBeInTheDocument();
+      expect(
+        screen.queryByTestId("progress-report-sections-error"),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  // Verifies the message shown when the selected formation has no competency.
+  describe("Sections empty state", () => {
+    it("shows the empty state message when the selected formation has no sections", () => {
+      renderWithFixture({ sections: [] });
+      expect(
+        screen.getByTestId("progress-report-sections-empty"),
+      ).toHaveTextContent("sections_empty");
+    });
+
+    it("exposes the empty state message as a status for assistive technologies", () => {
+      renderWithFixture({ sections: [] });
+      expect(screen.getByRole("status")).toHaveTextContent("sections_empty");
+    });
+
+    it("renders no ReportSections in the empty state", () => {
+      renderWithFixture({ sections: [] });
+      expect(screen.queryAllByTestId("mock-report-section")).toHaveLength(0);
+    });
+
+    it("does not show the empty state when no formation is selected", () => {
+      renderWithFixture({ selectedCoursePlan: null, sections: [] });
+      expect(
+        screen.queryByTestId("progress-report-sections-empty"),
+      ).not.toBeInTheDocument();
+    });
+
+    // Sections are also [] while (re)loading: the empty state must not flash.
+    it("gives priority to the loading state over the empty state", () => {
+      renderWithFixture({ sections: [], isSectionsLoading: true });
+      expect(screen.getByTestId("mock-loading")).toBeInTheDocument();
+      expect(
+        screen.queryByTestId("progress-report-sections-empty"),
+      ).not.toBeInTheDocument();
+    });
+
+    // Sections are also [] after a failed load: the error must win.
+    it("gives priority to the error state over the empty state", () => {
+      renderWithFixture({ sections: [], hasSectionsError: true });
+      expect(
+        screen.getByTestId("progress-report-sections-error"),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByTestId("progress-report-sections-empty"),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  // Verifies that the live regions exist before any message is shown:
+  // screen readers only reliably announce changes inside an existing region.
+  describe("Live regions", () => {
+    it("keeps the status and alert regions mounted when there is no message", () => {
+      renderWithFixture();
+      expect(screen.getByRole("status")).toBeEmptyDOMElement();
+      expect(screen.getByRole("alert")).toBeEmptyDOMElement();
+    });
+
+    it("keeps the same status region when the loading ends on an empty formation", () => {
+      const { rerender } = renderWithFixture({
+        sections: [],
+        isSectionsLoading: true,
+      });
+      const statusRegion = screen.getByRole("status");
+
+      rerender(
+        <ProgressReport
+          coursePlans={fixture.coursePlans}
+          selectedCoursePlan={fixture.selectedCoursePlan}
+          sections={[]}
+        />,
+      );
+
+      expect(screen.getByRole("status")).toBe(statusRegion);
+      expect(statusRegion).toHaveTextContent("sections_empty");
+    });
+
+    it("keeps the same alert region when the loading ends on an error", () => {
+      const { rerender } = renderWithFixture({ isSectionsLoading: true });
+      const alertRegion = screen.getByRole("alert");
+
+      rerender(
+        <ProgressReport
+          coursePlans={fixture.coursePlans}
+          selectedCoursePlan={fixture.selectedCoursePlan}
+          sections={[]}
+          hasSectionsError
+        />,
+      );
+
+      expect(screen.getByRole("alert")).toBe(alertRegion);
+      expect(alertRegion).toHaveTextContent("sections_error");
+    });
+  });
+
+  // Verifies that the view handles missing or empty props gracefully.
   describe("Default props (empty values)", () => {
     it("renders without crashing when no props are provided", () => {
       render(<ProgressReport />);
@@ -190,6 +348,7 @@ describe("ProgressReport", () => {
     });
   });
 
+  // Verifies that unusual but valid data does not break the view.
   describe("Edge cases", () => {
     it("renders a single section", () => {
       render(<ProgressReport sections={badData.singleSection} />);
@@ -210,120 +369,17 @@ describe("ProgressReport", () => {
       );
     });
 
-    it("gives priority to the loading state over the error state", () => {
-      render(<ProgressReport isSectionsLoading hasSectionsError />);
-      expect(screen.getByTestId("mock-loading")).toBeInTheDocument();
-      expect(
-        screen.queryByTestId("progress-report-sections-error"),
-      ).not.toBeInTheDocument();
-    });
-  });
-
-  describe("Sections error state", () => {
-    beforeEach(() => {
+    // An apprentice may follow no formation at all: nothing is selected,
+    // so no "no competency for this formation" message either.
+    it("renders the selector without any message when there is no course plan", () => {
       render(
         <ProgressReport
-          coursePlans={fixture.coursePlans}
-          selectedCoursePlan={fixture.selectedCoursePlan}
-          sections={fixture.sections}
-          hasSectionsError
-        />,
-      );
-    });
-
-    it("shows the sections error message", () => {
-      expect(
-        screen.getByTestId("progress-report-sections-error"),
-      ).toHaveTextContent("sections_error");
-    });
-
-    it("exposes the error message as an alert for assistive technologies", () => {
-      expect(screen.getByRole("alert")).toHaveTextContent("sections_error");
-    });
-
-    it("does not render the ReportSections on error", () => {
-      expect(screen.queryAllByTestId("mock-report-section")).toHaveLength(0);
-    });
-
-    it("keeps the CoursePlanSelector rendered on error", () => {
-      expect(
-        screen.getByTestId("mock-course-plan-selector"),
-      ).toBeInTheDocument();
-    });
-  });
-
-  describe("Sections empty state", () => {
-    it("shows the empty state message when the selected formation has no sections", () => {
-      render(
-        <ProgressReport
-          coursePlans={fixture.coursePlans}
-          selectedCoursePlan={fixture.selectedCoursePlan}
+          coursePlans={badData.emptyCoursePlans}
+          selectedCoursePlan={null}
           sections={[]}
         />,
       );
-      expect(
-        screen.getByTestId("progress-report-sections-empty"),
-      ).toHaveTextContent("sections_empty");
-    });
-
-    it("exposes the empty state message as a status for assistive technologies", () => {
-      render(
-        <ProgressReport
-          coursePlans={fixture.coursePlans}
-          selectedCoursePlan={fixture.selectedCoursePlan}
-          sections={[]}
-        />,
-      );
-      expect(screen.getByRole("status")).toHaveTextContent("sections_empty");
-    });
-
-    it("renders no ReportSections in the empty state", () => {
-      render(
-        <ProgressReport
-          coursePlans={fixture.coursePlans}
-          selectedCoursePlan={fixture.selectedCoursePlan}
-          sections={[]}
-        />,
-      );
-      expect(screen.queryAllByTestId("mock-report-section")).toHaveLength(0);
-    });
-
-    it("does not show the empty state when no formation is selected", () => {
-      render(<ProgressReport coursePlans={fixture.coursePlans} sections={[]} />);
-      expect(
-        screen.queryByTestId("progress-report-sections-empty"),
-      ).not.toBeInTheDocument();
-    });
-
-    // Sections are also [] while (re)loading: the empty state must not flash.
-    it("gives priority to the loading state over the empty state", () => {
-      render(
-        <ProgressReport
-          coursePlans={fixture.coursePlans}
-          selectedCoursePlan={fixture.selectedCoursePlan}
-          sections={[]}
-          isSectionsLoading
-        />,
-      );
-      expect(screen.getByTestId("mock-loading")).toBeInTheDocument();
-      expect(
-        screen.queryByTestId("progress-report-sections-empty"),
-      ).not.toBeInTheDocument();
-    });
-
-    // Sections are also [] after a failed load: the error must win.
-    it("gives priority to the error state over the empty state", () => {
-      render(
-        <ProgressReport
-          coursePlans={fixture.coursePlans}
-          selectedCoursePlan={fixture.selectedCoursePlan}
-          sections={[]}
-          hasSectionsError
-        />,
-      );
-      expect(
-        screen.getByTestId("progress-report-sections-error"),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId("cps-count")).toHaveTextContent("0");
       expect(
         screen.queryByTestId("progress-report-sections-empty"),
       ).not.toBeInTheDocument();

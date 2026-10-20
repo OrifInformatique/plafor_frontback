@@ -15,7 +15,10 @@ export default function CoursePlanSelector({
         name="course-plan"
         label={t("course_plan_label")}
         options={coursePlans.map((cp) => ({ value: cp.id, label: cp.label }))}
-        selectedValue={selectedCoursePlan?.id}
+        // SingleSelect only stays controlled when selectedValue !== null: with
+        // undefined, the browser would show the first formation as selected.
+        // "" selects the placeholder instead.
+        selectedValue={selectedCoursePlan?.id ?? ""}
         onChangeFunction={onCoursePlanChange}
       />
       <div className="flex flex-row justify-between max-sm:flex-col max-sm:gap-1">
@@ -40,22 +43,17 @@ export default function CoursePlanSelector({
   );
 }
 
+// Exported so that parents forwarding course plans validate the same shape.
+export const coursePlanShape = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  startDate: PropTypes.string,
+  endDate: PropTypes.string,
+  status: PropTypes.string,
+});
+
 CoursePlanSelector.propTypes = {
-  coursePlans: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-      startDate: PropTypes.string,
-      endDate: PropTypes.string,
-      status: PropTypes.string,
-    }),
-  ),
-  selectedCoursePlan: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    startDate: PropTypes.string,
-    endDate: PropTypes.string,
-    status: PropTypes.string,
-  }),
+  coursePlans: PropTypes.arrayOf(coursePlanShape),
+  selectedCoursePlan: coursePlanShape,
   onCoursePlanChange: PropTypes.func,
 };

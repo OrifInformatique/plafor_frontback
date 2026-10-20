@@ -1,8 +1,12 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import CoursePlanSelector from "../../components/course-plan-selector/CoursePlanSelector";
-import ReportSection from "../../components/report-section/ReportSection";
+import CoursePlanSelector, {
+  coursePlanShape,
+} from "../../components/course-plan-selector/CoursePlanSelector";
+import ReportSection, {
+  reportLineShape,
+} from "../../components/report-section/ReportSection";
 import Loading from "../../../../components/Loading";
 
 /**
@@ -39,48 +43,14 @@ export default function ProgressReport({
   // Only the sections area varies: loading, then error, then the empty state,
   // then the data itself. The empty state must come after loading and error,
   // since sections are also [] while (re)loading and after a failed load.
-  const renderSections = () => {
-    if (isSectionsLoading) {
-      return <Loading />;
-    }
-
-    // Same markup as <Loading />, which these messages replace in place.
-    // role="alert" announces the error right away; the empty state is not
-    // urgent, so role="status" lets screen readers announce it politely.
-    if (hasSectionsError) {
-      return (
-        <div
-          className="text-center"
-          role="alert"
-          data-testid="progress-report-sections-error"
-        >
-          <strong className="text-lg">{t("sections_error")}</strong>
-        </div>
-      );
-    }
-
-    // Without a selected formation, "no competency for this formation" makes no sense.
-    if (selectedCoursePlan && sections.length === 0) {
-      return (
-        <div
-          className="text-center"
-          role="status"
-          data-testid="progress-report-sections-empty"
-        >
-          <strong className="text-lg">{t("sections_empty")}</strong>
-        </div>
-      );
-    }
-
-    return sections.map((section) => (
-      <ReportSection
-        key={section.id}
-        label={section.label}
-        doughnutChartData={section.doughnutChartData}
-        reportLines={section.reportLines}
-      />
-    ));
-  };
+  const showError = !isSectionsLoading && hasSectionsError;
+  // Without a selected formation, "no competency for this formation" makes no sense.
+  const showEmpty =
+    !isSectionsLoading &&
+    !hasSectionsError &&
+    selectedCoursePlan !== null &&
+    sections.length === 0;
+  const showSections = !isSectionsLoading && !hasSectionsError;
 
   return (
     <div className="flex flex-col gap-6">
@@ -94,21 +64,62 @@ export default function ProgressReport({
         {t("title")}
       </h2>
 
-      <div data-testid="progress-report-sections">{renderSections()}</div>
+      <div>
+        {/* Both live regions stay mounted and only their content changes:
+            screen readers reliably announce changes inside a live region that
+            already exists, not a region inserted together with its text.
+            The loading and empty states are not urgent (status, polite);
+            the error is (alert, assertive). */}
+        <div role="status" data-testid="progress-report-sections-status">
+          {isSectionsLoading && <Loading />}
+          {/* Same markup as <Loading />, which these messages replace in place. */}
+          {showEmpty && (
+            <div
+              className="text-center"
+              data-testid="progress-report-sections-empty"
+            >
+              <strong className="text-lg">{t("sections_empty")}</strong>
+            </div>
+          )}
+        </div>
+
+        <div role="alert" data-testid="progress-report-sections-alert">
+          {showError && (
+            <div
+              className="text-center"
+              data-testid="progress-report-sections-error"
+            >
+              <strong className="text-lg">{t("sections_error")}</strong>
+            </div>
+          )}
+        </div>
+
+        <div data-testid="progress-report-sections" aria-busy={isSectionsLoading}>
+          {showSections &&
+            sections.map((section) => (
+              <ReportSection
+                key={section.id}
+                label={section.label}
+                doughnutChartData={section.doughnutChartData}
+                reportLines={section.reportLines}
+              />
+            ))}
+        </div>
+      </div>
     </div>
   );
 }
 
 ProgressReport.propTypes = {
-  coursePlans: PropTypes.array,
-  selectedCoursePlan: PropTypes.object,
+  coursePlans: PropTypes.arrayOf(coursePlanShape),
+  selectedCoursePlan: coursePlanShape,
   onCoursePlanChange: PropTypes.func,
   sections: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
       label: PropTypes.string,
       doughnutChartData: PropTypes.array,
-      reportLines: PropTypes.array,
+      reportLines: PropTypes.arrayOf(reportLineShape),
     }),
   ),
   isSectionsLoading: PropTypes.bool,

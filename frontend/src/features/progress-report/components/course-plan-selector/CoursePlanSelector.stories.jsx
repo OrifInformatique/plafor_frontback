@@ -1,9 +1,13 @@
+import { fn } from "@storybook/test";
 import CoursePlanSelector from "./CoursePlanSelector";
 
 const meta = {
   component: CoursePlanSelector,
   tags: ["autodocs"],
   args: {
+    // Logs the picked formation in the Actions panel
+    onCoursePlanChange: fn(),
+
     coursePlans: [
       {
         id: "1",
@@ -46,7 +50,8 @@ export const NoSelection = {
   },
 };
 
-// Only one course plan available — selector is disabled, formation is pre-selected
+// Only one course plan available — formation is pre-selected; the selector stays enabled
+// (SingleSelect only disables itself when there is no option at all)
 export const SingleCoursePlan = {
   args: {
     coursePlans: [

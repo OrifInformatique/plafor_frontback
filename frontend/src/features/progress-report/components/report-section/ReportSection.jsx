@@ -76,13 +76,14 @@ export default function ReportSection({
   );
 }
 
+// Exported so that parents forwarding report lines validate the same shape.
+export const reportLineShape = PropTypes.shape({
+  label: PropTypes.string.isRequired,
+  data: PropTypes.array,
+});
+
 ReportSection.propTypes = {
   label: PropTypes.string,
   doughnutChartData: PropTypes.array,
-  reportLines: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      data: PropTypes.array,
-    }),
-  ),
+  reportLines: PropTypes.arrayOf(reportLineShape),
 };
