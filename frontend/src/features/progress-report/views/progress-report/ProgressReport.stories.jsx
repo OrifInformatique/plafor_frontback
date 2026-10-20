@@ -333,3 +333,22 @@ export const SingleCoursePlan = {
     coursePlans: [meta.args.coursePlans[0]],
   },
 };
+
+// Sections are being (re)loaded after a course plan change — selector stays usable,
+// a loading indicator replaces the sections
+export const SectionsLoading = {
+  args: {
+    sections: [],
+    isSectionsLoading: true,
+  },
+};
+
+// Sections failed to load — non-blocking error, the selector stays usable
+// so the user can pick another formation
+export const SectionsError = {
+  args: {
+    sections: [],
+    hasSectionsError: true,
+  },
+};
+
