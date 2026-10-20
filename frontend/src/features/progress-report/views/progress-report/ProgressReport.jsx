@@ -22,6 +22,7 @@ import Loading from "../../../../components/Loading";
  * @param {Object}   props.selectedCoursePlan  - Currently selected formation, forwarded to CoursePlanSelector.
  * @param {Function} props.onCoursePlanChange  - Called when the user picks another formation.
  * @param {Array}    props.sections            - One entry per competency domain: { id, label, doughnutChartData, reportLines }.
+ *                                               When empty and a formation is selected, an empty-state message is shown.
  * @param {boolean}  props.isSectionsLoading   - When true, show a loading indicator in place of the sections.
  * @param {boolean}  props.hasSectionsError    - When true, show an error in place of the sections; the selector stays usable.
  */
@@ -35,7 +36,9 @@ export default function ProgressReport({
 }) {
   const { t } = useTranslation("progressReport");
 
-  // Only the sections area varies: loading, then error, then the data itself.
+  // Only the sections area varies: loading, then error, then the empty state,
+  // then the data itself. The empty state must come after loading and error,
+  // since sections are also [] while (re)loading and after a failed load.
   const renderSections = () => {
     if (isSectionsLoading) {
       return <Loading />;
@@ -45,6 +48,15 @@ export default function ProgressReport({
       return (
         <p className="text-center" data-testid="progress-report-sections-error">
           {t("sections_error")}
+        </p>
+      );
+    }
+
+    // Without a selected formation, "no competency for this formation" makes no sense.
+    if (selectedCoursePlan && sections.length === 0) {
+      return (
+        <p className="text-center" data-testid="progress-report-sections-empty">
+          {t("sections_empty")}
         </p>
       );
     }

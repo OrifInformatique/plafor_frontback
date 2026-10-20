@@ -178,11 +178,14 @@ describe("ProgressReport", () => {
       expect(screen.queryAllByTestId("mock-report-section")).toHaveLength(0);
     });
 
-    it("shows neither the loading indicator nor the error by default", () => {
+    it("shows neither the loading indicator, the error nor the empty state by default", () => {
       render(<ProgressReport />);
       expect(screen.queryByTestId("mock-loading")).not.toBeInTheDocument();
       expect(
         screen.queryByTestId("progress-report-sections-error"),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId("progress-report-sections-empty"),
       ).not.toBeInTheDocument();
     });
   });
@@ -242,6 +245,73 @@ describe("ProgressReport", () => {
       expect(
         screen.getByTestId("mock-course-plan-selector"),
       ).toBeInTheDocument();
+    });
+  });
+
+  describe("Sections empty state", () => {
+    it("shows the empty state message when the selected formation has no sections", () => {
+      render(
+        <ProgressReport
+          coursePlans={fixture.coursePlans}
+          selectedCoursePlan={fixture.selectedCoursePlan}
+          sections={[]}
+        />,
+      );
+      expect(
+        screen.getByTestId("progress-report-sections-empty"),
+      ).toHaveTextContent("sections_empty");
+    });
+
+    it("renders no ReportSections in the empty state", () => {
+      render(
+        <ProgressReport
+          coursePlans={fixture.coursePlans}
+          selectedCoursePlan={fixture.selectedCoursePlan}
+          sections={[]}
+        />,
+      );
+      expect(screen.queryAllByTestId("mock-report-section")).toHaveLength(0);
+    });
+
+    it("does not show the empty state when no formation is selected", () => {
+      render(<ProgressReport coursePlans={fixture.coursePlans} sections={[]} />);
+      expect(
+        screen.queryByTestId("progress-report-sections-empty"),
+      ).not.toBeInTheDocument();
+    });
+
+    // Sections are also [] while (re)loading: the empty state must not flash.
+    it("gives priority to the loading state over the empty state", () => {
+      render(
+        <ProgressReport
+          coursePlans={fixture.coursePlans}
+          selectedCoursePlan={fixture.selectedCoursePlan}
+          sections={[]}
+          isSectionsLoading
+        />,
+      );
+      expect(screen.getByTestId("mock-loading")).toBeInTheDocument();
+      expect(
+        screen.queryByTestId("progress-report-sections-empty"),
+      ).not.toBeInTheDocument();
+    });
+
+    // Sections are also [] after a failed load: the error must win.
+    it("gives priority to the error state over the empty state", () => {
+      render(
+        <ProgressReport
+          coursePlans={fixture.coursePlans}
+          selectedCoursePlan={fixture.selectedCoursePlan}
+          sections={[]}
+          hasSectionsError
+        />,
+      );
+      expect(
+        screen.getByTestId("progress-report-sections-error"),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByTestId("progress-report-sections-empty"),
+      ).not.toBeInTheDocument();
     });
   });
 });

@@ -1,5 +1,6 @@
 {
   "title": "Avancement du plan de formation",
   "loading_error": "Une erreur est survenue lors du chargement des formations.",
-  "sections_error": "Une erreur est survenue lors du chargement des compétences de cette formation."
+  "sections_error": "Une erreur est survenue lors du chargement des compétences de cette formation.",
+  "sections_empty": "Aucune compétence n'est encore définie pour cette formation."
 }

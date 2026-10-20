@@ -352,3 +352,9 @@ export const SectionsError = {
   },
 };
 
+// A formation is selected but has no competency domain yet — empty-state message
+export const EmptySections = {
+  args: {
+    sections: [],
+  },
+};
