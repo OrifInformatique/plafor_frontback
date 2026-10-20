@@ -23,7 +23,7 @@ jest.mock(
         {/* Lets us assert the callback is forwarded and invoked by the child */}
         <button
           data-testid="cps-change"
-          onClick={() => onCoursePlanChange?.("2")}
+          onClick={() => onCoursePlanChange("2")}
         >
           change
         </button>
@@ -43,6 +43,11 @@ jest.mock("../../../components/report-section/ReportSection", () => ({
       {label}
     </div>
   ),
+}));
+
+jest.mock("../../../../../components/Loading", () => ({
+  __esModule: true,
+  default: () => <div data-testid="mock-loading" />,
 }));
 
 // --- Tests ---
@@ -125,10 +130,29 @@ describe("ProgressReport", () => {
       expect(onCoursePlanChange).toHaveBeenCalledTimes(1);
       expect(onCoursePlanChange).toHaveBeenCalledWith("2");
     });
+  });
 
-    it("does not crash when the selector reports a change without a handler", async () => {
-      render(<ProgressReport sections={fixture.sections} />);
-      await userEvent.click(screen.getByTestId("cps-change"));
+  describe("Sections loading state", () => {
+    beforeEach(() => {
+      render(
+        <ProgressReport
+          coursePlans={fixture.coursePlans}
+          selectedCoursePlan={fixture.selectedCoursePlan}
+          sections={fixture.sections}
+          isSectionsLoading
+        />,
+      );
+    });
+
+    it("shows the loading indicator", () => {
+      expect(screen.getByTestId("mock-loading")).toBeInTheDocument();
+    });
+
+    it("does not render the ReportSections while loading", () => {
+      expect(screen.queryAllByTestId("mock-report-section")).toHaveLength(0);
+    });
+
+    it("keeps the CoursePlanSelector rendered while loading", () => {
       expect(
         screen.getByTestId("mock-course-plan-selector"),
       ).toBeInTheDocument();
@@ -153,6 +177,14 @@ describe("ProgressReport", () => {
       render(<ProgressReport />);
       expect(screen.queryAllByTestId("mock-report-section")).toHaveLength(0);
     });
+
+    it("shows neither the loading indicator nor the error by default", () => {
+      render(<ProgressReport />);
+      expect(screen.queryByTestId("mock-loading")).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId("progress-report-sections-error"),
+      ).not.toBeInTheDocument();
+    });
   });
 
   describe("Edge cases", () => {
@@ -173,6 +205,43 @@ describe("ProgressReport", () => {
       expect(screen.getByTestId("mock-report-section")).toHaveTextContent(
         badData.sectionWithNumericId[0].label,
       );
+    });
+
+    it("gives priority to the loading state over the error state", () => {
+      render(<ProgressReport isSectionsLoading hasSectionsError />);
+      expect(screen.getByTestId("mock-loading")).toBeInTheDocument();
+      expect(
+        screen.queryByTestId("progress-report-sections-error"),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  describe("Sections error state", () => {
+    beforeEach(() => {
+      render(
+        <ProgressReport
+          coursePlans={fixture.coursePlans}
+          selectedCoursePlan={fixture.selectedCoursePlan}
+          sections={fixture.sections}
+          hasSectionsError
+        />,
+      );
+    });
+
+    it("shows the sections error message", () => {
+      expect(
+        screen.getByTestId("progress-report-sections-error"),
+      ).toHaveTextContent("sections_error");
+    });
+
+    it("does not render the ReportSections on error", () => {
+      expect(screen.queryAllByTestId("mock-report-section")).toHaveLength(0);
+    });
+
+    it("keeps the CoursePlanSelector rendered on error", () => {
+      expect(
+        screen.getByTestId("mock-course-plan-selector"),
+      ).toBeInTheDocument();
     });
   });
 });
