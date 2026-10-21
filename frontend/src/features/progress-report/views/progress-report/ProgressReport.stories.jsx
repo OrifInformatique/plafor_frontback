@@ -1,36 +1,35 @@
+import { fn } from "@storybook/test";
 import ProgressReport from "./ProgressReport";
+
+// Declared once so the selection is the very same object as the list entry,
+// as it is in the real app.
+const coursePlans = [
+  {
+    id: "1",
+    label:
+      "Informaticienne / informaticien avec CFC, orientation développement d’applications",
+    startDate: "01.08.2025",
+    endDate: "31.07.2029",
+    status: "En cours",
+  },
+  {
+    id: "2",
+    label:
+      "[2014-2020] Informaticienne, informaticien avec CFC, orientation développement d’applications",
+    startDate: "01.08.2020",
+    endDate: "31.07.2022",
+    status: "Abandonnée",
+  },
+];
 
 const meta = {
   component: ProgressReport,
   tags: ["autodocs"],
   args: {
-    coursePlans: [
-      {
-        id: "1",
-        label:
-          "Informaticienne / informaticien avec CFC, orientation développement d’applications",
-        startDate: "01.08.2025",
-        endDate: "31.07.2029",
-        status: "En cours",
-      },
-      {
-        id: "2",
-        label:
-          "[2014-2020] Informaticienne, informaticien avec CFC, orientation développement d’applications",
-        startDate: "01.08.2020",
-        endDate: "31.07.2022",
-        status: "Abandonnée",
-      },
-    ],
-
-    selectedCoursePlan: {
-      id: "1",
-      label:
-        "Informaticienne / informaticien avec CFC, orientation développement d’applications",
-      startDate: "01.08.2025",
-      endDate: "31.07.2029",
-      status: "En cours",
-    },
+    coursePlans,
+    selectedCoursePlan: coursePlans[0],
+    // Logs the picked formation in the Actions panel
+    onCoursePlanChange: fn(),
 
     // Section A: full spectrum of mastery levels across its lines
     // Section B: a struggling domain, skewed towards "Non expliqué"
@@ -316,20 +315,49 @@ export const ManySections = {
 // Selected formation is an old, abandoned course plan — view must still render normally
 export const AbandonedCoursePlanSelected = {
   args: {
-    selectedCoursePlan: {
-      id: "2",
-      label:
-        "[2014-2020] Informaticienne, informaticien avec CFC, orientation développement d’applications",
-      startDate: "01.08.2020",
-      endDate: "31.07.2022",
-      status: "Abandonnée",
-    },
+    selectedCoursePlan: coursePlans[1],
   },
 };
 
-// Only one formation available — CoursePlanSelector renders disabled/pre-selected
+// Only one formation available — it is pre-selected; the selector stays enabled
+// (SingleSelect only disables itself when there is no option at all)
 export const SingleCoursePlan = {
   args: {
-    coursePlans: [meta.args.coursePlans[0]],
+    coursePlans: [coursePlans[0]],
+  },
+};
+
+// The apprentice follows no formation at all — the selector is disabled and
+// nothing is shown below the title (no dedicated message yet)
+export const NoCoursePlans = {
+  args: {
+    coursePlans: [],
+    selectedCoursePlan: null,
+    sections: [],
+  },
+};
+
+// Sections are being (re)loaded after a course plan change — selector stays usable,
+// a loading indicator replaces the sections
+export const SectionsLoading = {
+  args: {
+    sections: [],
+    isSectionsLoading: true,
+  },
+};
+
+// Sections failed to load — non-blocking error, the selector stays usable
+// so the user can pick another formation
+export const SectionsError = {
+  args: {
+    sections: [],
+    hasSectionsError: true,
+  },
+};
+
+// A formation is selected but has no competency domain yet — empty-state message
+export const EmptySections = {
+  args: {
+    sections: [],
   },
 };

@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { reportLineShape } from "../../prop-types";
 import DoughnutChart from "../doughnut-chart/DoughnutChart";
 import ReportLine from "../report-line/ReportLine";
 
@@ -40,12 +41,14 @@ export default function ReportSection({
 
   return (
     <div className="grid [grid-template-areas:'title_title'_'donut_lines'] grid-cols-[auto_1fr] grid-rows-[auto_1fr] pt-3 pr-[5px] pb-[30px] pl-0 gap-[30px] border-t border-[#d0d0d0] max-sm:[grid-template-areas:'title_title'_'donut_toggle'_'lines_lines'] max-sm:grid-cols-2 max-sm:grid-rows-[auto_auto_auto] max-sm:py-3 max-sm:px-0 max-sm:gap-0">
-      <div
+      {/* h3: sits under the h2 title of the ProgressReport view, so screen
+          reader users can jump from one competency domain to the next. */}
+      <h3
         className="[grid-area:title] font-semibold text-base overflow-hidden whitespace-nowrap text-ellipsis max-sm:whitespace-normal"
         title={label}
       >
         {label}
-      </div>
+      </h3>
       <div className="[grid-area:donut] flex items-start justify-center h-[200px] w-[300px] max-sm:h-auto max-sm:w-[130px] max-sm:justify-self-center">
         <DoughnutChart data={doughnutChartData} />
       </div>
@@ -79,10 +82,5 @@ export default function ReportSection({
 ReportSection.propTypes = {
   label: PropTypes.string,
   doughnutChartData: PropTypes.array,
-  reportLines: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      data: PropTypes.array,
-    }),
-  ),
+  reportLines: PropTypes.arrayOf(reportLineShape),
 };
