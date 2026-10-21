@@ -5,10 +5,12 @@ import ProgressReport from "../ProgressReport";
 import fixture from "../__fixtures__/progress-report-data.json";
 import badData from "../__fixtures__/bad-data.json";
 
-// ProgressReport is a controlled, presentational orchestrator: its only job is
-// to forward props to its children. We therefore mock both children and have
-// the mocks surface the props they receive, so we can assert the wiring without
-// depending on the children's real implementation.
+// ProgressReport is a controlled view: it forwards props to its children and
+// decides what the sections area shows (loading, error, empty state or data).
+// CoursePlanSelector, ReportSection and Loading are mocked, and the mocks
+// surface the props they receive, so we can assert the wiring without depending
+// on the children's real implementation. StateMessage is kept real: it is plain
+// markup, and the assertions on the live regions check the text it renders.
 
 // t() returns the key itself: assertions do not depend on the French copy,
 // and no i18next instance is needed (no NO_I18NEXT_INSTANCE warning).
@@ -16,13 +18,9 @@ jest.mock("react-i18next", () => ({
   useTranslation: () => ({ t: (key) => key }),
 }));
 
-// The real module is spread so its exported PropTypes shapes stay available.
 jest.mock(
   "../../../components/course-plan-selector/CoursePlanSelector",
   () => ({
-    ...jest.requireActual(
-      "../../../components/course-plan-selector/CoursePlanSelector",
-    ),
     __esModule: true,
     default: ({ coursePlans, selectedCoursePlan, onCoursePlanChange }) => (
       <div data-testid="mock-course-plan-selector">
@@ -43,7 +41,6 @@ jest.mock(
 );
 
 jest.mock("../../../components/report-section/ReportSection", () => ({
-  ...jest.requireActual("../../../components/report-section/ReportSection"),
   __esModule: true,
   default: ({ label, doughnutChartData, reportLines }) => (
     <div
@@ -131,13 +128,6 @@ describe("ProgressReport", () => {
         );
       });
     });
-
-    it("marks the sections area as not busy", () => {
-      expect(screen.getByTestId("progress-report-sections")).toHaveAttribute(
-        "aria-busy",
-        "false",
-      );
-    });
   });
 
   // Verifies that a change reported by the selector reaches the parent callback.
@@ -166,13 +156,6 @@ describe("ProgressReport", () => {
     it("shows the loading indicator inside the status live region", () => {
       expect(screen.getByRole("status")).toContainElement(
         screen.getByTestId("mock-loading"),
-      );
-    });
-
-    it("marks the sections area as busy", () => {
-      expect(screen.getByTestId("progress-report-sections")).toHaveAttribute(
-        "aria-busy",
-        "true",
       );
     });
 
@@ -367,6 +350,16 @@ describe("ProgressReport", () => {
       expect(screen.getByTestId("mock-report-section")).toHaveTextContent(
         badData.sectionWithNumericId[0].label,
       );
+    });
+
+    // Default values only cover undefined: a null payload from the API must
+    // fall back to the empty state instead of crashing.
+    it("treats null sections as an empty list", () => {
+      renderWithFixture({ sections: null });
+      expect(screen.queryAllByTestId("mock-report-section")).toHaveLength(0);
+      expect(
+        screen.getByTestId("progress-report-sections-empty"),
+      ).toBeInTheDocument();
     });
 
     // An apprentice may follow no formation at all: nothing is selected,

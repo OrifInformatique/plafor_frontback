@@ -33,6 +33,12 @@ describe("ReportSection", () => {
       expect(screen.getByTitle(fixture.label)).toBeInTheDocument();
     });
 
+    it("exposes the section label as a level 3 heading", () => {
+      expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent(
+        fixture.label,
+      );
+    });
+
     it("renders the DoughnutChart", () => {
       expect(screen.getByTestId("mock-doughnut")).toBeInTheDocument();
     });

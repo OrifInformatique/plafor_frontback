@@ -2,6 +2,7 @@ import React from "react";
 import { SingleSelect } from "@orif-informatique/react-components-library";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
+import { coursePlanShape } from "../../prop-types";
 import "./CoursePlanSelector.css";
 export default function CoursePlanSelector({
   coursePlans = [],
@@ -42,15 +43,6 @@ export default function CoursePlanSelector({
     </div>
   );
 }
-
-// Exported so that parents forwarding course plans validate the same shape.
-export const coursePlanShape = PropTypes.shape({
-  id: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  startDate: PropTypes.string,
-  endDate: PropTypes.string,
-  status: PropTypes.string,
-});
 
 CoursePlanSelector.propTypes = {
   coursePlans: PropTypes.arrayOf(coursePlanShape),
