@@ -2,14 +2,19 @@ import React, { useEffect, useState } from "react";
 
 const Popup = ({
     title = "Nouveau popup",
-    fields,
     onClose,
     onSubmit,
+    config = {},
 }) => {
 
     const [values, setValues] = useState({});
     const [error, setError] = useState("");
     
+    const radioConfig = config.radio;
+    const selectConfig = config.select;
+    const dateConfig = config.date;
+    const gradeConfig = config.grade;
+
     const handleChange = (name, value) => {
         setValues((prev) => ({
             ...prev,
@@ -19,6 +24,67 @@ const Popup = ({
     };
 
     const handleSubmit = () => {
+
+        // Validation du radio
+        if (radioConfig?.enabled) {
+            const value = values[radioConfig.name];
+
+            if (!value) {
+                setError("Veuillez sélectionner un type de module");
+                return;
+            }
+        }
+
+        // Validation du select
+        if (selectConfig?.enabled) {
+            const value = values[selectConfig.name];
+
+            if (value === undefined || value === "") {
+                setError(`Veuillez sélectionner : ${selectConfig.label}`);
+                return;
+            }
+        }
+
+        // Validation de la note
+        if (gradeConfig?.enabled) {
+            const value = values[gradeConfig.name];
+
+            if (value === undefined || value === "") {
+                setError("Veuillez entrer une note");
+                return;
+            }
+
+            const note = Number(value);
+
+            if (!Number.isFinite(note) || note < 1 || note > 6) {
+                setError("La note doit être comprise entre 1 et 6.");
+                return;
+            }
+        }
+
+        // Validation de la date
+        if (dateConfig?.enabled) {
+            const value = values[dateConfig.name];
+
+            if (!value) {
+                setError(`Veuillez entrer une date`);
+                return;
+            }
+
+            const selectedDate = new Date(`${value}T00:00:00`);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (
+                Number.isNaN(selectedDate.getTime()) ||
+                selectedDate > today
+            ) {
+                setError("La date doit être valide et ne peut pas être dans le futur.");
+                return;
+            }
+        }
+
+        /*
         for (const field of fields) {
             const value = values[field.name];
 
@@ -65,6 +131,7 @@ const Popup = ({
                 }
             }
         }
+            */
 
         setError("");
         onSubmit(values);
@@ -89,112 +156,132 @@ const Popup = ({
                     </div>
                 )}
 
-                {/* Champs */}
-                {fields.map((field) => (
-                    <div key={field.name} className="mb-4">
+                {/* RADIO */}
+                {radioConfig?.enabled && (
+                    <div className="mb-4">
+                        <label className="mb-2 block font-medium">
+                            {radioConfig.label}
+                        </label>
 
-                        {/* RADIO */}
-                        {field.type === "radio" ? (
-                            <>
-                                <label className="mb-2 block font-medium">
-                                    {field.label}
-                                </label>
-
-                                <div className="flex gap-6">
-                                    {field.options?.map((option) => (
-                                        <label
-                                            key={option.value}
-                                            htmlFor={`${field.name}-${option.value}`}
-                                            className="flex items-center gap-2"
-                                        >
-                                            <input
-                                                id={`${field.name}-${option.value}`}
-                                                type="radio"
-                                                name={field.name}
-                                                value={option.value}
-                                                checked={
-                                                    values[field.name] === option.value
-                                                }
-                                                onChange={(e) =>
-                                                    handleChange(
-                                                        field.name,
-                                                        e.target.value
-                                                    )
-                                                }
-                                            />
-
-                                            {option.label}
-                                        </label>
-                                    ))}
-                                </div>
-                            </>
-
-                        /* SELECT */
-                        ) : field.type === "select" ? (
-                            <>
+                        <div className="flex gap-6">
+                            {radioConfig.options.map((option) => (
                                 <label
-                                    htmlFor={field.name}
-                                    className="mb-2 block font-medium"
+                                    key={option.value}
+                                    className="flex items-center gap-2"
                                 >
-                                    {field.label}
+                                    <input
+                                        type="radio"
+                                        name={radioConfig.name}
+                                        value={option.value}
+                                        checked={
+                                            values[radioConfig.name] ===
+                                            option.value
+                                        }
+                                        onChange={(e) =>
+                                            handleChange(
+                                                radioConfig.name,
+                                                e.target.value
+                                            )
+                                        }
+                                    />
+
+                                    {option.label}
                                 </label>
-
-                                <select
-                                    id={field.name}
-                                    value={values[field.name] ?? ""}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            field.name,
-                                            e.target.value
-                                        )
-                                    }
-                                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2"
-                                >
-                                    <option value="">
-                                        {field.placeholder ?? "Sélectionner..."}
-                                    </option>
-
-                                    {field.options?.map((option) => (
-                                        <option
-                                            key={option.value}
-                                            value={option.value}
-                                        >
-                                            {option.label}
-                                        </option>
-                                    ))}
-                                </select>
-                            </>
-
-                        /* INPUT */
-                        ) : (
-                            <>
-                                <label
-                                    htmlFor={field.name}
-                                    className="mb-2 block font-medium"
-                                >
-                                    {field.label}
-                                </label>
-
-                                <input
-                                    id={field.name}
-                                    type={field.type ?? "text"}
-                                    min={field.min}
-                                    max={field.max}
-                                    step={field.step}
-                                    placeholder={field.placeholder}
-                                    value={values[field.name] ?? ""}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            field.name,
-                                            e.target.value
-                                        )
-                                    }
-                                    className="w-full rounded-lg border border-gray-300 px-3 py-2"
-                                />
-                            </>
-                        )}
+                            ))}
+                        </div>
                     </div>
-                ))}
+                )}
+
+                {/* SELECT */}
+                {selectConfig?.enabled && (
+                    <div className="mb-4">
+                        <label
+                            htmlFor={selectConfig.name}
+                            className="mb-2 block font-medium"
+                        >
+                            {selectConfig.label}
+                        </label>
+
+                        <select
+                            id={selectConfig.name}
+                            value={values[selectConfig.name] ?? ""}
+                            onChange={(e) =>
+                                handleChange(
+                                    selectConfig.name,
+                                    e.target.value
+                                )
+                            }
+                            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2"
+                        >
+                            <option value="">
+                                {selectConfig.placeholder ?? "Sélectionner..."}
+                            </option>
+
+                            {(selectConfig.options ?? []).map((option) => (
+                                <option
+                                    key={option.value}
+                                    value={option.value}
+                                >
+                                    {option.label}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                )}
+
+                {/* DATE */}
+                {dateConfig?.enabled && (
+                    <div className="mb-4">
+                        <label
+                            htmlFor={dateConfig.name}
+                            className="mb-2 block font-medium"
+                        >
+                            {dateConfig.label}
+                        </label>
+
+                        <input
+                            id={dateConfig.name}
+                            type="date"
+                            value={values[dateConfig.name] ?? ""}
+                            onChange={(e) =>
+                                handleChange(
+                                    dateConfig.name,
+                                    e.target.value
+                                )
+                            }
+                            className="w-full rounded-lg border border-gray-300 px-3 py-2"
+                        />
+                    </div>
+                )}
+
+                {/* NOTE */}
+                {gradeConfig?.enabled && (
+                    <div className="mb-4">
+                        <label
+                            htmlFor={gradeConfig.name}
+                            className="mb-2 block font-medium"
+                        >
+                            {gradeConfig.label}
+                        </label>
+
+                        <input
+                            id={gradeConfig.name}
+                            type="number"
+                            min={gradeConfig.min ?? 1}
+                            max={gradeConfig.max ?? 6}
+                            step={gradeConfig.step ?? 0.1}
+                            placeholder={gradeConfig.placeholder ?? "Ex. 5.5"}
+                            value={values[gradeConfig.name] ?? ""}
+                            onChange={(e) =>
+                                handleChange(
+                                    gradeConfig.name,
+                                    e.target.value
+                                )
+                            }
+                            className="w-full rounded-lg border border-gray-300 px-3 py-2"
+                        />
+                    </div>
+                )}
 
                 {/* Boutons */}
                 <div className="flex justify-end gap-3">

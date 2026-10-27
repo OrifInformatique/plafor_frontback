@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { getDataExemplePopup, getDataExempleINFRA, getDataExempleMEDIA, getDataExempleOPE, getDataExempleDEV } from "/src/common/services/dataService";
+import { useParams } from 'react-router-dom';
+import { getDataBulletin, getDataExemplePopup } from '/src/common/services/dataService';
+import { getPopupConfigs } from './config/popupConfigs';
 import Popup from './components/popup';
 import ListeDeroulante from './components/listeDeroulante';
 import LigneTableauBulletin from './components/ligneTableauBulletin';
 
-const BulletinInterface = ({ userData }) => {
 
-    const [ligneOuverte, setLigneOuverte] = useState(null);
-    const [data, setData] = useState(userData || null);
+const BulletinInterface = ({}) => {
+    const { id } = useParams();
+
+    const [data, setData] = useState(null);
     const [dataExemplePopup, setDataExemplePopup] = useState(null);
-
+    const [error, setError] = useState(null);
+    const [ligneOuverte, setLigneOuverte] = useState(null);
+    
     // Quel type de popup : null | "module" | "culture" | "cbe" | "tpi"
     const [popupType, setPopupType] = useState(null);
 
@@ -17,34 +22,24 @@ const BulletinInterface = ({ userData }) => {
     useEffect(() => {
         async function loadData() {
             try {
-                // Changer le getData pour voir les autres exemples
-                //const result = await getDataExempleINFRA();
-                //const result = await getDataExempleMEDIA();
-                //const result = await getDataExempleOPE();
-                const result = await getDataExempleDEV();
+                setError(null);
+                setData(null);
+
+                const result = await getDataBulletin(id);
                 setData(result.data);
-            
+                
+                const resultPopup = await getDataExemplePopup();
+                setDataExemplePopup(resultPopup.data);
+
             } catch(err) {
                 console.error("Erreur de chargement des données : ", err);
-                setData(null);
+                setError("Impossible de charger les données du bulletin.");
             }
         }
-
-        async function loadDataExemplePopup() {
-            try {
-                const result = await getDataExemplePopup();
-                setDataExemplePopup(result.data);
-            
-            } catch(err) {
-                console.error("Erreur du chargement des données : ", err);
-                setDataExemplePopup(null);
-            }
-        }
-
+        
         loadData();
-        loadDataExemplePopup();
     
-    }, [userData]);
+    }, [id]);
 
     if (!data) {
         return <div> Chargement... </div>;
@@ -89,155 +84,8 @@ const BulletinInterface = ({ userData }) => {
         .find(subject => subject.name === "Modules");
     const dataPopupModuleName = dataPopupModule?.teaching_module ?? [];
 
-
-    //==================
-    //      Modules
-    //==================
-
-    const fieldsModules = [
-        {
-            name: "typeModule",
-            label: "Type de module",
-            type: "radio",
-            options: [
-                {
-                    value: "ecole",
-                    label: "Module école"
-                },
-                {
-                    value: "interentreprise",
-                    label: "Module interentreprise"
-                },
-            ],
-        },
-        {
-            name: "module",
-            label: "Module",
-            type: "select",
-            placeholder: "Sélectionner un module",
-            options: dataPopupModuleName.map(module => ({
-                value: module.id,
-                label: `${module.module_number} : ${module.module_name}`,
-            })),
-        },
-        {
-            name: "note",
-            label: "Note",
-            type: "number",
-            min: 1,
-            max: 6,
-            step: 0.1,
-            placeholder: "Ex. 5.5",
-        },
-        {
-            name: "date",
-            label: "Date",
-            type: "date",
-        },
-    ];
-
-    //==========================
-    //      Culture générale
-    //==========================
-
-    const fieldsCulture = [
-        {
-            name: "categorie",
-            label: "Catégorie",
-            type: "select",
-            placeholder: "Sélectionner une matière",
-            options: [
-                {
-                    value: "ECG",
-                    label: "ECG",
-                },
-                {
-                    value: "TPA",
-                    label: "TPA",
-                },
-                {
-                    value: "examen_final",
-                    label: "Examen final",
-                },
-            ],
-        },
-        {
-            name: "note",
-            label: "Note",
-            type: "number",
-            min: 1,
-            max: 6,
-            step: 0.1,
-            placeholder: "Ex. 5.5",
-        },
-        {
-            name: "date",
-            label: "Date",
-            type: "date",
-        },
-    ];
-
-    //==============
-    //      CBE
-    //==============
-
-    const fieldsCBE = [
-        {
-            name: "matiere",
-            label: "Matière",
-            type: "select",
-            placeholder: "Sélectionner une matière",
-            options: [
-                {
-                    value: "math",
-                    label: "Mathématiques",
-                },
-                {
-                    value: "anglais",
-                    label: "Anglais",
-                },
-                {
-                    value: "allemand",
-                    label: "Allemand",
-                },
-            ],
-        },
-        {
-            name: "note",
-            label: "Note",
-            type: "number",
-            min: 1,
-            max: 6,
-            step: 0.1,
-            placeholder: "Ex. 5.5",
-        },
-        {
-            name: "date",
-            label: "Date",
-            type: "date",
-        },
-    ];
-
-    //==============
-    //      TPI
-    //==============
-
-    const fieldsTPI = [
-        {
-            name: "note",
-            label: "Note",
-            type: "number",
-            min: 1,
-            max: 6,
-            step: 0.1,
-            placeholder: "Ex. 5.5",
-        },
-        {
-            name: "date",
-            label: "Date",
-            type: "date",
-        },
-    ];
+    const popupConfigs = getPopupConfigs(dataPopupModuleName);
+    const popupConfig = popupType ? popupConfigs[popupType] : null;
 
     const toggleLigne = (id) => {
         setLigneOuverte(ligneOuverte === id ? null : id);
@@ -332,64 +180,17 @@ const BulletinInterface = ({ userData }) => {
                 X 
             </button>
         </div>
-
-        {popupType && (
-            <>
-                {(() => {
-                    switch (popupType) {
-                        case "module":
-                            return (
-                                <Popup
-                                    title="Nouvelle note - Module"
-                                    fields={fieldsModules}
-                                    onClose={() => setPopupType(null)}
-                                    onSubmit={(values) => {
-                                        console.log(values);
-                                        setPopupType(null);
-                                    }}
-                                />
-                            );
-                        case "culture":
-                            return (
-                                <Popup
-                                    title="Nouvelle note - Culture générale"
-                                    fields={fieldsCulture}
-                                    onClose={() => setPopupType(null)}
-                                    onSubmit={(values) => {
-                                        console.log(values);
-                                        setPopupType(null);
-                                    }}
-                                />
-                            );
-                        case "cbe":
-                            return (
-                                <Popup
-                                    title="Nouvelle note - CBE"
-                                    fields={fieldsCBE}
-                                    onClose={() => setPopupType(null)}
-                                    onSubmit={(values) => {
-                                        console.log(values);
-                                        setPopupType(null);
-                                    }}
-                                />
-                            );   
-                        case "tpi":
-                            return (
-                                <Popup
-                                    title="Nouvelle note - TPI"
-                                    fields={fieldsTPI}
-                                    onClose={() => setPopupType(null)}
-                                    onSubmit={(values) => {
-                                        console.log(values);
-                                        setPopupType(null);
-                                    }}
-                                />
-                            );    
-                        default:
-                            return null;                                                 
-                    }
-                })()}
-            </>
+        
+        {popupConfig && (
+            <Popup
+                title={popupConfig.title}
+                config={popupConfig.config}
+                onClose={() => setPopupType(null)}
+                onSubmit={(values) => {
+                    console.log(values);
+                    setPopupType(null);
+                }}
+            />
         )}
     </>);
 }

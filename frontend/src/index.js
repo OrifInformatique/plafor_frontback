@@ -83,7 +83,7 @@ root.render(
                     />
 
                     <Route
-                        path="/bulletin"
+                        path="/bulletin/:id"
                         element={<BulletinInterface />}
                     />
                 </Route>
