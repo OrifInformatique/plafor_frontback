@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ProgressReport from "../../views/progress-report/ProgressReport";
+import StateMessage from "../../components/state-message/StateMessage";
 import {
   getCoursePlans,
   getCoursePlanSections,
@@ -36,6 +37,11 @@ export default function ProgressReportContainer() {
     getCoursePlans()
       .then((data) => {
         if (ignore) return;
+        // The container is the API boundary, so it is the one that rejects a
+        // malformed payload: throwing routes it to the blocking error below.
+        if (!Array.isArray(data)) {
+          throw new Error("Invalid /course-plans payload: expected an array");
+        }
         // Normalize ids to strings once, here at the boundary: a native
         // <select> always reports its value as a string, so aligning the whole
         // feature on strings keeps comparisons (and PropTypes) consistent
@@ -46,7 +52,10 @@ export default function ProgressReportContainer() {
         if (plans.length > 0) setSelectedId(plans[0].id);
       })
       .catch((err) => {
-        if (!ignore) setError(err);
+        if (ignore) return;
+        // The UI only shows a generic message: keep the cause for debugging.
+        console.error("Failed to load the course plans", err);
+        setError(err);
       })
       .finally(() => {
         if (!ignore) setLoading(false);
@@ -77,10 +86,21 @@ export default function ProgressReportContainer() {
 
     getCoursePlanSections(selectedId)
       .then((data) => {
-        if (!ignore) setSections(data);
+        if (ignore) return;
+        // Without this check, a malformed payload would reach the view as a
+        // non-array, be read as "no section" and show a misleading empty state.
+        if (!Array.isArray(data)) {
+          throw new Error("Invalid sections payload: expected an array");
+        }
+        setSections(data);
       })
       .catch((err) => {
-        if (!ignore) setSectionsError(err);
+        if (ignore) return;
+        console.error(
+          `Failed to load the sections of course plan ${selectedId}`,
+          err,
+        );
+        setSectionsError(err);
       })
       .finally(() => {
         if (!ignore) setSectionsLoading(false);
@@ -106,16 +126,25 @@ export default function ProgressReportContainer() {
     setSelectedId(String(value));
   };
 
-  // Edge states.
-  if (loading) {
-    return <Loading />;
-  }
-
-  if (error) {
+  // Blocking states: loading and error share the very same tree, so React
+  // keeps both live regions mounted when the loading ends on an error and only
+  // their content changes; screen readers then reliably announce the error
+  // (same rule as the sections area of the view).
+  if (loading || error) {
     return (
-      <div className="text-center" data-testid="progress-report-error">
-        <strong className="text-lg">{t("loading_error")}</strong>
-      </div>
+      <>
+        <div role="status" data-testid="progress-report-status">
+          {loading && <Loading />}
+        </div>
+        <div role="alert" data-testid="progress-report-alert">
+          {!loading && error && (
+            <StateMessage
+              message={t("loading_error")}
+              testId="progress-report-error"
+            />
+          )}
+        </div>
+      </>
     );
   }
 
