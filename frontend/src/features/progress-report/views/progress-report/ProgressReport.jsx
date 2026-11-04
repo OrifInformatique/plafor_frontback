@@ -22,6 +22,7 @@ import { coursePlanShape, reportSectionShape } from "../../prop-types";
  *
  * @param {Object}      props
  * @param {Array}       props.coursePlans         - Formations available, forwarded to CoursePlanSelector.
+ *                                                  When empty, a "no formation" message is shown.
  * @param {Object|null} props.selectedCoursePlan  - Currently selected formation, forwarded to CoursePlanSelector.
  * @param {Function}    props.onCoursePlanChange  - Called with the id of the formation the user picks.
  * @param {Array}       props.sections            - One entry per competency domain: { id, label, doughnutChartData, reportLines }.
@@ -43,14 +44,20 @@ export default function ProgressReport({
   // falls back to "no section" instead of crashing, like the charts do.
   const safeSections = Array.isArray(sections) ? sections : [];
 
-  // Only the sections area varies: loading, then error, then the empty state,
-  // then the data itself. The empty state must come after loading and error,
-  // since sections are also [] while (re)loading and after a failed load.
+  // Only the sections area varies: loading, then error, then "no formation",
+  // then the empty state, then the data itself. The messages must come after
+  // loading and error, since sections are also [] while (re)loading and after
+  // a failed load.
   const showError = !isSectionsLoading && hasSectionsError;
+  // An apprentice may follow no formation at all: say so instead of leaving
+  // a disabled selector above a blank area.
+  const showNoCoursePlans =
+    !isSectionsLoading && !hasSectionsError && coursePlans.length === 0;
   // Without a selected formation, "no competency for this formation" makes no sense.
   const showEmpty =
     !isSectionsLoading &&
     !hasSectionsError &&
+    !showNoCoursePlans &&
     selectedCoursePlan !== null &&
     safeSections.length === 0;
   const showSections = !isSectionsLoading && !hasSectionsError;
@@ -77,6 +84,12 @@ export default function ProgressReport({
             the error is (alert, assertive). */}
         <div role="status" data-testid="progress-report-sections-status">
           {isSectionsLoading && <Loading />}
+          {showNoCoursePlans && (
+            <StateMessage
+              message={t("no_course_plans")}
+              testId="progress-report-no-course-plans"
+            />
+          )}
           {showEmpty && (
             <StateMessage
               message={t("sections_empty")}
