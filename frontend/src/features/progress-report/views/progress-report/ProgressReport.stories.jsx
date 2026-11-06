@@ -328,7 +328,7 @@ export const SingleCoursePlan = {
 };
 
 // The apprentice follows no formation at all — the selector is disabled and
-// nothing is shown below the title (no dedicated message yet)
+// a "no formation" message replaces the sections
 export const NoCoursePlans = {
   args: {
     coursePlans: [],

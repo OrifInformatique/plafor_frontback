@@ -362,17 +362,76 @@ describe("ProgressReport", () => {
       ).toBeInTheDocument();
     });
 
-    // An apprentice may follow no formation at all: nothing is selected,
-    // so no "no competency for this formation" message either.
-    it("renders the selector without any message when there is no course plan", () => {
+  });
+
+  // Verifies the message shown when the apprentice follows no formation at all.
+  describe("No course plan state", () => {
+    const renderWithoutCoursePlans = (props = {}) =>
       render(
         <ProgressReport
           coursePlans={badData.emptyCoursePlans}
           selectedCoursePlan={null}
           sections={[]}
+          {...props}
         />,
       );
+
+    it("shows the no course plan message", () => {
+      renderWithoutCoursePlans();
+      expect(
+        screen.getByTestId("progress-report-no-course-plans"),
+      ).toHaveTextContent("no_course_plans");
+    });
+
+    it("exposes the no course plan message as a status for assistive technologies", () => {
+      renderWithoutCoursePlans();
+      expect(screen.getByRole("status")).toHaveTextContent("no_course_plans");
+    });
+
+    it("keeps the CoursePlanSelector rendered without course plans", () => {
+      renderWithoutCoursePlans();
       expect(screen.getByTestId("cps-count")).toHaveTextContent("0");
+    });
+
+    // Nothing is selected, so "no competency for this formation" makes no sense.
+    it("does not show the sections empty state", () => {
+      renderWithoutCoursePlans();
+      expect(
+        screen.queryByTestId("progress-report-sections-empty"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("does not show the no course plan message when there are course plans", () => {
+      renderWithFixture();
+      expect(
+        screen.queryByTestId("progress-report-no-course-plans"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("gives priority to the loading state over the no course plan message", () => {
+      renderWithoutCoursePlans({ isSectionsLoading: true });
+      expect(screen.getByTestId("mock-loading")).toBeInTheDocument();
+      expect(
+        screen.queryByTestId("progress-report-no-course-plans"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("gives priority to the error state over the no course plan message", () => {
+      renderWithoutCoursePlans({ hasSectionsError: true });
+      expect(
+        screen.getByTestId("progress-report-sections-error"),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByTestId("progress-report-no-course-plans"),
+      ).not.toBeInTheDocument();
+    });
+
+    // Locks the priority even with inconsistent props (a selection without list).
+    it("gives priority to the no course plan message over the empty state", () => {
+      renderWithoutCoursePlans({ selectedCoursePlan: fixture.selectedCoursePlan });
+      expect(
+        screen.getByTestId("progress-report-no-course-plans"),
+      ).toBeInTheDocument();
       expect(
         screen.queryByTestId("progress-report-sections-empty"),
       ).not.toBeInTheDocument();
