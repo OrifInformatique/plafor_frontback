@@ -1,14 +1,18 @@
-const dotenv = require('dotenv').config();
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+import webpack from 'webpack';
 
-const path = require('path');
-const webpack = require('webpack');
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import CopyPlugin from 'copy-webpack-plugin';
 
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const parsedEnv = dotenv.config({ quiet: true }).parsed || {};
 
 const APP_ROOT = process.env.APP_ROOT || '/';
 
-module.exports = {
+export default {
     mode: 'development',
     entry: path.resolve(__dirname, 'src/index.js'),
     output: {
@@ -29,8 +33,8 @@ module.exports = {
         historyApiFallback: true,
         proxy: [
             {
-                context: ['/auth', '/users'],
-                target: 'https://auth.sectioninformatique.ch',
+                pathFilter: ['/auth', '/users', '/items', '/roles', '/tests'],
+                target: process.env.BACKEND_API_URL || "http://localhost:8081",
                 changeOrigin: true,
                 secure: false,
             },
@@ -45,6 +49,8 @@ module.exports = {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 use: 'babel-loader',
+                // Required with "type": "module": allow extensionless imports in src/
+                resolve: { fullySpecified: false },
             },
             {
                 test: /\.(css|pcss)$/i,
@@ -57,7 +63,7 @@ module.exports = {
             template: path.join(__dirname, 'src', 'index.tmpl.html'),
         }),
         new webpack.DefinePlugin({
-            'process.env': JSON.stringify(dotenv.parsed),
+            'process.env': JSON.stringify(parsedEnv),
         }),
         new CopyPlugin({
             patterns: ['public'],

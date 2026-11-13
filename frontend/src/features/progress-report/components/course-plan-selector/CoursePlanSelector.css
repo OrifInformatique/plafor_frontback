@@ -1,5 +1,0 @@
-/* Overrides the internal label gap of the SingleSelect library component.
-   Cannot be expressed with Tailwind since it targets a descendant element by tag name. */
-.course-plan-selector label {
-  gap: 8px;
-}
