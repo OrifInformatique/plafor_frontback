@@ -8,11 +8,19 @@ import badData from "../__fixtures__/bad-data.json";
 // SingleSelect is replaced by a plain <select> to avoid depending on the
 // external library in unit tests. The mock exposes the same props so we
 // can verify they are wired correctly.
+// t() returns the key itself: assertions do not depend on the French copy,
+// and no i18next instance is needed (no NO_I18NEXT_INSTANCE warning).
+jest.mock("react-i18next", () => ({
+  useTranslation: () => ({ t: (key) => key }),
+}));
+
 jest.mock("@orif-informatique/react-components-library", () => ({
   __esModule: true,
   SingleSelect: ({ options, selectedValue, onChangeFunction }) => (
     <select
       data-testid="mock-single-select"
+      // Raw prop, before the fallback below, so tests can assert what is passed
+      data-selected-value={selectedValue}
       value={selectedValue ?? ""}
       onChange={(e) => onChangeFunction(e.target.value)}
     >
@@ -129,6 +137,22 @@ describe("CoursePlanSelector", () => {
       expect(screen.queryByText(coursePlanData.selectedCoursePlanFilled.startDate)).not.toBeInTheDocument();
       expect(screen.queryByText(coursePlanData.selectedCoursePlanFilled.endDate)).not.toBeInTheDocument();
       expect(screen.queryByText(coursePlanData.selectedCoursePlanFilled.status)).not.toBeInTheDocument();
+    });
+
+    // SingleSelect only stays controlled when selectedValue !== null: with
+    // undefined, the browser would show the first formation as selected.
+    it("selects the placeholder (empty value) when selectedCoursePlan is null", () => {
+      render(
+        <CoursePlanSelector
+          coursePlans={coursePlanData.coursePlans}
+          selectedCoursePlan={null}
+          onCoursePlanChange={mockOnChange}
+        />,
+      );
+      expect(screen.getByTestId("mock-single-select")).toHaveAttribute(
+        "data-selected-value",
+        "",
+      );
     });
   });
 });
