@@ -1,0 +1,43 @@
+# dev | test | prod : see README for more info
+# Remember to run `docker compose up --build` when changing environment
+ENVIRONMENT=dev
+
+# Define the Tomcat server port for your Docker app container
+PORT=8081
+
+# WARN: Set your database production database in `application.properties`!
+
+# Local dev database (Local mariadb)
+DEV_SPRING_DATASOURCE_URL=jdbc:mariadb://db:3306/dev_db
+
+# Local OR cloud test database
+TEST_SPRING_DATASOURCE_URL=jdbc:mariadb://db:3306/test_db
+
+# User name and password used by Docker to create the database container
+DB_USERNAME=root
+DB_PASSWORD=pwd
+
+# Base URL for spring-auth service
+# Attention : don't use https://auth.sectioninformatique.ch beacause the SSL
+# certificate is not valid for this domain.
+# Use https://spring-auth.jcloud.ik-server.com/ as it is the Jelastic server
+# domain name, with a valid SSL certificate.
+# You can also use a local instance of spring-auth for development purpose.
+# If you are using docker desktop (Window or iOS) : http://host.docker.internal:{YOUR PORT NUMBER}
+# If you are on Linux, use the docker-compose service name : http://spring-auth-dev:8080
+SPRING_AUTH_URL=http://host.docker.internal:8080
+
+# URL to call for Azure login, which should point to the spring-auth Azure login endpoint.
+AZURE_LOGIN_URL=http://localhost:8080/oauth2/login/azure
+
+# Callback URL after a successfull OAuth2 login with spring-auth.
+# This URL should point to the backend endpoint that handles the temporary authentication code.
+AFTER_OAUTH2_LOGIN_URL=http://localhost:8081/auth/auth-code
+
+# URL to redirect to the frontend after Azure login
+AFTER_OAUTH2_LOGIN_FRONTEND_CALLBACK=http://localhost:4000/azure
+
+# JWT Token Configuration
+SECURITY_JWT_TOKEN_SECRET_KEY=your-secret-access-key-here-change-in-production
+SECURITY_JWT_TOKEN_ACCESS_TOKEN_LIFETIME=5m
+SECURITY_JWT_TOKEN_REFRESH_TOKEN_LIFETIME=30d
