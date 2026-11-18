@@ -4,16 +4,16 @@ import StateMessage from "../../components/state-message/StateMessage";
 import {
   getCoursePlans,
   getCoursePlanSections,
-} from "../../../../services/api/course-plans";
+} from "../../api/api";
 import { useTranslation } from "react-i18next";
-import Loading from "../../../../components/Loading";
+import Loading from "../../components/loading/Loading";
 
 /**
  * ProgressReportContainer
  *
  * "Smart" component of the progress-report feature. It owns the state
  * (selected course plan + sections), fetches the data through the
- * `course-plans` service, handles loading / errors, then feeds the dumb
+ * feature's `api` module, handles loading / errors, then feeds the dumb
  * <ProgressReport /> component. The view stays 100% presentational.
  */
 export default function ProgressReportContainer() {

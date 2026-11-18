@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import CoursePlanSelector from "../../components/course-plan-selector/CoursePlanSelector";
 import ReportSection from "../../components/report-section/ReportSection";
 import StateMessage from "../../components/state-message/StateMessage";
-import Loading from "../../../../components/Loading";
+import Loading from "../../components/loading/Loading";
 import { coursePlanShape, reportSectionShape } from "../../prop-types";
 
 /**

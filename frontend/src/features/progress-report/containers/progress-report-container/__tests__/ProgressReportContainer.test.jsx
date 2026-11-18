@@ -5,7 +5,7 @@ import ProgressReportContainer from "../ProgressReportContainer";
 import {
   getCoursePlans,
   getCoursePlanSections,
-} from "../../../../../services/api/course-plans";
+} from "../../../api/api";
 
 // ProgressReportContainer owns the data flow: it fetches the course plans and
 // their sections, then feeds the controlled <ProgressReport /> view. The
@@ -19,7 +19,7 @@ jest.mock("react-i18next", () => ({
   useTranslation: () => ({ t: (key) => key }),
 }));
 
-jest.mock("../../../../../services/api/course-plans", () => ({
+jest.mock("../../../api/api", () => ({
   getCoursePlans: jest.fn(),
   getCoursePlanSections: jest.fn(),
 }));
@@ -56,7 +56,7 @@ jest.mock("../../../views/progress-report/ProgressReport", () => ({
   ),
 }));
 
-jest.mock("../../../../../components/Loading", () => ({
+jest.mock("../../../components/loading/Loading", () => ({
   __esModule: true,
   default: () => <div data-testid="mock-loading" />,
 }));

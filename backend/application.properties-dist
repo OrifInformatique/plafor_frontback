@@ -1,0 +1,5 @@
+### Logging levels ###
+logging.level.root=ERROR
+logging.level.ch.sectioninformatique=ERROR
+logging.level.org.springframework.security=DEBUG
+logging.level.ch.sectioninformatique.template=DEBUG

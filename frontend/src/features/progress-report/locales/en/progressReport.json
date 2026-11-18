@@ -1,0 +1,8 @@
+{
+  "title": "Training Plan Progress",
+  "loading": "Loading…",
+  "loading_error": "An error occurred while loading the training courses.",
+  "sections_error": "An error occurred while loading the skills for this training course.",
+  "sections_empty": "No skills have been defined for this training course yet.",
+  "no_course_plans": "No training courses are available at this time."
+}

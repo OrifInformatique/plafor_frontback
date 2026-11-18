@@ -1,4 +1,4 @@
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 import ProgressReport from "./ProgressReport";
 
 // Declared once so the selection is the very same object as the list entry,

@@ -1,4 +1,4 @@
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 import CoursePlanSelector from "./CoursePlanSelector";
 
 const meta = {

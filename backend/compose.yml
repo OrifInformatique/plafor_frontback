@@ -1,0 +1,64 @@
+# Don't forget to run 
+# `docker compose up` with `ENVIRONMENT=base` set in `.env`
+# the first time you run this project!"
+
+services:
+  app:
+    container_name: "Spring-boot-${ENVIRONMENT}"
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: "${ENVIRONMENT}" # Use the environment variable to target the desired stage
+    volumes:
+      - ./src/asciidoc:/app/target/generated-snippets
+      - ../docs:/app/target/generated-snippets-html
+    environment:
+      # Pass environment variables to the container and the Spring Boot app
+      SPRING_PROFILES_ACTIVE: "${ENVIRONMENT}"
+      PORT: "${PORT}"
+
+      # Prod database SPRING_DATASOURCE_URL has to be set in the production environment
+      DEV_SPRING_DATASOURCE_URL: "${DEV_SPRING_DATASOURCE_URL}"
+      TEST_SPRING_DATASOURCE_URL: "${TEST_SPRING_DATASOURCE_URL}"
+      SPRING_DATASOURCE_USERNAME: "${DB_USERNAME}"
+      SPRING_DATASOURCE_PASSWORD: "${DB_PASSWORD}"
+      SPRING_AUTH_URL: "${SPRING_AUTH_URL}"
+      AZURE_LOGIN_URL: "${AZURE_LOGIN_URL}"
+      AFTER_OAUTH2_LOGIN_URL: "${AFTER_OAUTH2_LOGIN_URL}"
+      SECURITY_JWT_TOKEN_SECRET_KEY: "${SECURITY_JWT_TOKEN_SECRET_KEY}"
+      SECURITY_JWT_TOKEN_REFRESH_TOKEN_LIFETIME: "${SECURITY_JWT_TOKEN_REFRESH_TOKEN_LIFETIME}"
+      SECURITY_JWT_TOKEN_ACCESS_TOKEN_LIFETIME: "${SECURITY_JWT_TOKEN_ACCESS_TOKEN_LIFETIME}"
+      AFTER_OAUTH2_LOGIN_FRONTEND_CALLBACK: "${AFTER_OAUTH2_LOGIN_FRONTEND_CALLBACK}"
+    ports:
+      - "${PORT}:${PORT}"
+    depends_on:
+      - db
+    networks:
+      - spring_network # application network to let Spring app talk to the database
+      - shared_network # shared network to let Spring app talk to other services like spring-auth
+
+  db:
+    container_name: "Spring-boot-mariadb"
+    image: mariadb:11.4
+    environment:
+      MARIADB_ROOT_PASSWORD: "${DB_PASSWORD}"
+      MARIADB_DATABASE: "${ENVIRONMENT}_db"
+    ports:
+      - "3306:3306" # Expose the database port to connect from outside the container
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - spring_network # application network to let Spring app talk to the database
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  spring_network:
+    driver: bridge
+
+  shared_network:
+    name: shared_network # force name without project prefix to be accessible by other projects
+    driver: bridge
