@@ -1,0 +1,6 @@
+[
+  { "label": "Autonome", "value": 40 },
+  { "label": "Exercé", "value": 30 },
+  { "label": "Expliqué", "value": 20 },
+  { "label": "Non expliqué", "value": 10 }
+]

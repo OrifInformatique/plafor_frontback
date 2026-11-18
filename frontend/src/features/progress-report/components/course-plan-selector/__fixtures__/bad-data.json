@@ -1,0 +1,17 @@
+{
+  "emptyCoursePlans": [],
+
+  "coursePlansWithMissingFields": [
+    {
+      "id": "1"
+    },
+    {
+      "label": "Formation sans id"
+    }
+  ],
+
+  "selectedCoursePlanMissingFields": {
+    "id": "1",
+    "label": "Formation incomplète"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "label": "A1 Clarifier et documenter les besoins des parties prenantes dans le cadre d'un projet ICT",
+  "data": [
+    { "label": "Autonome", "value": 40 },
+    { "label": "Exercé", "value": 30 },
+    { "label": "Expliqué", "value": 20 },
+    { "label": "Non expliqué", "value": 10 }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "label": "A Suivi des projets ICT",
+
+  "doughnutChartData": [
+    { "label": "Autonome", "value": 100 },
+    { "label": "Exercé", "value": 0 },
+    { "label": "Expliqué", "value": 0 },
+    { "label": "Non expliqué", "value": 0 }
+  ],
+
+  "reportLines": [
+    {
+      "label": "A1 Clarifier et documenter les besoins des parties prenantes dans le cadre d'un projet ICT",
+      "data": [
+        { "label": "Autonome", "value": 40 },
+        { "label": "Exercé", "value": 30 },
+        { "label": "Expliqué", "value": 20 },
+        { "label": "Non expliqué", "value": 10 }
+      ]
+    },
+    {
+      "label": "A2 Définir un modèle de procédure pour un projet ICT",
+      "data": [
+        { "label": "Autonome", "value": 0 },
+        { "label": "Exercé", "value": 0 },
+        { "label": "Expliqué", "value": 0 },
+        { "label": "Non expliqué", "value": 0 }
+      ]
+    },
+    {
+      "label": "A3 Rechercher des informations sur des solutions ICT et sur les innovations",
+      "data": [
+        { "label": "Autonome", "value": 70 },
+        { "label": "Exercé", "value": 22 },
+        { "label": "Expliqué", "value": 5 },
+        { "label": "Non expliqué", "value": 3 }
+      ]
+    },
+    {
+      "label": "A4 Planifier les projets ICT et les tâches selon un modèle de procédure",
+      "data": [
+        { "label": "Autonome", "value": 100 },
+        { "label": "Exercé", "value": 0 },
+        { "label": "Expliqué", "value": 0 },
+        { "label": "Non expliqué", "value": 0 }
+      ]
+    },
+    {
+      "label": "A5 Visualiser et présenter les variantes de solutions ICT",
+      "data": [
+        { "label": "Autonome", "value": 0 },
+        { "label": "Exercé", "value": 0 },
+        { "label": "Expliqué", "value": 50 },
+        { "label": "Non expliqué", "value": 50 }
+      ]
+    },
+    {
+      "label": "A6 Vérifier l’avancement des projets ICT et des tâches et en faire état selon le modèle de procédure",
+      "data": [
+        { "label": "Autonome", "value": 25 },
+        { "label": "Exercé", "value": 25 },
+        { "label": "Expliqué", "value": 25 },
+        { "label": "Non expliqué", "value": 25 }
+      ]
+    },
+    {
+      "label": "A7 Remettre la solution ICT au client et clôturer le projet",
+      "data": [
+        { "label": "Autonome", "value": 60 },
+        { "label": "Exercé", "value": 10 },
+        { "label": "Expliqué", "value": 15 },
+        { "label": "Non expliqué", "value": 15 }
+      ]
+    }
+  ]
+}

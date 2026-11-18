@@ -1,0 +1,53 @@
+{
+  "emptyCoursePlans": [],
+
+  "singleSection": [
+    {
+      "id": "A",
+      "label": "A Suivi des projets ICT",
+      "doughnutChartData": [
+        { "label": "Autonome", "value": 50 },
+        { "label": "Exercé", "value": 50 },
+        { "label": "Expliqué", "value": 0 },
+        { "label": "Non expliqué", "value": 0 }
+      ],
+      "reportLines": [
+        {
+          "label": "A1 Clarifier et documenter les besoins",
+          "data": [
+            { "label": "Autonome", "value": 50 },
+            { "label": "Exercé", "value": 50 },
+            { "label": "Expliqué", "value": 0 },
+            { "label": "Non expliqué", "value": 0 }
+          ]
+        }
+      ]
+    }
+  ],
+
+  "sectionsWithMissingFields": [
+    {
+      "id": "no-label",
+      "doughnutChartData": [{ "label": "Autonome", "value": 100 }],
+      "reportLines": [{ "label": "X1 Une ligne", "data": [] }]
+    },
+    {
+      "id": "no-doughnut",
+      "label": "Section sans données de graphique"
+    },
+    {
+      "id": "no-lines",
+      "label": "Section sans lignes de rapport",
+      "doughnutChartData": [{ "label": "Autonome", "value": 100 }]
+    }
+  ],
+
+  "sectionWithNumericId": [
+    {
+      "id": 42,
+      "label": "Section avec un id numérique",
+      "doughnutChartData": [{ "label": "Autonome", "value": 100 }],
+      "reportLines": []
+    }
+  ]
+}
