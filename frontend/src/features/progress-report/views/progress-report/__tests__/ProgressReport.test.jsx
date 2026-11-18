@@ -53,7 +53,7 @@ jest.mock("../../../components/report-section/ReportSection", () => ({
   ),
 }));
 
-jest.mock("../../../../../components/Loading", () => ({
+jest.mock("../../../components/loading/Loading", () => ({
   __esModule: true,
   default: () => <div data-testid="mock-loading" />,
 }));

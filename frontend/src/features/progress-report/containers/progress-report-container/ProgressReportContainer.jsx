@@ -6,7 +6,7 @@ import {
   getCoursePlanSections,
 } from "../../../../services/api/course-plans";
 import { useTranslation } from "react-i18next";
-import Loading from "../../../../components/Loading";
+import Loading from "../../components/loading/Loading";
 
 /**
  * ProgressReportContainer

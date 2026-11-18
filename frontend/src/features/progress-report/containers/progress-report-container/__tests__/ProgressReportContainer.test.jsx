@@ -56,7 +56,7 @@ jest.mock("../../../views/progress-report/ProgressReport", () => ({
   ),
 }));
 
-jest.mock("../../../../../components/Loading", () => ({
+jest.mock("../../../components/loading/Loading", () => ({
   __esModule: true,
   default: () => <div data-testid="mock-loading" />,
 }));

@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
  *
  * Centered, bold message shown in place of content that cannot be displayed
  * (empty data, loading error...). It uses the same markup as the text of the
- * shared <Loading /> component, so that a message replacing the loading
+ * feature's <Loading /> component, so that a message replacing the loading
  * indicator keeps the same look and position.
  *
  * @param {Object} props
