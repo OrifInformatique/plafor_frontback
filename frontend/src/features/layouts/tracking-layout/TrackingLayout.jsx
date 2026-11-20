@@ -17,17 +17,21 @@ const TrackingLayout = () => {
   const links = getTrackingNavItems(getTrackingRole(mainRole), t);
 
   return (
-    <>
+    <div className="bg-primary px-4 pt-4 sm:px-10">
       <NavBar
         links={links}
         ariaLabel={t("nav_label")}
         menuButtonLabel={t("nav_menu")}
-        linksAlign="start"
+        burgerPosition="left"
+        linksAlign="center"
+        className="mx-auto rounded-xl bg-white px-6 py-2"
+        linkClassName="text-sm text-black"
+        activeLinkClassName="font-semibold text-primary"
       />
-      <div className="mt-6">
+      <div className="mt-6 rounded-t-2xl bg-white p-6 sm:p-10">
         <Outlet />
       </div>
-    </>
+    </div>
   );
 };
 
