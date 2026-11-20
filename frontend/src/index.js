@@ -7,6 +7,7 @@ import './i18n';
 
 // Layouts
 import MainLayout from './features/layouts/MainLayout';
+import TrackingLayout from './features/layouts/tracking-layout/TrackingLayout';
 
 // Modules
 import Home from './features/home';
@@ -14,8 +15,10 @@ import Login from './template/auth/ui/login';
 import AzureCallback from './template/auth/ui/login/AzureCallback';
 import ChangePassword from './template/auth/ui/change-password';
 import ResetPassword from './template/auth/ui/reset-password';
+import RequireRole from './template/auth/requireRole';
 import Admin from './features/admin';
 import UserList from './template/users';
+import ProgressReportContainer from './features/progress-report/containers/progress-report-container/ProgressReportContainer';
 
 // Styles
 import '@orif-informatique/react-components-library/styles.css';
@@ -74,6 +77,12 @@ root.render(
                         path="/reset-password"
                         element={<ResetPassword />}
                     />
+
+                    <Route element={<RequireRole />}>
+                      <Route element={<TrackingLayout />}>
+                        <Route path="competences" element={<ProgressReportContainer />} />
+                      </Route>
+                    </Route>
                 </Route>
             </Routes>
         </BrowserRouter>
