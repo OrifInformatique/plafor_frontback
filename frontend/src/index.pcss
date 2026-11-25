@@ -1,19 +1,25 @@
 @import "tailwindcss";
 @source "../node_modules/@orif-informatique/react-components-library/dist";
 
+/* Design tokens. Declared in @theme (not :root) so that Tailwind v4 generates
+   the matching utilities and their variants (bg-primary, hover:bg-primary,
+   bg-primary/80, text-danger, font-display...).
+   "static" always emits the variables in :root, even when no utility uses
+   them, because the library's prebuilt CSS reads var(--color-*) directly. */
+@theme static {
+  --color-primary: #005ba9;
+  --color-background: #f4f7fd;
+  --color-disabled: #e7e7e7;
+  --color-danger: #b91c1c;
+
+  --font-display: 'Montserrat', sans-serif;
+}
+
 @layer base {
   @font-face {
     font-family: 'Montserrat';
     font-style: normal;
     src: url('/public/fonts/montserrat.ttf') format('truetype');
-  }
-  :root {
-    --color-primary: #005ba9;
-    --color-background: #f4f7fd;
-    --color-disabled: #e7e7e7;
-    --color-danger: #b91c1c;
-
-    --font-display: 'Montserrat', sans-serif;
   }
 }
 
