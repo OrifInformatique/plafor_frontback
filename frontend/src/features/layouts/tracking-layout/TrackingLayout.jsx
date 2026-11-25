@@ -17,7 +17,7 @@ const TrackingLayout = () => {
   const links = getTrackingNavItems(getTrackingRole(mainRole), t);
 
   return (
-    <div className="bg-primary px-4 pt-4 sm:px-10">
+    <div className="bg-primary px-4 py-4 sm:px-10 sm:py-10">
       <NavBar
         links={links}
         ariaLabel={t("nav_label")}
@@ -28,7 +28,7 @@ const TrackingLayout = () => {
         linkClassName="text-sm text-black"
         activeLinkClassName="font-semibold text-primary"
       />
-      <div className="mt-6 rounded-t-2xl bg-white p-6 sm:p-10">
+      <div className="mt-6 rounded-2xl bg-white p-6 sm:p-10">
         <Outlet />
       </div>
     </div>

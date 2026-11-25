@@ -109,10 +109,10 @@ describe("ReportSection", () => {
 
     it("shows the lines wrapper when the toggle button is clicked", async () => {
       const wrapper = screen.getByTestId("lines-wrapper");
-      expect(wrapper.className).toContain("max-sm:hidden");
+      expect(wrapper.className).toContain("max-lg:hidden");
       await userEvent.click(screen.getByRole("button"));
-      expect(wrapper.className).not.toContain("max-sm:hidden");
-      expect(wrapper.className).toContain("max-sm:grid");
+      expect(wrapper.className).not.toContain("max-lg:hidden");
+      expect(wrapper.className).toContain("max-lg:grid");
     });
   });
 
