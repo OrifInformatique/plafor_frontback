@@ -8,6 +8,7 @@
  */
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { percentagePlugin } from "./percentage-plugin";
@@ -31,12 +32,14 @@ const CHART_DEFAULTS = {
 /**
  * Ensures the incoming dataset is always valid.
  * If no data is provided, a doughnut is showed.
+ * The fallback label is received already translated, so this stays a pure
+ * function (shown in the tooltip of the gray fallback doughnut).
  */
-function normalizeData(data) {
+function normalizeData(data, emptyLabel) {
   if (!Array.isArray(data) || data.length === 0) {
     return [
       {
-        label: "No data or incorrect data",
+        label: emptyLabel,
         value: 100,
         color: "#E0E0E0",
         isEmpty: true,
@@ -61,7 +64,8 @@ function normalizeData(data) {
  * Main DoughnutChart component
  */
 export default function DoughnutChart({ data = [], showLegend = false }) {
-  const normalized = normalizeData(data);
+  const { t } = useTranslation("progressReport");
+  const normalized = normalizeData(data, t("no_data"));
   const isEmpty = normalized.length === 1 && normalized[0].isEmpty === true;
 
   // Build dataset for Chart.js

@@ -4,6 +4,12 @@ import DoughnutChart from "../DoughnutChart";
 import skillsData from "../__fixtures__/skills-data.json";
 import badData from "../__fixtures__/bad-data.json";
 
+// t() returns the key itself: assertions do not depend on the French copy,
+// and no i18next instance is needed (no NO_I18NEXT_INSTANCE warning).
+jest.mock("react-i18next", () => ({
+  useTranslation: () => ({ t: (key) => key }),
+}));
+
 // We create a jest function(moke function) to spy on the props sent to <Doughnut />
 const mockDoughnut = jest.fn(() => null);
 
@@ -45,7 +51,8 @@ describe("DoughnutChart", () => {
     expect(mockDoughnut).toHaveBeenCalledTimes(1);
     const { data, options } = mockDoughnut.mock.calls[0][0];
 
-    expect(data.labels).toEqual(["No data or incorrect data"]);
+    // The fallback label is translated (shown in the tooltip).
+    expect(data.labels).toEqual(["no_data"]);
     expect(data.datasets[0].data).toEqual([100]);
 
     // Legend must be hidden when empty (even if showLegend=true)

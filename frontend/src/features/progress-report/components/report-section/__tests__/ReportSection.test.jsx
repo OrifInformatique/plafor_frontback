@@ -4,6 +4,12 @@ import userEvent from "@testing-library/user-event";
 import ReportSection from "../ReportSection";
 import fixture from "../__fixtures__/report-section-data.json";
 
+// t() returns the key itself: assertions do not depend on the French copy,
+// and no i18next instance is needed (no NO_I18NEXT_INSTANCE warning).
+jest.mock("react-i18next", () => ({
+  useTranslation: () => ({ t: (key) => key }),
+}));
+
 // Avoid rendering real DoughnutChart and ReportLine internal in this unit test
 // mocks of child components
 jest.mock("../../doughnut-chart/DoughnutChart", () => ({
@@ -69,6 +75,14 @@ describe("ReportSection", () => {
 
     it("renders a toggle button", () => {
       expect(screen.getByRole("button")).toBeInTheDocument();
+    });
+
+    // The arrow is decorative (aria-expanded carries the state), so the
+    // accessible name is the translated label only.
+    it("names the toggle button with the translated label only", () => {
+      expect(
+        screen.getByRole("button", { name: "details" }),
+      ).toBeInTheDocument();
     });
 
     it("has aria-expanded set to false by default", () => {

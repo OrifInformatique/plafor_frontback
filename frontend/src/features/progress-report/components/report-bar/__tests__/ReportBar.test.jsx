@@ -4,6 +4,12 @@ import ReportBar from "../ReportBar";
 import skillsData from "../__fixtures__/skills-data.json";
 import badData from "../__fixtures__/bad-data.json";
 
+// t() returns the key itself: assertions do not depend on the French copy,
+// and no i18next instance is needed (no NO_I18NEXT_INSTANCE warning).
+jest.mock("react-i18next", () => ({
+  useTranslation: () => ({ t: (key) => key }),
+}));
+
 describe("ReportBar", () => {
   it("renders the correct number of segments with valid data", () => {
     render(<ReportBar data={skillsData} />);
@@ -19,6 +25,8 @@ describe("ReportBar", () => {
     expect(segments[0].style.flexBasis).toBe("100%");
     // #E0E0E0 → rgb(224, 224, 224)
     expect(segments[0].style.backgroundColor).toBe("rgb(224, 224, 224)");
+    // The fallback title is translated.
+    expect(segments[0].title).toBe("no_data: 100%");
   });
 
   it("distributes segment widths proportionally to values", () => {

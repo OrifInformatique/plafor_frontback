@@ -11,6 +11,7 @@
  */
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 // Default colors: autonome, exercé, expliqué, non expliqué
 const DEFAULT_COLORS = ["#005BA9", "#4D8DC3", "#CCDEEE", "#F2F2F7"];
@@ -27,15 +28,18 @@ export const CATEGORY_ORDER = [
  * Ensures the incoming dataset is always valid.
  * If no data is provided, a gray 100% bar is returned.
  * Negative values are clamped to 0 (no visual meaning in a bar).
+ * The fallback label is received already translated, so this stays a pure
+ * function (shown in the title of the gray fallback bar).
  *
- * @param {Array} data
+ * @param {Array}  data
+ * @param {string} emptyLabel - Translated label of the fallback segment.
  * @returns {Array<{ label: string, value: number, color: string, isEmpty: boolean }>}
  */
-function normalizeData(data) {
+function normalizeData(data, emptyLabel) {
   if (!Array.isArray(data) || data.length === 0) {
     return [
       {
-        label: "No data or incorrect data",
+        label: emptyLabel,
         value: 100,
         color: "#E0E0E0",
         isEmpty: true,
@@ -63,7 +67,8 @@ function normalizeData(data) {
  * @param {Array}   props.data - Array of { label, value, color?, isEmpty? }
  */
 export default function ReportBar({ data = [] }) {
-  const segments = normalizeData(data);
+  const { t } = useTranslation("progressReport");
+  const segments = normalizeData(data, t("no_data"));
   const total = segments.reduce((sum, s) => sum + s.value, 0);
 
   return (

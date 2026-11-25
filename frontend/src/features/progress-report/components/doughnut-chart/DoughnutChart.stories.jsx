@@ -19,10 +19,11 @@ export default meta;
 // Variant with legend
 export const Default = {};
 
-// No data or data incorrect
+// No data or data incorrect: an empty array triggers the component's own
+// fallback, so the story shows the real (translated) label.
 export const NoData = {
   args: {
-    data: [{ label: "No data or incorrect data", value: 100, color: "#E0E0E0", isEmpty: true }],
+    data: [],
   },
 };
 

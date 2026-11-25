@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { reportLineShape } from "../../prop-types";
 import DoughnutChart from "../doughnut-chart/DoughnutChart";
@@ -37,6 +38,7 @@ export default function ReportSection({
   doughnutChartData = [],
   reportLines = [],
 }) {
+  const { t } = useTranslation("progressReport");
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -58,7 +60,10 @@ export default function ReportSection({
           onClick={() => setIsOpen((prev) => !prev)}
           aria-expanded={isOpen}
         >
-          Détails {isOpen ? "▲" : "▼"}
+          {t("details")}{" "}
+          {/* Decorative: aria-expanded already tells the open/closed state,
+              so screen readers must not read "black up-pointing triangle". */}
+          <span aria-hidden="true">{isOpen ? "▲" : "▼"}</span>
         </button>
       </div>
       <div
